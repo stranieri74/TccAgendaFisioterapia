@@ -1,0 +1,72 @@
+<div class="usuario-form">
+
+  <h2>
+    {{ editando ? '✏️ Editar Usuario' : '➕ Novo Usuario' }}
+  </h2>
+
+  <!-- ✅ MENSAGEM DE ERRO -->
+  <div *ngIf="erro" class="alert alert-error">
+    ❌ {{ erro }}
+  </div>
+
+  <!-- ✅ MENSAGEM DE SUCESSO -->
+  <div *ngIf="sucesso" class="alert alert-success">
+    ✅ {{ sucesso }}
+  </div>
+
+  <div *ngIf="carregando" class="loading">
+    Carregando...
+  </div>
+
+  <form *ngIf="!carregando" (ngSubmit)="salvar()">
+
+    <div class="form-group">
+      <label>Login</label>
+      <input type="text" [(ngModel)]="usuario.login" name="login" required />
+    </div>
+
+    <div class="form-group">
+       <label>Senha</label>
+       <input type="password" [(ngModel)]="usuario.senhaHash" name="senhaHash" />
+       </div>
+
+    <div class="form-group">
+      <label>Funcionário</label>
+        <select [(ngModel)]="usuario.funcionarioId" name="funcionarioId">
+        <option value="">Selecione</option>
+        <option *ngFor="let f of funcionarios" [value]="f.id">
+        {{ f.nome }}
+     </option>
+     </select>
+     </div>
+
+     <div class="form-group">
+        <label>Perfil</label>
+        <select [(ngModel)]="usuario.perfil" name="perfil">
+        <option value="ADMIN">ADMIN</option>
+        <option value="PROFISSIONAL">PROFISSIONAL</option>
+        <option value="RECEPCAO">RECEPCAO</option>
+        </select>
+      </div>
+
+        <div class="form-group checkbox">
+          <label>
+           <input type="checkbox" [(ngModel)]="usuario.ativo" name="ativo" />
+            Usuário ativo
+          </label>
+       </div>
+    
+
+    <div class="acoes">
+      <button type="submit" class="btn-salvar">
+        💾 Salvar
+      </button>
+
+      <button type="button" class="btn-cancelar" (click)="cancelar()">
+        ❌ Cancelar
+      </button>
+    </div>
+
+  </form>
+
+</div>

@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Paciente {
+  id             Int          @id(map: "PK__paciente__3213E83F654D2796") @default(autoincrement())
+  nome           String?      @db.VarChar(200)
+  dataNascimento DateTime?    @db.Date
+  cep            String?      @db.Char(15)
+  uf             String?      @db.Char(2)
+  endereco       String?      @db.VarChar(200)
+  numero         Int?
+  bairro         String?      @db.VarChar(100)
+  telefone       String?      @db.VarChar(30)
+  celular        String?      @db.VarChar(30)
+  cpf            String?      @db.VarChar(20)
+  email          String?      @db.VarChar(100)
+  convenio       String?      @db.VarChar(50)
+  sexo           Decimal?     @db.Decimal(1, 0)
+  estadoCivil    Decimal?     @db.Decimal(1, 0)
+  cidade         String?      @db.VarChar(120)
+  agenda         agenda[]
+  prontuario     prontuario[]
+
+  @@map("paciente")
+}
+
+model funcionario {
+  id             Int          @id(map: "PK__funciona__3213E83FFF11BF5C") @default(autoincrement())
+  nome           String       @db.VarChar(200)
+  dataNascimento DateTime     @db.Date
+  cep            String       @db.Char(15)
+  cnpj           String       @db.VarChar(50)
+  uf             String       @db.Char(2)
+  endereco       String       @db.VarChar(200)
+  numero         Int
+  bairro         String       @db.VarChar(100)
+  telefone       String       @db.VarChar(30)
+  celular        String       @db.VarChar(30)
+  cpf            String       @db.VarChar(20)
+  email          String?      @db.VarChar(100)
+  crefito        String       @db.VarChar(100)
+  sexo           Decimal?     @db.Decimal(1, 0)
+  estadoCivil    Decimal?     @db.Decimal(1, 0)
+  cidade         String       @db.VarChar(120)
+  ativo          Int
+  agenda         agenda[]
+  prontuario     prontuario[]
+  usuario        usuario[]
+
+  @@map("funcionario")
+}
+
+model usuario {
+  id            Int          @id(map: "PK__usuario__3213E83F5E53BC60") @default(autoincrement())
+  login         String       @unique(map: "UQ_Usuario_Login") @db.VarChar(50)
+  senhaHash     String       @db.VarChar(255)
+  perfil        String       @db.VarChar(50)
+  ativo         Decimal      @db.Decimal(1, 0)
+  funcionarioId Int
+  agenda        agenda[]
+  prontuario    prontuario[]
+  funcionario   funcionario  @relation(fields: [funcionarioId], references: [id], onUpdate: NoAction, map: "fk_funcionario")
+
+  @@map("usuario")
+}
+
+model prontuario {
+  id             Int         @id(map: "PK__prontuar__3213E83FEB56203F") @default(autoincrement())
+  pacienteId     Int
+  profissionalId Int
+  usuarioId      Int
+  data           DateTime?   @default(now(), map: "DF__prontuario__data__5165187F") @db.DateTime
+  tipo           String      @db.VarChar(30)
+  evolucao       String?     @db.Text
+  paciente       Paciente    @relation(fields: [pacienteId], references: [id], onUpdate: NoAction, map: "FK_Prontuario_Paciente")
+  funcionario    funcionario @relation(fields: [profissionalId], references: [id], onUpdate: NoAction, map: "FK_Prontuario_Profissional")
+  usuario        usuario     @relation(fields: [usuarioId], references: [id], onUpdate: NoAction, map: "FK_Prontuario_Usuario")
+
+  @@map("prontuario")
+}
+
+model agenda {
+  id             Int         @id(map: "PK__agenda__3213E83FC2498F19") @default(autoincrement())
+  pacienteId     Int
+  profissionalId Int
+  usuarioId      Int
+  tipo           String      @db.VarChar(50)
+  paciente       Paciente    @relation(fields: [pacienteId], references: [id], onUpdate: NoAction, map: "FK_Agenda_Paciente")
+  funcionario    funcionario @relation(fields: [profissionalId], references: [id], onUpdate: NoAction, map: "FK_Agenda_Profissional")
+  usuario        usuario     @relation(fields: [usuarioId], references: [id], onUpdate: NoAction, map: "FK_Agenda_Usuario")
+  AgendaDia      AgendaDia[]
+
+  @@map("agenda")
+}
+
+model AgendaDia {
+  id        Int       @id(map: "PK__AgendaDi__3213E83F9CCFFA81") @default(autoincrement())
+  agendaId  Int
+  data      DateTime? @db.DateTime
+  diaSemana String?   @db.VarChar(10)
+  hora      String    @db.VarChar(20)
+  agenda    agenda    @relation(fields: [agendaId], references: [id], onUpdate: NoAction, map: "FK_AgendaDia_Agenda")
+
+  @@map("AgendaDia")
+}

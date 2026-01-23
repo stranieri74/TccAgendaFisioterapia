@@ -1,0 +1,54 @@
+<div class="usuarios-page">
+
+  <div class="header">
+    <h2>👤 Usuários</h2>
+
+    <button class="btn-novo" (click)="novo()">
+      + Novo Usuário
+    </button>
+  </div>
+
+  <div *ngIf="carregando" class="loading">
+    Carregando Usuários...
+  </div>
+
+  <div *ngIf="erro" class="erro">
+    {{ erro }}
+  </div>
+
+  <!-- container responsivo -->
+  <div class="table-container" *ngIf="!carregando && usuarios.length">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Login</th>
+          <th>Nome</th>
+          <th>Perfil</th>
+          <th>Situação</th>
+          <th width="140">Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let p of usuarios">
+          <td>{{p.login}}</td>
+          <td>{{p.funcionario?.nome}}</td>
+          <td>{{p.perfil}}</td>
+          <td>{{p.ativo ? 'Ativo' : 'Inativo'}}</td>
+
+          <td class="acoes">
+            <button class="btn-editar" (click)="editar(p.id)">✏️</button>
+            <button class="btn-excluir" (click)="excluir(p.id)">❌</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div *ngIf="!carregando && !usuarios.length" class="vazio">
+    Nenhum funcionário cadastrado.
+  </div>
+
+</div>

@@ -1,0 +1,143 @@
+<div class="paciente-form">
+
+  <h2>
+    {{ editando ? '✏️ Editar Paciente' : '➕ Novo Paciente' }}
+  </h2>
+
+  <!-- ✅ MENSAGEM DE ERRO -->
+  <div *ngIf="erro" class="alert alert-error">
+    ❌ {{ erro }}
+  </div>
+
+  <!-- ✅ MENSAGEM DE SUCESSO -->
+  <div *ngIf="sucesso" class="alert alert-success">
+    ✅ {{ sucesso }}
+  </div>
+
+  <div *ngIf="carregando" class="loading">
+    Carregando...
+  </div>
+
+  <form *ngIf="!carregando" (ngSubmit)="salvar()">
+
+    <div class="form-group">
+      <label>Nome</label>
+      <input type="text" [(ngModel)]="paciente.nome" name="nome" required />
+    </div>
+
+    <div class="form-group">
+      <label>Data Nascimento</label>
+      <input type="date" [(ngModel)]="paciente.dataNascimento" name="dataNascimento" required />
+    </div>
+    
+    <div class="form-group">
+      <label>CPF</label>
+      <input type="text" [(ngModel)]="paciente.cpf" name="cpf" mask="000.000.000-00" placeholder="000.000.000-00" required />
+    </div>
+     <div class="form-group">
+      <label>Sexo</label>
+      
+      <select [(ngModel)]="paciente.sexo" name="sexo">
+        <option value="0">Selecione</option>
+        <option value="1">Masculino</option>
+        <option value="2">Feminino</option>
+        <option value="3">Outro</option>
+      </select>
+    </div>
+ 
+    <!-- ESTADO CIVIL -->
+    <div class="form-group">
+      <label>Estado Civil</label>
+      <select [(ngModel)]="paciente.estadoCivil" name="estadoCivil">
+        <option value="0">Selecione</option>
+        <option value="1">Solteiro(a)</option>
+        <option value="2">Casado(a)</option>
+        <option value="3">Divorciado(a)</option>
+        <option value="4">Viúvo(a)</option>
+        <option value="5">União Estável</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>CEP</label>
+      <input type="text" [(ngModel)]="paciente.cep" name="cep" required />
+    </div>
+
+<!-- ESTADO -->
+    <div class="form-group">
+      <label>Estado (UF)</label>
+      <select [(ngModel)]="paciente.uf" name="uf">
+        <option value="">Selecione</option>
+        <option value="SP">São Paulo</option>
+        <option value="RJ">Rio de Janeiro</option>
+        <option value="MG">Minas Gerais</option>
+        <option value="PR">Paraná</option>
+        <option value="SC">Santa Catarina</option>
+        <option value="RS">Rio Grande do Sul</option>
+      </select>
+    </div>
+
+    <!-- CIDADE -->
+    <div class="form-group">
+      <label>Cidade</label>
+      <input type="text" [(ngModel)]="paciente.cidade" name="cidade" />
+    </div>
+
+    <div class="form-group">
+      <label>Endereço</label>
+      <input type="text" [(ngModel)]="paciente.endereco" name="endereco" />
+    </div>
+
+    <div class="form-group">
+      <label>Numero</label>
+      <input type="number" [(ngModel)]="paciente.numero" name="numero" />
+    </div>
+
+    <div class="form-group">
+      <label>Bairro</label>
+      <input type="text" [(ngModel)]="paciente.bairro" name="bairro" />
+    </div>
+
+    <div class="form-group">
+      <label>Telefone</label>
+      <input type="text" [(ngModel)]="paciente.telefone" name="telefone" />
+    </div>
+
+    <div class="form-group">
+      <label>Celular</label>
+      <input type="text" [(ngModel)]="paciente.celular" name="celular" />
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="paciente.email" name="email" />
+    </div>
+
+    <div class="form-group">
+      <label>Convênio</label>
+      <select [(ngModel)]="paciente.convenio" name="convenio">
+        <option value="">Selecione</option>
+        <option value="Particular">Particular</option>
+        <option value="Unimed">Unimed</option>
+        <option value="Sermed">Sermed</option>
+        <option value="HappVida">HappVida</option>
+        <option value="Bradesco Saúde">Bradesco Saúde</option>
+        <option value="Amil">Amil</option>
+        <option value="SulAmérica">SulAmérica</option>
+        <option value="Outro">Outro</option>
+      </select>
+    </div>
+
+    <div class="acoes">
+      <button type="submit" class="btn-salvar">
+        💾 Salvar
+      </button>
+
+      <button type="button" class="btn-cancelar" (click)="cancelar()">
+        ❌ Cancelar
+      </button>
+    </div>
+
+  </form>
+
+</div>

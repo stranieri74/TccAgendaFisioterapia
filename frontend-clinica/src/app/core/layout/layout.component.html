@@ -1,0 +1,42 @@
+<div class="layout">
+
+  <aside class="menu">
+    <h2 class="logo">Clínica</h2>
+
+    <nav>
+
+      <div class="menu-group">
+        <span class="menu-title">Cadastros</span>
+        <a routerLink="/pacientes">Pacientes</a>
+        <a routerLink="/profissionais">Profissionais</a>
+        <a routerLink="/usuarios">Usuários</a>
+      </div>
+
+      <div class="menu-group">
+        <span class="menu-title">Agenda</span>
+        <a routerLink="/agenda/prontuario">Prontuário</a>
+        <a routerLink="/agenda/consultar">Consultar</a>
+      </div>
+
+      <div class="menu-group">
+        <span class="menu-title">Evolução Paciente</span>
+        <a routerLink="/evolucao/historico">Histórico</a>
+        <a routerLink="/evolucao/evolucao">Evolução</a>
+      </div>
+
+      <div class="menu-group">
+        <span class="menu-title">Avaliações</span>
+        <a routerLink="/avaliacoes/agendar">Agendar</a>
+        <a routerLink="/avaliacoes/avaliar">Avaliar</a>
+      </div>
+
+    </nav>
+
+    <button class="logout" (click)="logout()">Sair</button>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

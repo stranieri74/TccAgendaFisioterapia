@@ -1,0 +1,58 @@
+<div class="pacientes-page">
+
+  <div class="header">
+    <h2>👤 Pacientes</h2>
+
+    <button class="btn-novo" (click)="novo()">
+      + Novo Paciente
+    </button>
+  </div>
+
+  <div *ngIf="carregando" class="loading">
+    Carregando pacientes...
+  </div>
+
+  <div *ngIf="erro" class="erro">
+    {{ erro }}
+  </div>
+
+  <!-- 🔥 container responsivo -->
+  <div class="table-container" *ngIf="!carregando && pacientes.length">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Matricula</th>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Telefone</th>
+          <th>Celular</th>
+          <th>Convênio</th>
+          <th width="140">Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let p of pacientes">
+          <td>{{ p.id }}</td>
+          <td>{{ p.nome }}</td>
+          <td>{{ p.cpf }}</td>
+          <td>{{ p.telefone }}</td>
+          <td>{{ p.celular }}</td>
+          <td>{{ p.convenio }}</td>
+
+          <td class="acoes">
+            <button class="btn-editar" (click)="editar(p.id)">✏️</button>
+            <button class="btn-excluir" (click)="excluir(p.id)">❌</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div *ngIf="!carregando && !pacientes.length" class="vazio">
+    Nenhum paciente cadastrado.
+  </div>
+
+</div>

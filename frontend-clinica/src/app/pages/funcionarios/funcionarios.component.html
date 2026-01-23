@@ -1,0 +1,61 @@
+<div class="funcionarios-page">
+
+  <div class="header">
+    <h2>👤 Funcionário</h2>
+
+    <button class="btn-novo" (click)="novo()">
+      + Novo Funcionário
+    </button>
+  </div>
+
+  <div *ngIf="carregando" class="loading">
+    Carregando Funcionário...
+  </div>
+
+  <div *ngIf="erro" class="erro">
+    {{ erro }}
+  </div>
+
+  <!-- container responsivo -->
+  <div class="table-container" *ngIf="!carregando && funcionarios.length">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Matricula</th>
+          <th>Nome</th>
+          <th>CNPJ</th>
+          <th>CREFITO</th>
+          <th>Telefone</th>
+          <th>Celular</th>
+          <th>Email</th>
+
+          <th width="140">Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let p of funcionarios">
+          <td>{{ p.id }}</td>
+          <td>{{ p.nome }}</td>
+          <td>{{ p.cnpj }}</td>
+          <td>{{ p.crefito }}</td>
+          <td>{{ p.telefone }}</td>
+          <td>{{ p.celular }}</td>
+          <td>{{ p.email }}</td>
+
+          <td class="acoes">
+            <button class="btn-editar" (click)="editar(p.id)">✏️</button>
+            <button class="btn-excluir" (click)="excluir(p.id)">❌</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div *ngIf="!carregando && !funcionarios.length" class="vazio">
+    Nenhum funcionário cadastrado.
+  </div>
+
+</div>

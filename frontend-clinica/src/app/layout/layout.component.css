@@ -1,0 +1,216 @@
+/* ===============================
+   LAYOUT GERAL
+================================ */
+.layout {
+  display: flex;
+  height: 100vh;
+ /* overflow: hidden;*/
+
+}
+
+/* ===============================
+   SIDEBAR
+================================ */
+.sidebar {
+  width: 250px;
+  background: #1e88e5;
+  color: #ffffff;
+  transition: width 0.3s ease;
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.sidebar.closed {
+  width: 0;
+  padding: 0;
+}
+
+.sidebar.closed * {
+  display: none;
+}
+
+/* ===============================
+   LOGO
+================================ */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+}
+
+.logo img {
+  width: 42px;
+}
+
+.logo span {
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ===============================
+   MENU
+================================ */
+nav {
+  margin-top: 10px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.menu-text {
+  white-space: nowrap;
+}
+
+/* esconder texto quando menu fechado */
+.sidebar.closed .menu-text {
+  display: none;
+}
+
+/* ===============================
+   SUBMENU
+================================ */
+.submenu {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.submenu a {
+  display: block;
+  padding: 10px 45px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.submenu a:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* esconder submenu quando fechado */
+.sidebar.closed .submenu {
+  display: none;
+}
+
+/* ===============================
+   CONTEÚDO
+================================ */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /*overflow: hidden;*/
+}
+
+/* ===============================
+   HEADER
+================================ */
+header {
+  height: 60px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-btn {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+/* ===============================
+   PAGE
+================================ */
+.page {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+/* ===============================
+   OVERLAY MOBILE
+================================ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* ===============================
+   RESPONSIVO
+================================ */
+@media (max-width: 768px) {
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+  }
+
+  .content {
+    margin-left: 0;
+  }
+
+}
+
+.menu-footer {
+  margin-top: auto;
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-footer a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.menu-footer a:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.logout {
+  color: #ffbaba;
+}
+
+.logout:hover {
+  background: rgba(255, 0, 0, 0.2);
+}
+
