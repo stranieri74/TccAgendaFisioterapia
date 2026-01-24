@@ -1,0 +1,102 @@
+.topo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.topo select {
+  padding: 6px;
+  min-width: 220px;
+}
+
+.semana {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.calendar-wrapper {
+  height: calc(100vh - 230px);
+  overflow: auto;
+  border: 1px solid #ccc;
+}
+
+.agenda-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: #f4f4f4;
+  z-index: 10;
+}
+
+.hora-col {
+  position: sticky;
+  left: 0;
+  background: #fafafa;
+  width: 70px;
+  z-index: 9;
+}
+
+td, th {
+  border: 1px solid #ddd;
+  padding: 4px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.evento {
+  font-size: 12px;
+  margin: 2px 0;
+  padding: 3px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.fisio {
+  background: #2ecc71;
+}
+
+.avaliacao {
+  background: #3498db;
+}
+
+.retorno {
+  background: #f1c40f;
+  color: #000;
+}
+
+.linha-atual td {
+  border-top: 2px solid red;
+}
+
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  width: 300px;
+  border-radius: 8px;
+}
+
+/* sábado e domingo */
+.fim-semana {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+/* opcional: fundo leve */
+.fim-semana {
+  background-color: #fff5f5;
+}

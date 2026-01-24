@@ -1,118 +1,85 @@
 import { prisma } from '@/prisma/infra/database/prisma';
-import { Agenda, TipoAtendimento } from '@/domain/entities/Agenda';
 
 export class AgendaRepository {
 
-  async salvar(agenda: Agenda): Promise<Agenda> {
-    const result = await prisma.agenda.create({
+  async create(agenda: {
+    pacienteId: number;
+    profissionalId: number;
+    usuarioId: number;
+    tipo: string;
+    dataInicio: Date;
+    dataFim?: Date | null;
+    observacao?: string | null;
+    ativo: boolean;
+  }) {
+    return prisma.agenda.create({
       data: {
-        paciente : {
-          connect: {id: agenda.getPacienteId()}
-        },
-        funcionario : {
-          connect: { id: agenda.getProfissionalId() }
-        },
-        usuario : {
-          connect: { id: agenda.getUsuarioId() }
-        },
-        tipo: agenda.getTipoAtendimento()
+        pacienteId: agenda.pacienteId,
+        profissionalId: agenda.profissionalId,
+        usuarioId: agenda.usuarioId,
+        tipo: agenda.tipo,
+        dataInicio: agenda.dataInicio,
+        dataFim: agenda.dataFim,
+        observacao: agenda.observacao,
+        ativo: agenda.ativo ? 1 : 0
       }
     });
-
-    return new Agenda(
-      result.id,
-      result.pacienteId,
-      result.profissionalId,
-      result.usuarioId,
-      result.tipo as TipoAtendimento
-    );
   }
 
-  async listar(): Promise<Agenda[]> {
-    const agendas = await prisma.agenda.findMany();
-
-    return agendas.map(a =>
-      new Agenda(
-        a.id,
-        a.pacienteId,
-        a.profissionalId,
-        a.usuarioId,
-        a.tipo as TipoAtendimento
-      )
-    );
-  }
-
-  async buscarPorId(id: number): Promise<Agenda | null> {
-    const result = await prisma.agenda.findUnique({
-      where: { id }
+  async findById(id: number) {
+    return prisma.agenda.findUnique({
+      where: { id },
+      include: {
+        paciente: true,
+        funcionario: true,
+        usuario: true,
+        AgendaDia: true
+      }
     });
-
-    if (!result) return null;
-
-    return new Agenda(
-      result.id,
-      result.pacienteId,
-      result.profissionalId,
-      result.usuarioId,
-      result.tipo as TipoAtendimento
-    );
   }
 
-  async listarPorPaciente(pacienteId: number): Promise<Agenda[]> {
-    const agendas = await prisma.agenda.findMany({
-      where: { pacienteId }
-    });
-
-    return agendas.map(a =>
-      new Agenda(
-        a.id,
-        a.pacienteId,
-        a.profissionalId,
-        a.usuarioId,
-        a.tipo as TipoAtendimento
-      )
-    );
-  }
-
-  async listarPorProfissional(profissionalId: number): Promise<Agenda[]> {
-    const agendas = await prisma.agenda.findMany({
+  async findByProfissional(profissionalId: number) {
+    return prisma.agenda.findMany({
       where: { profissionalId }
     });
-
-    return agendas.map(a =>
-      new Agenda(
-        a.id,
-        a.pacienteId,
-        a.profissionalId,
-        a.usuarioId,
-        a.tipo as TipoAtendimento
-      )
-    );
   }
 
-  async deletar(id: number): Promise<void> {
-    await prisma.agenda.delete({
-      where: { id }
+  // =====================================
+  // BUSCAR TODAS AS AGENDAS
+  // =====================================
+  async findAll() {
+    return prisma.agenda.findMany({
+      include: {
+        paciente: true,
+        funcionario: true,
+        usuario: true,
+        AgendaDia: true
+      },
+      orderBy: {
+        id: "desc"
+      }
     });
   }
 
-  async atualizar(agenda: Agenda): Promise<Agenda> {
-  const result = await prisma.agenda.update({
-    where: { id: agenda.getId()! },
+  async update(data: any) {
+  return prisma.agenda.update({
+    where: { id: data.id },
     data: {
-      pacienteId: agenda.getPacienteId(),
-      profissionalId: agenda.getProfissionalId(),
-      usuarioId: agenda.getUsuarioId(),
-      tipo: agenda.getTipoAtendimento()
+      pacienteId: data.pacienteId,
+      profissionalId: data.profissionalId,
+      tipo: data.tipo,
+      dataInicio: data.dataInicio,
+      dataFim: data.dataFim,
+      observacao: data.observacao,
+      ativo: data.ativo ? 1 : 0
     }
   });
-
-  return new Agenda(
-    result.id,
-    result.pacienteId,
-    result.profissionalId,
-    result.usuarioId,
-    result.tipo as TipoAtendimento
-  );
 }
+
+async delete(id: number) {
+  return prisma.agenda.delete({
+    where: { id }
+  });
+}
+
 }

@@ -8,6 +8,9 @@ import { FuncionariosComponent } from './pages/funcionarios/funcionarios.compone
 import { FuncionarioFormComponent } from './pages/funcionarios/form/funcionario-form.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { UsuarioFormComponent } from './pages/usuarios/form/usuario-form.component';
+import { AgendaListComponent } from './pages/agenda/agenda-list.component';
+import { AgendaFormComponent } from './pages/agenda/agenda-form/agenda-form.component';
+import { AgendaCalendarioComponent } from './pages/agenda/calendario/agenda-calendario.component';
 
 export const routes: Routes = [
 
@@ -93,6 +96,26 @@ export const routes: Routes = [
         path: 'usuarios/editar/:id',
         component: UsuarioFormComponent,
         runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'agenda',
+        component: AgendaListComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'agenda/novo',
+        component: AgendaFormComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'agenda/editar/:id',
+        component: AgendaFormComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+  path: 'calendario',
+  component: AgendaCalendarioComponent,
+  runGuardsAndResolvers: 'always'
       }
 
     ]

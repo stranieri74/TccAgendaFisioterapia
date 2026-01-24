@@ -1,12 +1,6 @@
 import { NextResponse } from 'next/server';
-import { autorizar } from '@/shared/security/Authorization';
 import { JwtService } from '@/shared/security/JwtService';
-import { PerfilUsuario } from '@/domain/entities/Usuario';
 import { AgendaService } from '@/services/AgendaService';
-import { AgendaRepository } from '@/repositories/AgendaRepository';
-import { AgendaDiaRepository } from '@/repositories/AgendaDiaRepository';
-import { PacienteRepository } from '@/repositories/PacienteRepository';
-import { FuncionarioRepository } from '@/repositories/FuncionarioRepository';
 
 function getAuthPayload(request: Request) {
   const authHeader = request.headers.get('authorization');
@@ -20,100 +14,15 @@ function getAuthPayload(request: Request) {
   return JwtService.validarToken(token);
 }
 
-const agendaRepository = new AgendaRepository();
-const agendaDiaRepository = new AgendaDiaRepository();
-const pacienteRepository = new PacienteRepository();
-const funcionarioRepository = new FuncionarioRepository();
+const service = new AgendaService();
 
-const agendaService = new AgendaService(
-  agendaRepository,
-  agendaDiaRepository,
-  pacienteRepository,
-  funcionarioRepository
-);
-
-export async function GET(request: Request) {
+// ===================================================
+// POST — criar agenda
+// ===================================================
+export async function POST(req: Request) {
   try {
-    const payload = getAuthPayload(request);
-    autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.RECEPCAO]);
-
-    const { searchParams } = new URL(request.url);
-
-    const id = searchParams.get('id');
-    const pacienteId = searchParams.get('pacienteId');
-    const profissionalId = searchParams.get('profissionalId');
-
-    if (id) {
-      const agenda = await agendaService.buscarPorId(Number(id));
-      return NextResponse.json(agenda);
-    }
-
-    if (pacienteId) {
-      const agendas = await agendaService.listarPorPaciente(
-        Number(pacienteId)
-      );
-      return NextResponse.json(agendas);
-    }
-
-    if (profissionalId) {
-      const agendas = await agendaService.listarPorProfissional(
-        Number(profissionalId)
-      );
-      return NextResponse.json(agendas);
-    }
-
-    const agendas = await agendaService.listar();
-    return NextResponse.json(agendas);
-
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: error.message },
-      { status: 403 }
-    );
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const payload = getAuthPayload(request);
-    autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.RECEPCAO]);
-
-    const body = await request.json();
-
-    const agenda = await agendaService.cadastrar({
-      pacienteId: body.pacienteId,
-      profissionalId: body.profissionalId,
-      usuarioId: payload.sub ? Number(payload.sub) : body.usuarioId,
-      tipo: body.tipo,
-      dias: body.dias
-    });
-
-    return NextResponse.json(agenda, { status: 201 });
-
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: error.message },
-      { status: 400 }
-    );
-  }
-}
-
-export async function PUT(request: Request) {
-  try {
-    const payload = getAuthPayload(request);
-    autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.RECEPCAO]);
-
-    const body = await request.json();
-
-    const agenda = await agendaService.atualizar({
-      id: body.id,
-      pacienteId: body.pacienteId,
-      profissionalId: body.profissionalId,
-      usuarioId: payload.sub ? Number(payload.sub) : body.usuarioId,
-      tipo: body.tipo,
-      dias: body.dias
-    });
-
+    const body = await req.json();
+    const agenda = await service.criarAgenda(body);
     return NextResponse.json(agenda);
 
   } catch (error: any) {
@@ -124,25 +33,138 @@ export async function PUT(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+// ===================================================
+// GET — listar
+// ===================================================
+export async function GET(req: Request) {
   try {
-    const payload = getAuthPayload(request);
-    autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.RECEPCAO]);
+    const { searchParams } = new URL(req.url);
 
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+    const profissionalIdParam =
+      searchParams.get("profissionalId");
 
-    if (!id) {
-      return NextResponse.json(
-        { message: 'ID é obrigatório' },
-        { status: 400 }
-      );
+    const dataParam =
+      searchParams.get("dataInicio");
+    
+    const idParam =
+      searchParams.get("id");
+
+    // ======================================
+    // 🔎 BUSCAR POR ID (EDIÇÃO)
+    // ======================================
+    if (idParam) {
+
+      const id = Number(idParam);
+
+      if (isNaN(id)) {
+        throw new Error("ID inválido");
+      }
+      
+      const agenda = await service.buscarPorId(id);
+
+      if (!agenda) {
+        return NextResponse.json(
+          { message: "Agenda não encontrada" },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json(agenda, { status: 200 });
     }
 
-    await agendaService.deletar(Number(id));
+    // =============================
+    // LISTAR TODAS
+    // =============================
+    if (!profissionalIdParam) {
+      const dados = await service.listarTodas();
+      return NextResponse.json(dados, { status: 200 });
+    }
+
+    const profissionalId = Number(profissionalIdParam);
+
+    if (isNaN(profissionalId)) {
+      throw new Error("profissionalId inválido");
+    }
+
+    // =============================
+    // PROFISSIONAL + DATA
+    // =============================
+    if (dataParam && dataParam.trim() !== "") {
+      const dataInicio = new Date(dataParam);
+
+      if (isNaN(dataInicio.getTime())) {
+        throw new Error("dataInicio inválida");
+      }
+
+      const dados = await service.agendaSemanal(
+        profissionalId,
+        dataInicio
+      );
+
+      return NextResponse.json(dados, { status: 200 });
+    }
+
+    // =============================
+    // SOMENTE PROFISSIONAL
+    // =============================
+    const dados =
+      await service.agendaPorProfissional(profissionalId);
+
+    return NextResponse.json(dados, { status: 200 });
+
+  } catch (err) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Erro interno";
 
     return NextResponse.json(
-      { message: 'Agenda removida com sucesso' },
+      { message },
+      { status: 400 }
+    );
+  }
+}
+
+// ===================================================
+// PUT — atualizar agenda
+// ===================================================
+export async function PUT(req: Request) {
+  try {
+    const body = await req.json();
+
+    if (!body.id) {
+      throw new Error("ID da agenda é obrigatório");
+    }
+
+    const agenda = await service.atualizarAgenda(body);
+
+    return NextResponse.json(agenda, { status: 200 });
+
+  } catch (error: any) {
+    return NextResponse.json(
+      { message: error.message },
+      { status: 400 }
+    );
+  }
+}
+
+// ===================================================
+// DELETE — excluir agenda
+// ===================================================
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+
+    const id = Number(searchParams.get("id"));
+
+    if (!id) {
+      throw new Error("ID da agenda é obrigatório");
+    }
+
+    await service.deletarAgenda(id);
+
+    return NextResponse.json(
+      { message: "Agenda excluída com sucesso" },
       { status: 200 }
     );
 

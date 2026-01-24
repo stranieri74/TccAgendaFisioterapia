@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
   // ⚠️ Preflight (CORS)
   if (request.method === 'OPTIONS') {
     return new NextResponse(null, {
-      status: 204,
+      status: 200,
       headers: response.headers
     });
   }

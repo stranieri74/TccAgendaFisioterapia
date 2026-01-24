@@ -1,0 +1,153 @@
+<div class="container">
+
+  <h2>
+    {{ editando ? 'Editar Agendamento' : 'Novo Agendamento' }}
+  </h2>
+
+  <!-- ========================= -->
+  <!-- TIPO -->
+  <!-- ========================= -->
+  <div class="tipo">
+    <label>
+      <input
+        type="radio"
+        value="AVALIACAO"
+        [(ngModel)]="modo">
+      Avaliação
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        value="FISIOTERAPIA"
+        [(ngModel)]="modo">
+      Fisioterapia
+    </label>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ========================= -->
+  <!-- PACIENTE / PROFISSIONAL -->
+  <!-- ========================= -->
+  <div class="form-row">
+
+    <div class="form-group">
+      <label>Paciente</label>
+      <select [(ngModel)]="agendamento.pacienteId">
+        <option value="">Selecione</option>
+        <option
+          *ngFor="let p of pacientes"
+          [value]="p.id">
+          {{ p.nome }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Profissional</label>
+      <select [(ngModel)]="agendamento.profissionalId">
+        <option value="">Selecione</option>
+        <option
+          *ngFor="let f of funcionarios"
+          [value]="f.id">
+          {{ f.nome }}
+        </option>
+      </select>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ========================= -->
+  <!-- AVALIAÇÃO -->
+  <!-- ========================= -->
+  <div *ngIf="modo === 'AVALIACAO' || modo === 'RETORNO'">
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label>Data</label>
+        <input
+          type="date"
+          [(ngModel)]="agendamento.dataInicio">
+      </div>
+
+      <div class="form-group">
+        <label>Hora</label>
+        <input
+          type="time"
+          [(ngModel)]="agendamento.hora">
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- FISIOTERAPIA -->
+  <!-- ========================= -->
+  <div *ngIf="modo === 'FISIOTERAPIA'">
+
+    <div class="form-group">
+      <label>Data de início</label>
+      <input
+        type="date"
+        [(ngModel)]="agendamento.dataInicio">
+    </div>
+
+    <label>Dias da semana</label>
+
+    <div class="dias">
+      <button
+        type="button"
+        *ngFor="let d of diasSemana"
+        (click)="toggleDia(d.valor)"
+        [class.ativo]="diasSelecionados.includes(d.valor)">
+        {{ d.label }}
+      </button>
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label>Horário</label>
+        <input
+          type="time"
+          [(ngModel)]="agendamento.hora">
+      </div>
+
+      <div class="form-group">
+        <label>Quantidade de sessões</label>
+        <input
+          type="number"
+          min="1"
+          [(ngModel)]="agendamento.quantidade">
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- ERRO -->
+  <!-- ========================= -->
+  <div *ngIf="erro" class="erro">
+    {{ erro }}
+  </div>
+
+  <!-- ========================= -->
+  <!-- AÇÕES -->
+  <!-- ========================= -->
+  <div class="actions">
+    <button (click)="salvar()">
+      💾 Salvar
+    </button>
+
+    <button type="button" (click)="cancelar()">
+      ❌ Cancelar
+    </button>
+  </div>
+
+</div>

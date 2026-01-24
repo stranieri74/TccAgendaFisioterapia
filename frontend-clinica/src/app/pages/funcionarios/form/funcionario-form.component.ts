@@ -99,7 +99,7 @@ export class FuncionarioFormComponent implements OnInit {
 
           this.funcionario = res;
 
-          // ✅ CONVERSÃO CORRETA DA DATA
+          //  CONVERSÃO CORRETA DA DATA
           if (this.funcionario.dataNascimento) {
             const data = new Date(this.funcionario.dataNascimento);
 

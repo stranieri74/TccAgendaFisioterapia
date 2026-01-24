@@ -1,0 +1,101 @@
+<div class="agenda-page">
+
+  <div class="header">
+    <h2>📅 Agendamentos</h2>
+
+    <button class="btn-novo" (click)="novo()">
+      + Novo Agendamento
+    </button>
+  </div>
+
+  <!-- LEGENDA -->
+  <div class="legenda-texto">
+    <div class="linha-legenda fisio">
+      Fisioterapia
+    </div>
+
+    <div class="linha-legenda avaliacao">
+      Avaliação
+    </div>
+
+    <div class="linha-legenda retorno">
+      Retorno
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="carregando" class="loading">
+    Carregando agendamentos...
+  </div>
+
+  <!-- ERRO -->
+  <div *ngIf="erro" class="erro">
+    {{ erro }}
+  </div>
+
+  <!-- TABELA -->
+  <table *ngIf="!carregando && agendamentos.length">
+    <thead>
+      <tr>
+        <th>Paciente</th>
+        <th>Profissional</th>
+        <th>Data</th>
+        <th>Hora</th>
+        <th>Tipo</th>
+        <th>Status</th>
+        <th width="120">Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr
+        *ngFor="let a of agendamentos"
+        [ngClass]="getClasseEvento(a.tipo)">
+
+        <!-- PACIENTE -->
+        <td>
+          {{ a.paciente?.nome || a.paciente || '-' }}
+        </td>
+
+        <!-- PROFISSIONAL -->
+        <td>
+          {{ a.funcionario?.nome || '-' }}
+        </td>
+
+        <!-- DATA -->
+        <td>{{ a.data | date:'dd/MM/yyyy':'UTC' }}</td>
+
+
+        <!-- HORA -->
+       
+          <td>{{ a.hora }}</td>
+        
+
+        <!-- TIPO -->
+        <td>
+          {{ a.tipo }}
+        </td>
+
+        <!-- STATUS -->
+        <td>
+          {{ a.status || 'AGENDADO' }}
+        </td>
+
+        <!-- AÇÕES -->
+        <td class="acoes">
+          <button (click)="editar(a.id)">✏️</button>
+          <button (click)="excluir(a.id)">❌</button>
+        </td>
+
+      </tr>
+
+    </tbody>
+  </table>
+
+  <!-- VAZIO -->
+  <div *ngIf="!carregando && !agendamentos.length" class="vazio">
+    Nenhum agendamento cadastrado.
+  </div>
+
+</div>

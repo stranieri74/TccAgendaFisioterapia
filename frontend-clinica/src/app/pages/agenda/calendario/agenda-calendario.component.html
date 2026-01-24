@@ -1,0 +1,94 @@
+<div class="topo">
+
+  <div>
+    <label>Profissional:     </label>
+    <select
+      [(ngModel)]="profissionalId"
+      (change)="buscarAgenda()">
+
+      <option value="">Selecione</option>
+
+      <option
+        *ngFor="let f of funcionarios"
+        [value]="f.id">
+        {{ f.nome }}
+      </option>
+
+    </select>
+  </div>
+
+  <div class="semana">
+    <button (click)="alterarSemana(-1)">◀</button>
+
+    <span>
+      Semana de
+      {{ diasSemana[0] | date:'dd/MM' }}
+      até
+      {{ diasSemana[6] | date:'dd/MM' }}
+    </span>
+
+    <button (click)="alterarSemana(1)">▶</button>
+  </div>
+
+</div>
+
+<div class="calendar-wrapper" #scrollArea>
+
+<table class="agenda-table">
+
+  <thead>
+    <tr>
+      <th class="hora-col">Hora</th>
+
+      <th *ngFor="let d of diasSemana" [class.fim-semana]="isFimDeSemana(d)" >
+        {{ diasSemanaPt[d.getDay()]}}<br>
+        {{ d | date:'dd/MM' }}
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr
+      *ngFor="let hora of horas; let i = index"
+      [ngClass]="['linha-' + i, i === linhaAtualIndex ? 'linha-atual' : '']">
+
+      <td class="hora-col">
+        {{ hora }}
+      </td>
+
+      <td *ngFor="let dia of diasSemana">
+
+        <div
+          *ngFor="let e of eventosPorDiaHora(dia, hora)"
+          class="evento"
+          [ngClass]="getClasse(e.tipo)"
+          (click)="abrirEvento(e)">
+
+          {{ e.paciente }}
+
+        </div>
+
+      </td>
+
+    </tr>
+
+  </tbody>
+
+</table>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" *ngIf="eventoSelecionado">
+  <div class="modal">
+
+    <h3>{{ eventoSelecionado.paciente }}</h3>
+
+    <p><b>Hora:</b> {{ eventoSelecionado.hora }}</p>
+    <p><b>Tipo:</b> {{ eventoSelecionado.tipo }}</p>
+    <p><b>Status:</b> {{ eventoSelecionado.status }}</p>
+
+    <button (click)="fecharModal()">Fechar</button>
+
+  </div>
+</div>

@@ -91,6 +91,10 @@ model agenda {
   profissionalId Int
   usuarioId      Int
   tipo           String      @db.VarChar(50)
+  dataInicio     DateTime?   @db.Date
+  dataFim        DateTime?   @db.Date
+  observacao     String?     @db.VarChar(200)
+  ativo          Decimal?    @db.Decimal(1, 0)
   paciente       Paciente    @relation(fields: [pacienteId], references: [id], onUpdate: NoAction, map: "FK_Agenda_Paciente")
   funcionario    funcionario @relation(fields: [profissionalId], references: [id], onUpdate: NoAction, map: "FK_Agenda_Profissional")
   usuario        usuario     @relation(fields: [usuarioId], references: [id], onUpdate: NoAction, map: "FK_Agenda_Usuario")
@@ -100,12 +104,12 @@ model agenda {
 }
 
 model AgendaDia {
-  id        Int       @id(map: "PK__AgendaDi__3213E83F9CCFFA81") @default(autoincrement())
-  agendaId  Int
-  data      DateTime? @db.DateTime
-  diaSemana String?   @db.VarChar(10)
-  hora      String    @db.VarChar(20)
-  agenda    agenda    @relation(fields: [agendaId], references: [id], onUpdate: NoAction, map: "FK_AgendaDia_Agenda")
+  id       Int       @id(map: "PK__AgendaDi__3213E83F9CCFFA81") @default(autoincrement())
+  agendaId Int
+  data     DateTime? @db.DateTime
+  hora     String    @db.VarChar(20)
+  status   String?   @default("AGENDADO", map: "DF_AGENDAdia_status") @db.VarChar(50)
+  agenda   agenda    @relation(fields: [agendaId], references: [id], onUpdate: NoAction, map: "FK_AgendaDia_Agenda")
 
   @@map("AgendaDia")
 }
