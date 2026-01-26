@@ -1,0 +1,61 @@
+<div class="modal-bg">
+  <div class="modal">
+
+    <h3 class="titulo">{{ sessao?.paciente }}</h3>
+
+    <div class="info">
+      <p><b>Data:</b> {{ sessao?.data | date:'dd/MM/yyyy':'UTC' }} </p>
+      <p><b>Hora:</b> {{ sessao?.hora }}</p>
+      <p><b>Tipo:</b> {{ sessao?.tipo }}</p>
+      <p><b>Status:</b> {{ sessao?.status }}</p>
+    </div>
+
+    <!-- REAGENDAR -->
+    <div class="box">
+      <h4>🔄 Reagendar sessão</h4>
+
+      <div class="linha">
+        <input type="date" [(ngModel)]="novaData">
+        <input type="time" [(ngModel)]="novaHora">
+        <button class="btn primary" (click)="confirmarReagendamento()">
+          🔄 Reagendar
+        </button>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="box">
+      <h4>📌 Status da sessão</h4>
+
+      <div class="grupo-status">
+        <button class="btn status realizado"
+                (click)="marcarRealizado()">
+          ✅ Realizado
+        </button>
+
+        <button class="btn status agendado"
+                (click)="marcarAgendado()">
+          📅 Agendado
+        </button>
+
+        <button class="btn status falta"
+                (click)="marcarFalta()">
+          ❌ Falta
+        </button>
+        
+        <button class="btn cancel" (click)="cancelarSessao()">
+          🚫 Cancelar
+        </button>
+
+      </div>
+    </div>
+
+    <!-- FECHAR -->
+    <div class="rodape">
+      <button class="btn fechar" (click)="fecharModal()">
+        Fechar
+      </button>
+    </div>
+
+  </div>
+</div>

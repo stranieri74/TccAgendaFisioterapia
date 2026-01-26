@@ -30,9 +30,7 @@ export class AgendaListComponent implements OnInit {
     this.listarAgendamentos();
   }
 
-  // =====================================================
   // LISTAR TODAS AS AGENDAS
-  // =====================================================
   listarAgendamentos() {
   this.carregando = true;
 
@@ -60,9 +58,7 @@ export class AgendaListComponent implements OnInit {
     });
 }
 
-  // =====================================================
   // EXCLUIR
-  // =====================================================
   excluir(id: number) {
 
     if (!confirm('Deseja realmente excluir este agendamento?')) {
@@ -81,9 +77,7 @@ export class AgendaListComponent implements OnInit {
     });
   }
 
-  // =====================================================
   // NAVEGAÇÃO
-  // =====================================================
   novo() {
     this.router.navigate(['/agenda/novo']);
   }
@@ -92,9 +86,7 @@ export class AgendaListComponent implements OnInit {
     this.router.navigate(['/agenda/editar', id]);
   }
 
-  // =====================================================
   // CLASSE DE COR
-  // =====================================================
   getClasseEvento(tipo: string): string {
 
   if (tipo === 'FISIOTERAPIA') {
@@ -107,6 +99,21 @@ export class AgendaListComponent implements OnInit {
 
   if (tipo === 'RETORNO') {
     return 'linha-retorno';
+  }
+
+  if (tipo === 'FALTA') {
+    return 'falta';
+  }
+
+  if (tipo === 'REALIZADO') {
+    return 'realizado';
+  }
+
+  if (tipo === 'REMARCADO') {
+    return 'remarcado';
+  }
+  if (tipo === 'CANCELADO') {
+    return 'cancelado';
   }
 
   return '';

@@ -63,9 +63,7 @@ export class UsuarioFormComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  // ===============================
   // BUSCAR Funcionarios
-  // ===============================
   buscarUsuario() {
     this.carregando = true;
 
@@ -101,9 +99,7 @@ export class UsuarioFormComponent implements OnInit {
     });
 }
 
-  // ===============================
   // SALVAR
-  // ===============================
   salvar() {
 
     this.erro = '';

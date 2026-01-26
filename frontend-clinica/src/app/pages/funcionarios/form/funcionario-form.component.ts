@@ -86,9 +86,7 @@ export class FuncionarioFormComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  // ===============================
   // BUSCAR Funcionario
-  // ===============================
   buscarFuncionario() {
     this.carregando = true;
 
@@ -99,11 +97,9 @@ export class FuncionarioFormComponent implements OnInit {
 
           this.funcionario = res;
 
-          //  CONVERSÃO CORRETA DA DATA
           if (this.funcionario.dataNascimento) {
             const data = new Date(this.funcionario.dataNascimento);
 
-            // evita problema de fuso horário
             const ano = data.getFullYear();
             const mes = String(data.getMonth() + 1).padStart(2, '0');
             const dia = String(data.getDate()).padStart(2, '0');
@@ -123,9 +119,7 @@ export class FuncionarioFormComponent implements OnInit {
       });
   }
 
-  // ===============================
   // SALVAR
-  // ===============================
   salvar() {
 
     this.erro = '';

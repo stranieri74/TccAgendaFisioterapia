@@ -13,9 +13,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AgendaFormComponent implements OnInit {
 
-  // ===============================
   // CONTROLE
-  // ===============================
   modo: 'FISIOTERAPIA' | 'AVALIACAO' | 'RETORNO' = 'AVALIACAO';
   editando = false;
   id!: number;
@@ -23,15 +21,11 @@ export class AgendaFormComponent implements OnInit {
   erro = '';
   sucesso = '';
 
-  // ===============================
   // COMBOS
-  // ===============================
   pacientes: any[] = [];
   funcionarios: any[] = [];
 
-  // ===============================
   // FORM
-  // ===============================
   agendamento: any = {
     pacienteId: '',
     profissionalId: '',
@@ -41,9 +35,7 @@ export class AgendaFormComponent implements OnInit {
     quantidade: 1
   };
 
-  // ===============================
   // FISIOTERAPIA
-  // ===============================
   diasSemana = [
     { label: 'Domingo', valor: 0 },
     { label: 'Segunda', valor: 1 },
@@ -63,9 +55,6 @@ export class AgendaFormComponent implements OnInit {
     private cd: ChangeDetectorRef
   ) {}
 
-  // ===============================
-  // INIT
-  // ===============================
   ngOnInit(): void {
 
     const tipo = this.route.snapshot.paramMap.get('tipo');
@@ -86,9 +75,7 @@ export class AgendaFormComponent implements OnInit {
     
   }
 
-  // ===============================
   // COMBOS
-  // ===============================
   carregarCombos(): void {
 
     this.http.get<any[]>('http://localhost:3000/api/pacientes')
@@ -98,9 +85,7 @@ export class AgendaFormComponent implements OnInit {
       .subscribe(res => this.funcionarios = res);
   }
 
-  // ===============================
   // BUSCAR
-  // ===============================
   buscar(): void {
 
     this.http
@@ -130,9 +115,7 @@ export class AgendaFormComponent implements OnInit {
       });
   }
 
-  // ===============================
   // DIAS
-  // ===============================
   toggleDia(dia: number): void {
     this.diasSelecionados.includes(dia)
       ? this.diasSelecionados =
@@ -140,25 +123,21 @@ export class AgendaFormComponent implements OnInit {
       : this.diasSelecionados.push(dia);
   }
 
-  // ===============================
   // SALVAR
-  // ===============================
   salvar(): void {
 
     this.erro = '';
 
     const payload: any = {
-      pacienteId: this.agendamento.pacienteId,
-      profissionalId: this.agendamento.profissionalId,
+      pacienteId: Number(this.agendamento.pacienteId),
+      profissionalId: Number(this.agendamento.profissionalId),
       usuarioId: 1, // ajuste se necessário
       tipo: this.modo,
       dataInicio: this.agendamento.dataInicio,
       hora: this.agendamento.hora
     };
 
-    // ===============================
     // FISIOTERAPIA
-    // ===============================
     if (this.modo === 'FISIOTERAPIA') {
 
       if (
@@ -170,14 +149,14 @@ export class AgendaFormComponent implements OnInit {
         return;
       }
 
-      payload.diasSemana = this.diasSelecionados;
-      payload.quantidade = this.agendamento.quantidade;
+      payload.diasSemana = this.diasSelecionados.map(d => Number(d));
+      payload.quantidade = Number(this.agendamento.quantidade);
     }
 
     const req = this.editando
       ? this.http.put(
           'http://localhost:3000/api/agendas',
-          { ...payload, id: this.id }
+          { ...payload, id: Number(this.id) }
         )
       : this.http.post(
           'http://localhost:3000/api/agendas',

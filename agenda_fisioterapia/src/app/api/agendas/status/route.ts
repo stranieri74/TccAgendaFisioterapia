@@ -1,42 +1,65 @@
 import { NextResponse } from "next/server";
-import { AgendaDiaRepository } from "@/repositories/AgendaDiaRepository";
+import { prisma } from "@/prisma/infra/database/prisma";
 
-const repo = new AgendaDiaRepository();
+// ================================
+// ✅ CORS HEADERS
+// ================================
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization"
+};
 
-// ===================================================
-// PATCH — atualizar status da sessão
-// ===================================================
-export async function PATCH(request: Request) {
+// ================================
+// ✅ PRE-FLIGHT (OBRIGATÓRIO)
+// ================================
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
+// ================================
+// ✅ PATCH STATUS DA SESSÃO
+// ================================
+export async function PATCH(req: Request) {
   try {
-    const { searchParams } = new URL(request.url);
+    const body = await req.json();
 
-    const id = Number(searchParams.get("id"));
+    const { id, status } = body;
 
-    if (!id || isNaN(id)) {
+    if (!id || !status) {
       return NextResponse.json(
-        { message: "ID da sessão inválido" },
-        { status: 400 }
+        { message: "id e status são obrigatórios" },
+        { status: 400, headers: corsHeaders }
       );
     }
 
-    const body = await request.json();
-    const { status } = body;
+    const sessao = await prisma.agendaDia.findUnique({
+      where: { id: Number(id) }
+    });
 
-    if (!status) {
+    if (!sessao) {
       return NextResponse.json(
-        { message: "Status é obrigatório" },
-        { status: 400 }
+        { message: "Sessão não encontrada" },
+        { status: 404, headers: corsHeaders }
       );
     }
 
-    const atualizado = await repo.updateStatus(id, status);
+    await prisma.agendaDia.update({
+      where: { id: Number(id) },
+      data: { status }
+    });
 
-    return NextResponse.json(atualizado, { status: 200 });
-
-  } catch (error: any) {
     return NextResponse.json(
-      { message: error.message ?? "Erro interno" },
-      { status: 400 }
+      { message: "Status atualizado com sucesso" },
+      { headers: corsHeaders }
+    );
+
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { message: "Erro ao atualizar status" },
+      { status: 500, headers: corsHeaders }
     );
   }
 }

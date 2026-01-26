@@ -1,7 +1,28 @@
 <div class="topo">
 
+  <div class="legenda">
+
+  <div class="item">
+    <span class="box agendado"></span> Agendado
+  </div>
+
+  <div class="item">
+    <span class="box realizado"></span> Realizado
+  </div>
+
+  <div class="item">
+    <span class="box falta"></span> Falta
+  </div>
+
+  <div class="item">
+    <span class="box cancelado"></span> Cancelado
+  </div>
+
+</div>
+
   <div>
-    <label>Profissional:     </label>
+    <label>Profissional:</label>
+
     <select
       [(ngModel)]="profissionalId"
       (change)="buscarAgenda()">
@@ -40,9 +61,13 @@
     <tr>
       <th class="hora-col">Hora</th>
 
-      <th *ngFor="let d of diasSemana" [class.fim-semana]="isFimDeSemana(d)" >
-        {{ diasSemanaPt[d.getDay()]}}<br>
+      <th
+        *ngFor="let d of diasSemana"
+        [class.fim-semana]="isFimDeSemana(d)">
+
+        {{ diasSemanaPt[d.getDay()] }}<br>
         {{ d | date:'dd/MM' }}
+
       </th>
     </tr>
   </thead>
@@ -60,10 +85,13 @@
       <td *ngFor="let dia of diasSemana">
 
         <div
-          *ngFor="let e of eventosPorDiaHora(dia, hora)"
-          class="evento"
-          [ngClass]="getClasse(e.tipo)"
-          (click)="abrirEvento(e)">
+             *ngFor="let e of eventosPorDiaHora(dia, hora)"
+             class="evento"
+            [ngClass]="[
+                        getClasse(e.tipo),
+                        getClasseStatus(e.status)
+                       ]"
+             (click)="abrirEvento(e)">
 
           {{ e.paciente }}
 
@@ -78,17 +106,11 @@
 </table>
 </div>
 
-<!-- MODAL -->
-<div class="modal-bg" *ngIf="eventoSelecionado">
-  <div class="modal">
-
-    <h3>{{ eventoSelecionado.paciente }}</h3>
-
-    <p><b>Hora:</b> {{ eventoSelecionado.hora }}</p>
-    <p><b>Tipo:</b> {{ eventoSelecionado.tipo }}</p>
-    <p><b>Status:</b> {{ eventoSelecionado.status }}</p>
-
-    <button (click)="fecharModal()">Fechar</button>
-
-  </div>
-</div>
+<app-agenda-calendario-modal
+  *ngIf="eventoSelecionado"
+  [sessao]="eventoSelecionado"
+  (fechar)="fecharModal()"
+  (cancelar)="cancelarSessao($event)"
+  (alterarStatus)="alterarStatusSessao($event)"
+  (reagendar)="reagendarSessao($event)">
+</app-agenda-calendario-modal>

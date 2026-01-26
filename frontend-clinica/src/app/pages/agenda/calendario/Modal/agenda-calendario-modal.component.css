@@ -1,0 +1,101 @@
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  width: 520px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.3);
+}
+
+.titulo {
+  margin-bottom: 10px;
+}
+
+.info p {
+  margin: 3px 0;
+}
+
+.box {
+  border-top: 1px solid #eee;
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.linha {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.linha input {
+  padding: 6px;
+}
+
+.grupo-status {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn.primary {
+  background: #0d6efd;
+  color: white;
+  border: none;
+}
+
+.status.realizado {
+  background: #28a745;
+  color: white;
+}
+
+.status.agendado {
+  background: #0dcaf0;
+  color: white;
+}
+
+.status.falta {
+  background: #dc3545;
+  color: white;
+}
+
+.perigo {
+  display: flex;
+  gap: 10px;
+}
+
+.btn.cancel {
+  background: #ffc107;
+}
+
+.btn.delete {
+  background: #dc3545;
+  color: white;
+}
+
+.rodape {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.btn.fechar {
+  background: #343a40;
+  color: white;
+}

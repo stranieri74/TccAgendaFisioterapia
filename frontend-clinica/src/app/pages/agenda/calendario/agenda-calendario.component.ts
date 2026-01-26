@@ -8,27 +8,22 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { AgendaCalendarioModalComponent } from './Modal/agenda-calendario-modal.component';
 
 @Component({
   selector: 'app-agenda-calendario',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AgendaCalendarioModalComponent],
   templateUrl: './agenda-calendario.component.html',
   styleUrls: ['./agenda-calendario.component.css']
 })
 export class AgendaCalendarioComponent implements OnInit {
 
-  // =============================
-  // FILTROS
-  // =============================
   funcionarios: any[] = [];
   profissionalId!: number;
 
   dataInicio!: string;
 
-  // =============================
-  // CALENDÁRIO
-  // =============================
   diasSemana: Date[] = [];
   eventos: any[] = [];
 
@@ -37,7 +32,6 @@ export class AgendaCalendarioComponent implements OnInit {
   horaAtual = '';
   linhaAtualIndex = -1;
 
-  eventoSelecionado: any = null;
 
   @ViewChild('scrollArea') scrollArea!: ElementRef;
 
@@ -46,9 +40,7 @@ export class AgendaCalendarioComponent implements OnInit {
     private cd: ChangeDetectorRef
   ) {}
 
-  // =============================
-  // INIT
-  // =============================
+
   ngOnInit(): void {
 
     this.dataInicio = this.getSegundaAtual();
@@ -73,9 +65,6 @@ export class AgendaCalendarioComponent implements OnInit {
   'Sábado'
 ];
 
-  // =============================
-  // PROFISSIONAIS
-  // =============================
   carregarProfissionais() {
     this.http
       .get<any[]>('http://localhost:3000/api/funcionarios')
@@ -85,9 +74,6 @@ export class AgendaCalendarioComponent implements OnInit {
       });
   }
 
-  // =============================
-  // BUSCAR AGENDA
-  // =============================
   buscarAgenda() {
 
     if (!this.profissionalId || !this.dataInicio) return;
@@ -102,9 +88,7 @@ export class AgendaCalendarioComponent implements OnInit {
       });
   }
 
-  // =============================
-  // SEMANA
-  // =============================
+ 
   gerarSemana(data: Date) {
 
     this.diasSemana = [];
@@ -134,9 +118,6 @@ export class AgendaCalendarioComponent implements OnInit {
     }, 300);
   }
 
-  // =============================
-  // HORÁRIOS 15 EM 15
-  // =============================
   gerarHoras() {
 
     const lista: string[] = [];
@@ -154,15 +135,20 @@ export class AgendaCalendarioComponent implements OnInit {
     this.horas = lista;
   }
 
-  // =============================
-  // EVENTOS
-  // =============================
-  eventosPorDiaHora(dia: Date, hora: string) {
-    return this.eventos.filter(e =>
-      new Date(e.data).toDateString() === dia.toDateString() &&
+eventosPorDiaHora(dia: Date, hora: string) {
+
+  return this.eventos.filter(e => {
+
+    const dataEvento = this.parseDataSemFuso(e.data);
+
+    return (
+      dataEvento.getFullYear() === dia.getFullYear() &&
+      dataEvento.getMonth() === dia.getMonth() &&
+      dataEvento.getDate() === dia.getDate() &&
       e.hora === hora
     );
-  }
+  });
+}
 
   getClasse(tipo: string) {
     if (tipo === 'FISIOTERAPIA') return 'fisio';
@@ -171,9 +157,26 @@ export class AgendaCalendarioComponent implements OnInit {
     return '';
   }
 
-  // =============================
-  // HORA ATUAL
-  // =============================
+getClasseStatus(status: string): string {
+
+  switch (status) {
+    case 'AGENDADO':
+      return 'status-agendado';
+
+    case 'REALIZADO':
+      return 'status-realizado';
+
+    case 'FALTOU':
+      return 'status-falta';
+
+    case 'CANCELADO':
+      return 'status-cancelado';
+
+    default:
+      return '';
+  }
+}
+
   definirHoraAtual() {
 
     const agora = new Date();
@@ -207,20 +210,6 @@ export class AgendaCalendarioComponent implements OnInit {
     }
   }
 
-  // =============================
-  // MODAL
-  // =============================
-  abrirEvento(evento: any) {
-    this.eventoSelecionado = evento;
-  }
-
-  fecharModal() {
-    this.eventoSelecionado = null;
-  }
-
-  // =============================
-  // UTIL
-  // =============================
   getSegundaAtual(): string {
 
     const hoje = new Date();
@@ -236,6 +225,96 @@ export class AgendaCalendarioComponent implements OnInit {
 
   isFimDeSemana(data: Date): boolean {
   const dia = data.getDay();
-  return dia === 0 || dia === 6; // domingo ou sábado
+  return dia === 0 || dia === 6; 
 }
+
+// ===============================
+// MODAL
+// ===============================
+eventoSelecionado: any = null;
+
+abrirEvento(evento: any) {
+  this.eventoSelecionado = evento;
+}
+
+fecharModal() {
+  this.eventoSelecionado = null;
+}
+
+// ===============================
+// EXCLUIR SESSÃO
+// ===============================
+excluirSessao(id: number) {
+
+  if (!confirm('Deseja excluir esta sessão?')) return;
+
+  this.http.delete(
+    `http://localhost:3000/api/agendas/status?id=${id}`
+  ).subscribe(() => {
+    this.buscarAgenda();
+    this.fecharModal();
+  });
+}
+
+// ===============================
+// CANCELAR SESSÃO
+// ===============================
+cancelarSessao(id: number) {
+
+  this.http.patch(
+    `http://localhost:3000/api/agendas/status`,
+    {
+      id,
+      status: 'CANCELADO'
+    }
+  ).subscribe(() => {
+    this.buscarAgenda();
+    this.fecharModal();
+  });
+}
+
+// ===============================
+// ALTERAR STATUS
+// ===============================
+alterarStatusSessao(data: {
+  id: number;
+  status: string;
+}) {
+
+  this.http.patch(
+    `http://localhost:3000/api/agendas/status`,
+    data
+  ).subscribe(() => {
+    this.buscarAgenda();
+    this.fecharModal();
+  });
+}
+
+// ===============================
+// REAGENDAR
+// ===============================
+reagendarSessao(data: {
+  id: number;
+  novaData: string;
+  novaHora: string;
+}) {
+
+  this.http.patch(
+    `http://localhost:3000/api/agendas/status/remarcar`,
+    {
+      id: data.id,
+      novaData: data.novaData,
+      novaHora: data.novaHora
+    }
+  ).subscribe(() => {
+    this.buscarAgenda();
+    this.fecharModal();
+  });
+}
+
+private parseDataSemFuso(data: string): Date {
+  const [ano, mes, dia] = data.substring(0, 10).split('-').map(Number);
+  return new Date(ano, mes - 1, dia);
+}
+
 }
