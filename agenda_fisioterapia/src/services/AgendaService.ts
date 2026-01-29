@@ -216,6 +216,8 @@ export class AgendaService {
         profissionalId
       );
 
+
+
     if (!profissional) {
       throw new Error("Profissional não encontrado");
     }
@@ -224,6 +226,11 @@ export class AgendaService {
       profissionalId
     );
   }
+
+  async findAvaliacoesPendentesHoje(profissionalId: number) {
+  return this.agendaRepo
+    .findAvaliacoesPendentesHoje(profissionalId);
+}
 
     async buscarPorId(agendaId: number) {
 

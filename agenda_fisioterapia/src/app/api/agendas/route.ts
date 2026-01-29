@@ -40,14 +40,13 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const profissionalIdParam =
-      searchParams.get("profissionalId");
+    const profissionalIdParam = searchParams.get("profissionalId");
 
-    const dataParam =
-      searchParams.get("dataInicio");
+    const dataParam = searchParams.get("dataInicio");
     
-    const idParam =
-      searchParams.get("id");
+    const idParam = searchParams.get("id");
+    
+    const avaliacaoHojeParam = searchParams.get("avaliacaoHoje");
 
     // ======================================
     // 🔎 BUSCAR POR ID (EDIÇÃO)
@@ -84,6 +83,12 @@ export async function GET(req: Request) {
 
     if (isNaN(profissionalId)) {
       throw new Error("profissionalId inválido");
+    }
+    
+    // LISTAR avaliações profissionais, data e avaliação
+    if (profissionalIdParam && avaliacaoHojeParam === 'true') {
+       const dados = await service.findAvaliacoesPendentesHoje(profissionalId);
+       return NextResponse.json(dados, { status: 200 });
     }
 
     // =============================

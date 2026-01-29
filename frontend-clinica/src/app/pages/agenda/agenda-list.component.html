@@ -79,8 +79,8 @@
 
         <!-- STATUS -->
         <td>
-          {{ a.status || 'AGENDADO' }}
-        </td>
+  {{ a.AgendaDia?.[0]?.status || 'AGENDADO' }}
+</td>
 
         <!-- AÇÕES -->
         <td class="acoes">

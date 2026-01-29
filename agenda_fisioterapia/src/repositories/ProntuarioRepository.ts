@@ -1,5 +1,6 @@
 import { prisma } from '@/prisma/infra/database/prisma';
 import { Prontuario, TipoEvolucao } from '@/domain/entities/Prontuario';
+import { agoraBrasil } from '@/shared/utils/DataBrasil';
 
 export class ProntuarioRepository {
 
@@ -8,7 +9,6 @@ export class ProntuarioRepository {
       data: {
         tipo: prontuario.getTipoEvolucao(),
         evolucao: prontuario.getEvolucao(),
-        data: prontuario.getData(),
 
         paciente: {
           connect: { id: prontuario.getPacienteId() }
@@ -148,5 +148,33 @@ export class ProntuarioRepository {
     await prisma.prontuario.delete({
       where: { id }
     });
+  }
+
+  async buscarAtivoPorPacienteEProfissional(
+    pacienteId: number,
+    profissionalId: number
+  ): Promise<Prontuario | null> {
+
+    const prontuario = await prisma.prontuario.findFirst({
+      where: {
+        pacienteId,
+        profissionalId
+      },
+      orderBy: {
+        data: 'desc'
+      }
+    });
+
+    if (!prontuario) return null;
+
+    return new Prontuario(
+      prontuario.id,
+      prontuario.pacienteId,
+      prontuario.profissionalId,
+      prontuario.usuarioId,
+      prontuario.data ?? new Date(),
+      prontuario.evolucao ?? '',
+      prontuario.tipo as TipoEvolucao
+    );
   }
 }

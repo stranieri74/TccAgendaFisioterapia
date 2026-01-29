@@ -2,6 +2,7 @@ import { Prontuario, TipoEvolucao } from '@/domain/entities/Prontuario';
 import { ProntuarioRepository } from '@/repositories/ProntuarioRepository';
 import { PacienteRepository } from '@/repositories/PacienteRepository';
 import { FuncionarioRepository } from '@/repositories/FuncionarioRepository';
+import { agoraBrasil } from '@/shared/utils/DataBrasil';
 
 export class ProntuarioService {
   constructor(
@@ -50,7 +51,7 @@ export class ProntuarioService {
       dados.pacienteId,
       dados.profissionalId,
       dados.usuarioId,
-      dados.data,
+      agoraBrasil(),
       dados.evolucao,
       dados.tipo
     );

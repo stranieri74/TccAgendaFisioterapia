@@ -157,3 +157,22 @@ td, th {
 .legenda .cancelado {
   background: #f1c40f;
 }
+
+/* ---------------- PROFISSIONAL ---------------- */
+
+.profissional {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profissional label {
+  font-weight: 600;
+}
+
+.profissional select {
+  min-width: 220px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}

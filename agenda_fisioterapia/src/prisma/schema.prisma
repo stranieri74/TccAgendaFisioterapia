@@ -75,9 +75,10 @@ model prontuario {
   pacienteId     Int
   profissionalId Int
   usuarioId      Int
-  data           DateTime?   @default(now(), map: "DF__prontuario__data__5165187F") @db.DateTime
+  data DateTime? @db.DateTimeOffset
   tipo           String      @db.VarChar(30)
   evolucao       String?     @db.Text
+  avaliacao      avaliacao[]
   paciente       Paciente    @relation(fields: [pacienteId], references: [id], onUpdate: NoAction, map: "FK_Prontuario_Paciente")
   funcionario    funcionario @relation(fields: [profissionalId], references: [id], onUpdate: NoAction, map: "FK_Prontuario_Profissional")
   usuario        usuario     @relation(fields: [usuarioId], references: [id], onUpdate: NoAction, map: "FK_Prontuario_Usuario")
@@ -99,6 +100,7 @@ model agenda {
   funcionario    funcionario @relation(fields: [profissionalId], references: [id], onUpdate: NoAction, map: "FK_Agenda_Profissional")
   usuario        usuario     @relation(fields: [usuarioId], references: [id], onUpdate: NoAction, map: "FK_Agenda_Usuario")
   AgendaDia      AgendaDia[]
+  avaliacao      avaliacao[]
 
   @@map("agenda")
 }
@@ -112,4 +114,31 @@ model AgendaDia {
   agenda   agenda    @relation(fields: [agendaId], references: [id], onUpdate: NoAction, map: "FK_AgendaDia_Agenda")
 
   @@map("AgendaDia")
+}
+
+model avaliacao {
+  id           Int        @id(map: "PK__avaliaca__3213E83FB170ADBA") @default(autoincrement())
+  prontuarioId Int
+  agendaId     Int
+  data         DateTime   @default(dbgenerated("sysdatetime()"), map: "DF_avaliacao_data") @db.DateTime
+  tipo         String     @db.VarChar(30)
+  queixa       String?    @db.Text
+  historia     String?    @db.Text
+  doencas      String?    @db.Text
+  medicamentos String?    @db.Text
+  cirurgias    String?    @db.Text
+  dor          Int?
+  inspecao     String?    @db.Text
+  palpacao     String?    @db.Text
+  adm          String?    @db.Text
+  forca        String?    @db.Text
+  testes       String?    @db.Text
+  diagnostico  String?    @db.Text
+  objetivos    String?    @db.Text
+  plano        String?    @db.Text
+  observacoes  String?    @db.Text
+  agenda       agenda     @relation(fields: [agendaId], references: [id], onUpdate: NoAction, map: "FK_avaliacao_agenda")
+  prontuario   prontuario @relation(fields: [prontuarioId], references: [id], onUpdate: NoAction, map: "FK_avaliacao_prontuario")
+
+  @@map("avaliacao")
 }

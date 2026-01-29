@@ -1,0 +1,99 @@
+<div class="page-container">
+
+  <!-- Cabeçalho -->
+  <div class="page-header">
+    <h2>Avaliações do Dia</h2>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <table class="table">
+
+      <!-- Cabeçalho -->
+      <thead>
+        <tr>
+          <th>Horário</th>
+          <th>Paciente</th>
+          <th>Tipo</th>
+          <th>Status</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+
+      <!-- Corpo -->
+      <tbody>
+
+        <tr *ngFor="let a of atendimentos">
+
+          <!-- Horário -->
+          <td>
+            {{ a.AgendaDia?.[0]?.hora }}
+          </td>
+
+          <!-- Paciente -->
+          <td>
+            {{ a.paciente?.nome }}
+          </td>
+
+          <!-- Tipo -->
+          <td>
+            {{ a.tipo }}
+          </td>
+
+          <!-- STATUS -->
+          <td>
+  <span
+    class="status-chip"
+    [ngClass]="{
+      'pendente': a.AgendaDia?.[0]?.status === 'AGENDADO',
+      'realizado': a.AgendaDia?.[0]?.status === 'REALIZOU'
+    }"
+  >
+    {{
+      a.AgendaDia?.[0]?.status === 'AGENDADO'
+        ? '🔵 Avaliação pendente'
+        : '🟢 Avaliação realizada'
+    }}
+  </span>
+</td>
+
+          <!-- AÇÃO -->
+          <td>
+
+            <button
+  class="btn"
+  [ngClass]="{
+    'btn-primary': !a.avaliacao?.length,
+    'btn-warning': a.avaliacao?.length
+  }"
+  (click)="avaliar(
+    a.id,
+    a.avaliacao?.[0]?.id
+  )"
+>
+  {{
+    a.avaliacao?.length
+      ? 'Editar avaliação'
+      : 'Avaliar'
+  }}
+</button>
+
+          </td>
+
+        </tr>
+
+        <!-- Vazio -->
+        <tr *ngIf="atendimentos.length === 0">
+          <td colspan="5" class="empty">
+            Nenhuma avaliação encontrada para hoje.
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

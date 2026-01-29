@@ -1,0 +1,74 @@
+<div class="container">
+
+  <h2>Avaliação Fisioterapêutica</h2>
+
+  <section>
+    <h3>Queixa Principal</h3>
+    <textarea [(ngModel)]="avaliacao.queixa"></textarea>
+  </section>
+
+  <section>
+    <h3>Anamnese</h3>
+
+    <label>História da Doença Atual</label>
+    <textarea [(ngModel)]="avaliacao.historia"></textarea>
+
+    <label>Doenças Associadas</label>
+    <textarea [(ngModel)]="avaliacao.doencas"></textarea>
+
+    <label>Medicamentos</label>
+    <textarea [(ngModel)]="avaliacao.medicamentos"></textarea>
+
+    <label>Cirurgias Prévias</label>
+    <textarea [(ngModel)]="avaliacao.cirurgias"></textarea>
+  </section>
+
+  <section>
+    <h3>Avaliação Física</h3>
+
+    <label>Dor (EVA)</label>
+    <input type="number" min="0" max="10"
+           [(ngModel)]="avaliacao.dor">
+
+    <label>Inspeção</label>
+    <textarea [(ngModel)]="avaliacao.inspecao"></textarea>
+
+    <label>Palpação</label>
+    <textarea [(ngModel)]="avaliacao.palpacao"></textarea>
+
+    <label>ADM</label>
+    <textarea [(ngModel)]="avaliacao.adm"></textarea>
+
+    <label>Força Muscular</label>
+    <textarea [(ngModel)]="avaliacao.forca"></textarea>
+
+    <label>Testes</label>
+    <textarea [(ngModel)]="avaliacao.testes"></textarea>
+  </section>
+
+  <section>
+    <h3>Diagnóstico</h3>
+    <textarea [(ngModel)]="avaliacao.diagnostico"></textarea>
+  </section>
+
+  <section>
+    <h3>Objetivos</h3>
+    <textarea [(ngModel)]="avaliacao.objetivos"></textarea>
+  </section>
+
+  <section>
+    <h3>Plano Terapêutico</h3>
+    <textarea [(ngModel)]="avaliacao.plano"></textarea>
+  </section>
+
+  <section>
+    <h3>Observações</h3>
+    <textarea [(ngModel)]="avaliacao.observacoes"></textarea>
+  </section>
+
+  <div class="acoes">
+    <button class="btn-voltar">Cancelar</button>
+    <button class="btn-salvar" (click)="salvar()">Salvar Avaliação</button>
+  </div>
+
+</div>

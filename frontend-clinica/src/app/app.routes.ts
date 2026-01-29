@@ -11,7 +11,9 @@ import { UsuarioFormComponent } from './pages/usuarios/form/usuario-form.compone
 import { AgendaListComponent } from './pages/agenda/agenda-list.component';
 import { AgendaFormComponent } from './pages/agenda/agenda-form/agenda-form.component';
 import { AgendaCalendarioComponent } from './pages/agenda/calendario/agenda-calendario.component';
-
+import { SobreComponent } from './pages/sobre/sobre.component';
+import { AvaliacaoListComponent } from './pages/avaliacao/avaliacao-list.component';
+import { AvaliacaoFormComponent } from './pages/avaliacao/avaliacao-form/avaliacao-form.component';
 export const routes: Routes = [
 
   // 🔓 login fora do layout
@@ -113,10 +115,30 @@ export const routes: Routes = [
         runGuardsAndResolvers: 'always'
       },
       {
-  path: 'calendario',
-  component: AgendaCalendarioComponent,
-  runGuardsAndResolvers: 'always'
-      }
+        path: 'calendario',
+        component: AgendaCalendarioComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'sobre',
+        component: SobreComponent,
+        runGuardsAndResolvers: 'always'
+      },      
+     {
+      path: 'avaliacoes/:agendaId/:id',
+      component: AvaliacaoFormComponent,
+      runGuardsAndResolvers: 'always'
+     },
+     {
+      path: 'avaliacoes/:agendaId',
+      component: AvaliacaoFormComponent,
+      runGuardsAndResolvers: 'always'
+    },
+    {
+       path: 'avaliacoes',
+       component: AvaliacaoListComponent,
+       runGuardsAndResolvers: 'always'
+    }
 
     ]
   }

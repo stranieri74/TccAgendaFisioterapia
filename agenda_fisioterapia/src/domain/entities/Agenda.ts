@@ -16,4 +16,40 @@ export class Agenda {
     public observacao?: string,
     public ativo: boolean = true
   ) {}
+
+  getId(): number | null {
+    return this.id;
+  }
+
+  getPacienteId(): number {
+    return this.pacienteId;
+  }
+
+  getProfissionalId(): number {
+    return this.profissionalId;
+  }
+
+  getUsuarioId(): number {
+    return this.usuarioId;
+  }
+
+  getTipo(): TipoAtendimento {
+    return this.tipo;
+  }
+
+  getDataInicio(): Date {
+    return this.dataInicio;
+  }
+
+  getDataFim(): Date | undefined {
+    return this.dataFim;
+  }
+
+  getObservacao(): string | undefined {
+    return this.observacao;
+  }
+
+  getAtivo(): boolean {
+    return this.ativo;
+  }
 }
