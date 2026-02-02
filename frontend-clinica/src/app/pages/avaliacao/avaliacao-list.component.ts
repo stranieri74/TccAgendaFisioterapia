@@ -62,12 +62,12 @@ export class AvaliacaoListComponent implements OnInit {
 
           let statusAvaliacao = 'PENDENTE';
 
-          if (statusAgenda === 'REALIZOU' && !temAvaliacao) {
-            statusAvaliacao = 'REALIZADA';
+          if (statusAgenda === 'REALIZADO' && !temAvaliacao) {
+            statusAvaliacao = 'REALIZADO';
           }
 
-          if (statusAgenda === 'REALIZOU' && temAvaliacao) {
-            statusAvaliacao = 'CONCLUIDA';
+          if (statusAgenda === 'REALIZADO' && temAvaliacao) {
+            statusAvaliacao = 'CONCLUIDO';
           }
 
           return {

@@ -1,0 +1,49 @@
+<div class="container">
+
+  <h2>Evolução Fisioterapêutica</h2>
+
+  <section>
+    <label>Conduta</label>
+    <textarea [(ngModel)]="evolucao.conduta"></textarea>
+  </section>
+
+  <section>
+    <label>Exercícios</label>
+    <textarea [(ngModel)]="evolucao.exercicios"></textarea>
+  </section>
+
+  <section>
+    <label>Recursos</label>
+    <textarea [(ngModel)]="evolucao.recursos"></textarea>
+  </section>
+
+  <section>
+    <label>Resposta do Paciente</label>
+    <textarea [(ngModel)]="evolucao.respostaPaciente"></textarea>
+  </section>
+
+  <section>
+    <label>Observações</label>
+    <textarea [(ngModel)]="evolucao.observacoes"></textarea>
+  </section>
+
+  <section class="alta-box">
+    <label class="alta-label">
+      <input
+        type="checkbox"
+        [(ngModel)]="evolucao.alta"
+      />
+      Registrar alta do paciente
+    </label>
+
+    <small class="alta-info">
+      Ao marcar alta, o tratamento será encerrado e a agenda será finalizada.
+    </small>
+  </section>
+
+  <div class="acoes">
+    <button class="btn-voltar" (click)="cancelar()">Cancelar</button>
+    <button class="btn-salvar" (click)="salvar()">Salvar evolução</button>
+  </div>
+
+</div>

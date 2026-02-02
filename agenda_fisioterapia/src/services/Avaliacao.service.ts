@@ -98,7 +98,7 @@ export class AvaliacaoService {
 
 await this.agendaRepository.atualizarStatusDia(
     agenda.id,
-    'REALIZOU'
+    'REALIZADO'
   );
 
   await this.agendaRepository.atualizarDataFim(

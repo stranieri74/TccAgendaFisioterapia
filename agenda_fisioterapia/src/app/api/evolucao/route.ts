@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { AvaliacaoService } from '@/services/Avaliacao.service';
-import { AvaliacaoRepository } from '@/repositories/AvaliacaoRepository';
+import { EvolucaoService } from '@/services/EvolucaoService';
+import { EvolucaoRepository } from '@/repositories/EvolucaoRepository';
 import { ProntuarioRepository } from '@/repositories/ProntuarioRepository';
+import { AgendaDiaRepository } from '@/repositories/AgendaDiaRepository';
 import { AgendaRepository } from '@/repositories/AgendaRepository';
-
 import { JwtService } from '@/shared/security/JwtService';
 import { autorizar } from '@/shared/security/Authorization';
 import { PerfilUsuario } from '@/domain/entities/Usuario';
@@ -20,32 +20,27 @@ function getAuthPayload(request: Request) {
   return JwtService.validarToken(token);
 }
 
-
-const avaliacaoRepository = new AvaliacaoRepository();
+const evolucaoRepository = new EvolucaoRepository();
 const prontuarioRepository = new ProntuarioRepository();
+const agendaDiaRepository = new AgendaDiaRepository();
 const agendaRepository = new AgendaRepository();
 
-const service = new AvaliacaoService(
-  avaliacaoRepository,
+const service = new EvolucaoService(
+  evolucaoRepository,
   prontuarioRepository,
+  agendaDiaRepository,
   agendaRepository
 );
 
 export async function POST(request: Request) {
   try {
-
     const payload = getAuthPayload(request);
-    autorizar(payload.perfil, [
-      PerfilUsuario.ADMIN,
-      PerfilUsuario.PROFISSIONAL
-    ]);
+    autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.PROFISSIONAL, PerfilUsuario.RECEPCAO]);
 
     const body = await request.json();
+    const evolucao = await service.cadastrar(body);
 
-    // 🔥 método correto
-    const avaliacao = await service.cadastrar(body);
-
-    return NextResponse.json(avaliacao, { status: 201 });
+    return NextResponse.json(evolucao, { status: 201 });
 
   } catch (error: any) {
     return NextResponse.json(
@@ -57,34 +52,42 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
+
     const payload = getAuthPayload(request);
+
     autorizar(payload.perfil, [
       PerfilUsuario.ADMIN,
-      PerfilUsuario.PROFISSIONAL,
-      PerfilUsuario.RECEPCAO
+      PerfilUsuario.PROFISSIONAL
     ]);
 
     const { searchParams } = new URL(request.url);
-    const agendaId = Number(searchParams.get('agendaId'));
 
-    if (!agendaId) {
+    const hoje = searchParams.get('hoje');
+    const profissionalId = Number(searchParams.get('profissionalId'));
+    const Id = Number(searchParams.get('Id'));
+     if (!profissionalId) {
+
       return NextResponse.json(
-        { message: 'agendaId é obrigatório' },
-        { status: 400 }
+        await service
+          .listarEvolucaoId(
+            Id
+          )
+      );
+    }   
+
+    // EVOLUÇÕES DO DIA — FISIOTERAPIA
+    
+    if (hoje === 'true' && profissionalId) {
+
+      return NextResponse.json(
+        await service
+          .listarFisioterapiaHojePorProfissional(
+            profissionalId
+          )
       );
     }
 
-    const avaliacao = await service.buscarPorAgendaId(agendaId);
-    
-    // ✅ NÃO ENCONTROU
-    if (!avaliacao) {
-      return NextResponse.json(
-        { message: 'Avaliação não encontrada para esta agenda' },
-        { status: 404 }
-      );
-    }
-    
-    return NextResponse.json(avaliacao);
+    return NextResponse.json([]);
 
   } catch (error: any) {
     return NextResponse.json(
@@ -96,18 +99,23 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-
     const payload = getAuthPayload(request);
-    autorizar(payload.perfil, [
-      PerfilUsuario.ADMIN,
-      PerfilUsuario.PROFISSIONAL
-    ]);
-
+    autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.PROFISSIONAL, PerfilUsuario.RECEPCAO]);
     const body = await request.json();
 
-    const avaliacao = await service.atualizar(body);
+    const evolucao = await service.atualizar({
+      id: Number(body.id),
+      agendaDiaId: Number(body.agendaDiaId),
+      conduta: body.conduta,
+      exercicios: body.exercicios,
+      recursos: body.recursos,
+      respostaPaciente: body.respostaPaciente,
+      data: body.data,
+      observacoes: body.observacoes,
+      alta: body.alta
+    });
 
-    return NextResponse.json(avaliacao);
+    return NextResponse.json(evolucao);
 
   } catch (error: any) {
     return NextResponse.json(
@@ -116,3 +124,6 @@ export async function PUT(request: Request) {
     );
   }
 }
+
+
+

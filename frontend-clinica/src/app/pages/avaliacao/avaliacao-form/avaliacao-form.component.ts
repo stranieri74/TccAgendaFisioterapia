@@ -76,7 +76,7 @@ ngOnInit(): void {
   buscar(): void {
 
     if (!this.agendaId) return;
-alert(this.agendaId);
+
     this.http
       .get<any>(
         `http://localhost:3000/api/avaliacao?agendaId=${this.agendaId}`

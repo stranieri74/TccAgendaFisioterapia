@@ -47,13 +47,13 @@
     class="status-chip"
     [ngClass]="{
       'pendente': a.AgendaDia?.[0]?.status === 'AGENDADO',
-      'realizado': a.AgendaDia?.[0]?.status === 'REALIZOU'
+      'realizado': a.AgendaDia?.[0]?.status === 'REALIZADO'
     }"
   >
     {{
       a.AgendaDia?.[0]?.status === 'AGENDADO'
-        ? '🔵 Avaliação pendente'
-        : '🟢 Avaliação realizada'
+        ? '🔵 Pendente'
+        : '🟢 Concluido'
     }}
   </span>
 </td>

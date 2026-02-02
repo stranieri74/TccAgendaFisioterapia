@@ -64,7 +64,7 @@ async findAvaliacoesPendentesHoje(profissionalId: number) {
       AgendaDia: {
         some: {
           status: {
-            in: ['AGENDADO', 'REALIZOU']
+            in: ['AGENDADO', 'REALIZADO']
           },
           data: {
             gte: hoje,
@@ -78,12 +78,10 @@ async findAvaliacoesPendentesHoje(profissionalId: number) {
 
       paciente: true,
       funcionario: true,
-
-      // ✅ agenda do dia
       AgendaDia: {
         where: {
           status: {
-            in: ['AGENDADO', 'REALIZOU']
+            in: ['AGENDADO', 'REALIZADO']
           }
         },
         orderBy: {
@@ -91,7 +89,6 @@ async findAvaliacoesPendentesHoje(profissionalId: number) {
         }
       },
 
-      // ✅ AQUI ESTÁ A CHAVE
       avaliacao: {
         select: {
           id: true,

@@ -75,10 +75,11 @@ model prontuario {
   pacienteId     Int
   profissionalId Int
   usuarioId      Int
-  data DateTime? @db.DateTimeOffset
+  data           DateTime?   @default(dbgenerated("sysdatetimeoffset()"), map: "DF_prontuario_data") @db.DateTimeOffset
   tipo           String      @db.VarChar(30)
   evolucao       String?     @db.Text
   avaliacao      avaliacao[]
+  evolucoes      evolucoes[]
   paciente       Paciente    @relation(fields: [pacienteId], references: [id], onUpdate: NoAction, map: "FK_Prontuario_Paciente")
   funcionario    funcionario @relation(fields: [profissionalId], references: [id], onUpdate: NoAction, map: "FK_Prontuario_Profissional")
   usuario        usuario     @relation(fields: [usuarioId], references: [id], onUpdate: NoAction, map: "FK_Prontuario_Usuario")
@@ -106,12 +107,13 @@ model agenda {
 }
 
 model AgendaDia {
-  id       Int       @id(map: "PK__AgendaDi__3213E83F9CCFFA81") @default(autoincrement())
-  agendaId Int
-  data     DateTime? @db.DateTime
-  hora     String    @db.VarChar(20)
-  status   String?   @default("AGENDADO", map: "DF_AGENDAdia_status") @db.VarChar(50)
-  agenda   agenda    @relation(fields: [agendaId], references: [id], onUpdate: NoAction, map: "FK_AgendaDia_Agenda")
+  id        Int         @id(map: "PK__AgendaDi__3213E83F9CCFFA81") @default(autoincrement())
+  agendaId  Int
+  data      DateTime?   @db.DateTime
+  hora      String      @db.VarChar(20)
+  status    String?     @default("AGENDADO", map: "DF_AGENDAdia_status") @db.VarChar(50)
+  agenda    agenda      @relation(fields: [agendaId], references: [id], onUpdate: NoAction, map: "FK_AgendaDia_Agenda")
+  evolucoes evolucoes[]
 
   @@map("AgendaDia")
 }
@@ -141,4 +143,19 @@ model avaliacao {
   prontuario   prontuario @relation(fields: [prontuarioId], references: [id], onUpdate: NoAction, map: "FK_avaliacao_prontuario")
 
   @@map("avaliacao")
+}
+
+model evolucoes {
+  id               Int        @id(map: "PK_evolucao") @default(autoincrement())
+  prontuarioId     Int
+  agendaDiaId      Int
+  data             DateTime   @default(dbgenerated("sysdatetimeoffset()"), map: "DF_evolucao_data") @db.DateTimeOffset
+  conduta          String?    @db.NVarChar(Max)
+  exercicios       String?    @db.NVarChar(Max)
+  recursos         String?    @db.NVarChar(Max)
+  respostaPaciente String?    @db.NVarChar(Max)
+  observacoes      String?    @db.NVarChar(Max)
+  alta             Decimal    @default(0, map: "DF_evolucoes_alta") @db.Decimal(1, 0)
+  AgendaDia        AgendaDia  @relation(fields: [agendaDiaId], references: [id], onUpdate: NoAction, map: "FK_evolucao_agendaDia")
+  prontuario       prontuario @relation(fields: [prontuarioId], references: [id], onUpdate: NoAction, map: "FK_evolucao_prontuario")
 }

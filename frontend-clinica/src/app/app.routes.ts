@@ -14,6 +14,9 @@ import { AgendaCalendarioComponent } from './pages/agenda/calendario/agenda-cale
 import { SobreComponent } from './pages/sobre/sobre.component';
 import { AvaliacaoListComponent } from './pages/avaliacao/avaliacao-list.component';
 import { AvaliacaoFormComponent } from './pages/avaliacao/avaliacao-form/avaliacao-form.component';
+
+import { EvolucaoListComponent } from './pages/evolucao/evolucao-list.component';
+import { EvolucaoFormComponent } from './pages/evolucao/evolucao-form/evolucao-form.component';
 export const routes: Routes = [
 
   // 🔓 login fora do layout
@@ -138,6 +141,21 @@ export const routes: Routes = [
        path: 'avaliacoes',
        component: AvaliacaoListComponent,
        runGuardsAndResolvers: 'always'
+    },
+    {
+     path: 'evolucao',
+     component: EvolucaoListComponent,
+     runGuardsAndResolvers: 'always'
+    },
+    {
+     path: 'evolucao/:agendaDiaId',
+     component: EvolucaoFormComponent,
+     runGuardsAndResolvers: 'always'
+    },
+    {
+     path: 'evolucao/:agendaDiaId/:id',
+     component: EvolucaoFormComponent,
+     runGuardsAndResolvers: 'always'
     }
 
     ]

@@ -6,13 +6,18 @@ export class AgendaDiaRepository {
   }
 
 async findById(id: number) {
-    return prisma.agendaDia.findUnique({
-      where: { id },
-      include: {
-        agenda: true
+  return prisma.agendaDia.findUnique({
+    where: { id },
+    include: {
+      agenda: {
+        include: {
+          paciente: true,
+          funcionario: true
+        }
       }
-    });
-  }
+    }
+  });
+}
 
 findConflict(
     profissionalId: number,
@@ -90,7 +95,95 @@ async updateStatus(id: number, status: string) {
 
   deleteByAgenda(agendaId: number) {
   return prisma.agendaDia.deleteMany({
-    where: { agendaId }
+    where: { agendaId,
+      status: 'AGENDADO' }
   });
 }
+
+async listarFisioterapiaHojePorProfissional(
+  profissionalId: number
+) {
+
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+
+  const amanha = new Date(hoje);
+  amanha.setDate(amanha.getDate() + 1);
+
+  return prisma.agendaDia.findMany({
+    where: {
+      data: {
+        gte: hoje,
+        lt: amanha
+      },
+      status: {
+        in: ['AGENDADO', 'REALIZADO']
+      },
+      agenda: {
+        profissionalId,
+        tipo: 'FISIOTERAPIA'
+      }
+    },
+    include: {
+      evolucoes: true,
+      agenda: {
+        include: {
+          paciente: true,
+          funcionario: true
+        }
+      }
+    },
+    orderBy: {
+      hora: 'asc'
+    }
+  });
+}
+
+async cancelarSessoesFuturas(
+  agendaId: number,
+  dataReferencia: Date
+) {
+  return prisma.agendaDia.updateMany({
+    where: {
+      agendaId,
+      data: {
+        gt: dataReferencia
+      },
+      status: {
+        not: 'CANCELADO'
+      }
+    },
+    data: {
+      status: 'CANCELADO'
+    }
+  });
+}
+
+async reverterAltaIndevida(
+  agendaId: number,
+  dataReferencia: Date
+) {
+  // 1️⃣ Reativa as sessões futuras
+  await prisma.agendaDia.updateMany({
+    where: {
+      agendaId,
+      data: {
+        gt: dataReferencia
+      },
+      status: 'CANCELADO'
+    },
+    data: {
+      status: 'AGENDADO'
+    }
+  });
+
+  // 2️⃣ Remove a data fim da agenda
+  return prisma.agenda.update({
+    where: { id: agendaId },
+    data: {
+      dataFim: null
+    }
+  });
+}
+
 }
