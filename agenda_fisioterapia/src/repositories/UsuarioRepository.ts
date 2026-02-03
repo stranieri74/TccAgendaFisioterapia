@@ -209,5 +209,38 @@ async buscarPorIdComFuncionario(id: number) {
   });
 }
 
+async buscarParaRecuperacao(dados: {
+    email: string;
+    cpf?: string;
+    cnpj?: string;
+    crefito: string;
+  }) {
+
+    return prisma.usuario.findFirst({
+      where: {
+        funcionario: {
+          email: dados.email,
+          crefito: dados.crefito,
+          OR: [
+            { cpf: dados.cpf },
+            { cnpj: dados.cnpj }
+          ]
+        }
+      },
+      include: {
+        funcionario: true
+      }
+    });
+  }
+
+  async atualizarSenha(
+    usuarioId: number,
+    senhaHash: string
+  ) {
+    return prisma.usuario.update({
+      where: { id: usuarioId },
+      data: { senhaHash }
+    });
+  }
 }
 

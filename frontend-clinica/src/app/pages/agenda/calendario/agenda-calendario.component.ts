@@ -171,7 +171,8 @@ getClasseStatus(status: string): string {
 
     case 'CANCELADO':
       return 'status-cancelado';
-
+    case 'ALTA':
+      return 'status-alta';
     default:
       return '';
   }

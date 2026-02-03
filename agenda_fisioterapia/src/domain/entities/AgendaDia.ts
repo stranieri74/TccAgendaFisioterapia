@@ -2,7 +2,8 @@ export enum StatusAgendaDia {
   AGENDADO = "AGENDADO",
   REALIZADO = "REALIZADO",
   FALTOU = "FALTOU",
-  CANCELADO = "CANCELADO"
+  CANCELADO = "CANCELADO",
+  ALTA = "ALTA"
 }
 
 export class AgendaDia {

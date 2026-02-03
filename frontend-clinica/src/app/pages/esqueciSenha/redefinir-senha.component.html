@@ -1,0 +1,63 @@
+<div class="container">
+
+  <h2>🔐 Recuperação de Senha</h2>
+
+  <div *ngIf="erro" class="erro">
+    {{ erro }}
+  </div>
+
+  <div *ngIf="sucesso" class="sucesso">
+    {{ sucesso }}
+  </div>
+
+  <section>
+    <label>Email</label>
+    <input
+      type="email"
+      [(ngModel)]="form.email"
+      placeholder="Informe seu email"
+    />
+  </section>
+
+  <section>
+    <label>CPF</label>
+    <input
+      type="text"
+      [(ngModel)]="form.cpf"
+      placeholder="Informe CPF"
+    />
+  </section>
+
+  <section>
+    <label>CREFITO</label>
+    <input
+      type="text"
+      [(ngModel)]="form.crefito"
+      placeholder="Informe o CREFITO"
+    />
+  </section>
+
+  <section>
+    <label>Nova senha</label>
+    <input
+      type="password"
+      [(ngModel)]="form.novaSenha"
+      placeholder="Nova senha"
+    />
+  </section>
+
+  <section>
+    <label>Confirmar nova senha</label>
+    <input
+      type="password"
+      [(ngModel)]="form.confirmarSenha"
+      placeholder="Confirme a senha"
+    />
+  </section>
+
+  <div class="acoes">
+    <button class="btn-voltar" (click)="cancelar()">Cancelar</button>
+    <button class="btn-salvar" (click)="salvar()">Salvar nova senha</button>
+  </div>
+
+</div>

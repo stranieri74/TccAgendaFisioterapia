@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -8,7 +8,8 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule,
+            RouterModule ]
 })
 export class Login {
  mensagemEsqueciSenha = 'Esqueci minha senha';

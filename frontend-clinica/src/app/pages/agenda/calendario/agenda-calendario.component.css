@@ -123,6 +123,11 @@ td, th {
   color: #000;
 }
 
+.status-alta {
+  background-color: #ec920b;
+  color: #000;
+}
+
 .legenda {
   display: flex;
   gap: 20px;
@@ -156,6 +161,10 @@ td, th {
 
 .legenda .cancelado {
   background: #f1c40f;
+}
+
+.legenda .alta {
+  background: #ec920b;
 }
 
 /* ---------------- PROFISSIONAL ---------------- */

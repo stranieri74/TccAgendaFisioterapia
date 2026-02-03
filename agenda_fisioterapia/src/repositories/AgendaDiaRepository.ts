@@ -150,11 +150,11 @@ async cancelarSessoesFuturas(
         gt: dataReferencia
       },
       status: {
-        not: 'CANCELADO'
+        not: 'ALTA'
       }
     },
     data: {
-      status: 'CANCELADO'
+      status: 'ALTA'
     }
   });
 }
@@ -170,7 +170,7 @@ async reverterAltaIndevida(
       data: {
         gt: dataReferencia
       },
-      status: 'CANCELADO'
+      status: 'ALTA'
     },
     data: {
       status: 'AGENDADO'

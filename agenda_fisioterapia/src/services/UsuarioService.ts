@@ -208,4 +208,27 @@ export class UsuarioService {
 
     return await this.repository.atualizar(dados);
   }
+
+   async recuperarSenha(dados: {
+  email: string;
+  cpf: string;
+  cnpj: string;
+  crefito: string;
+  novaSenha: string;
+}) {
+  const usuario = await this.repository.buscarParaRecuperacao(
+    dados
+  );
+
+  if (!usuario) {
+    throw new Error('Dados não conferem');
+  }
+
+  const senhaHash = await bcrypt.hash(dados.novaSenha, 10);
+
+  await this.repository.atualizarSenha(
+    usuario.id,
+    senhaHash
+  );
+}
 }

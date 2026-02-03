@@ -14,9 +14,9 @@ import { AgendaCalendarioComponent } from './pages/agenda/calendario/agenda-cale
 import { SobreComponent } from './pages/sobre/sobre.component';
 import { AvaliacaoListComponent } from './pages/avaliacao/avaliacao-list.component';
 import { AvaliacaoFormComponent } from './pages/avaliacao/avaliacao-form/avaliacao-form.component';
-
 import { EvolucaoListComponent } from './pages/evolucao/evolucao-list.component';
 import { EvolucaoFormComponent } from './pages/evolucao/evolucao-form/evolucao-form.component';
+import { RedefinirSenhaComponent } from './pages/esqueciSenha/redefinir-senha.component';
 export const routes: Routes = [
 
   // 🔓 login fora do layout
@@ -26,6 +26,12 @@ export const routes: Routes = [
       import('./auth/login/login')
         .then(m => m.Login)
   },
+{
+  path: 'esqueci-senha',
+  loadComponent: () =>
+    import('./pages/esqueciSenha/redefinir-senha.component')
+      .then(m => m.RedefinirSenhaComponent)
+},
 
   // 🔐 rotas protegidas
   {
