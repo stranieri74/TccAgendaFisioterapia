@@ -21,7 +21,7 @@ export class LayoutComponent {
     this.verificarTela();
   }
 
-  
+
 
   @HostListener('window:resize')
   verificarTela() {
@@ -47,10 +47,10 @@ export class LayoutComponent {
   }
 
   logout() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('usuario');
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
 
-  this.router.navigate(['/login']);
-}
+    this.router.navigate(['/login']);
+  }
 
 }

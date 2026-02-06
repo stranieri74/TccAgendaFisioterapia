@@ -43,41 +43,34 @@
 
           <!-- STATUS -->
           <td>
-  <span
-    class="status-chip"
-    [ngClass]="{
+            <span class="status-chip" [ngClass]="{
       'pendente': a.AgendaDia?.[0]?.status === 'AGENDADO',
       'realizado': a.AgendaDia?.[0]?.status === 'REALIZADO'
-    }"
-  >
-    {{
-      a.AgendaDia?.[0]?.status === 'AGENDADO'
-        ? '🔵 Pendente'
-        : '🟢 Concluido'
-    }}
-  </span>
-</td>
+    }">
+              {{
+              a.AgendaDia?.[0]?.status === 'AGENDADO'
+              ? '🔵 Pendente'
+              : '🟢 Concluido'
+              }}
+            </span>
+          </td>
 
           <!-- AÇÃO -->
           <td>
 
-            <button
-  class="btn"
-  [ngClass]="{
+            <button class="btn" [ngClass]="{
     'btn-primary': !a.avaliacao?.length,
     'btn-warning': a.avaliacao?.length
-  }"
-  (click)="avaliar(
+  }" (click)="avaliar(
     a.id,
     a.avaliacao?.[0]?.id
-  )"
->
-  {{
-    a.avaliacao?.length
-      ? 'Editar avaliação'
-      : 'Avaliar'
-  }}
-</button>
+  )">
+              {{
+              a.avaliacao?.length
+              ? 'Editar avaliação'
+              : 'Avaliar'
+              }}
+            </button>
 
           </td>
 

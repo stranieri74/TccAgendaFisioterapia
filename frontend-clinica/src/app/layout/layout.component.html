@@ -1,10 +1,7 @@
 <div class="layout">
 
   <!-- OVERLAY MOBILE -->
-  <div
-    class="overlay"
-    *ngIf="mobile && menuAberto"
-    (click)="toggleMenu()">
+  <div class="overlay" *ngIf="mobile && menuAberto" (click)="toggleMenu()">
   </div>
 
   <!-- MENU -->
@@ -37,7 +34,7 @@
       <div class="submenu" *ngIf="submenuAberto === 'agenda'">
         <a routerLink="/agenda" (click)="fecharMenuMobile()">Agendamentos</a>
         <a routerLink="/calendario" (click)="fecharMenuMobile()">Calendário</a>
-        <a routerLink="/prontuarios" (click)="fecharMenuMobile()">Prontuários</a>
+        <a routerLink="/prontuario" (click)="fecharMenuMobile()">Prontuários</a>
       </div>
 
       <!-- EVOLUÇÃO -->
@@ -50,10 +47,7 @@
       </div>
 
       <!-- AVALIAÇÕES -->
-      <div
-        class="menu-item"
-        routerLink="/avaliacoes"
-        (click)="fecharMenuMobile()">
+      <div class="menu-item" routerLink="/avaliacoes" (click)="fecharMenuMobile()">
         🧠 <span *ngIf="menuAberto">Avaliações</span>
       </div>
 
@@ -67,7 +61,7 @@
       </a>
 
       <a class="logout" (click)="logout()">
-        ❌  <span *ngIf="menuAberto">Sair</span>
+        ❌ <span *ngIf="menuAberto">Sair</span>
       </a>
 
     </div>
@@ -85,7 +79,7 @@
     <section class="page">
       <router-outlet></router-outlet>
     </section>
-      <!-- ✅ RODAPÉ -->
+    <!-- ✅ RODAPÉ -->
     <app-footer></app-footer>
   </main>
 

@@ -1,6 +1,6 @@
 export enum TipoEvolucao {
-  AVALIACAO ='AVALIACAO',
-  REAVALIACAO ='REAVALIACAO',
+  AVALIACAO = 'AVALIACAO',
+  REAVALIACAO = 'REAVALIACAO',
   SESSAO = 'SESSAO',
   ALTA = 'ALTA'
 }
@@ -14,7 +14,8 @@ export class Prontuario {
     private data: Date,
     private evolucao: string,
     private tipo: TipoEvolucao,
-  ) {this.id = id,
+  ) {
+    this.id = id,
     this.data = data,
     this.evolucao = evolucao,
     this.tipo = tipo,
@@ -23,11 +24,11 @@ export class Prontuario {
     this.usuarioId = usuarioId
   }
 
-  getId() : number {
+  getId(): number {
     return this.id;
   }
 
-  getPacienteId() : number {
+  getPacienteId(): number {
     return this.pacienteId;
   }
 
@@ -35,11 +36,11 @@ export class Prontuario {
     return this.profissionalId;
   }
 
-  getUsuarioId() : number{
+  getUsuarioId(): number {
     return this.usuarioId;
   }
 
-  getData() :Date{
+  getData(): Date {
     return this.data;
   }
 
@@ -47,7 +48,7 @@ export class Prontuario {
     return this.evolucao;
   }
 
-   getTipoEvolucao(): TipoEvolucao {
-      return this.tipo;
-    }
+  getTipoEvolucao(): TipoEvolucao {
+    return this.tipo;
+  }
 }

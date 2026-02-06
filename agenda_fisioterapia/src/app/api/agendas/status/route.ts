@@ -1,25 +1,19 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/prisma/infra/database/prisma";
 
-// ================================
-// ✅ CORS HEADERS
-// ================================
+//  CORS HEADERS
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization"
 };
 
-// ================================
-// ✅ PRE-FLIGHT (OBRIGATÓRIO)
-// ================================
+// PRE-FLIGHT (OBRIGATÓRIO)
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// ================================
-// ✅ PATCH STATUS DA SESSÃO
-// ================================
+// PATCH STATUS DA SESSÃO
 export async function PATCH(req: Request) {
   try {
     const body = await req.json();

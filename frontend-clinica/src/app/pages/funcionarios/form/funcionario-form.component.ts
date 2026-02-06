@@ -21,23 +21,23 @@ export class FuncionarioFormComponent implements OnInit {
   id!: number;
 
   funcionario: any = {
-     nome: '',
-     dataNascimento: '',
-     cep: '',
-     cnpj: '',
-     uf: '',
-     cidade: '',
-     endereco: '',
-     numero: 0,
-     bairro: '',
-     telefone: '',
-     celular: '',
-     cpf: '',
-     email: '',
-     crefito: '',
-     sexo: 0,
-     estadoCivil: 0,
-     ativo: 0
+    nome: '',
+    dataNascimento: '',
+    cep: '',
+    cnpj: '',
+    uf: '',
+    cidade: '',
+    endereco: '',
+    numero: 0,
+    bairro: '',
+    telefone: '',
+    celular: '',
+    cpf: '',
+    email: '',
+    crefito: '',
+    sexo: 0,
+    estadoCivil: 0,
+    ativo: 0
   };
 
   constructor(
@@ -45,7 +45,7 @@ export class FuncionarioFormComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private cd: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -64,23 +64,23 @@ export class FuncionarioFormComponent implements OnInit {
 
   resetForm() {
     this.funcionario = {
-       nome: '',
-       dataNascimento: '',
-       cep: '',
-       cnpj: '',
-       uf: '',
-       cidade: '',
-       endereco: '',
-       numero: 0,
-       bairro: '',
-       telefone: '',
-       celular: '',
-       cpf: '',
-       email: '',
-       crefito: '',
-       sexo: 0,
-       estadoCivil: 0,
-       ativo: 0
+      nome: '',
+      dataNascimento: '',
+      cep: '',
+      cnpj: '',
+      uf: '',
+      cidade: '',
+      endereco: '',
+      numero: 0,
+      bairro: '',
+      telefone: '',
+      celular: '',
+      cpf: '',
+      email: '',
+      crefito: '',
+      sexo: 0,
+      estadoCivil: 0,
+      ativo: 0
     };
 
     this.cd.detectChanges();
@@ -136,13 +136,13 @@ export class FuncionarioFormComponent implements OnInit {
 
     const request = this.editando
       ? this.http.put(
-          'http://localhost:3000/api/funcionarios',
-          { ...funcionarioEnvio, id: this.id }
-        )
+        'http://localhost:3000/api/funcionarios',
+        { ...funcionarioEnvio, id: this.id }
+      )
       : this.http.post(
-          'http://localhost:3000/api/funcionarios',
-          funcionarioEnvio
-        );
+        'http://localhost:3000/api/funcionarios',
+        funcionarioEnvio
+      );
 
     request.subscribe({
       next: () => {

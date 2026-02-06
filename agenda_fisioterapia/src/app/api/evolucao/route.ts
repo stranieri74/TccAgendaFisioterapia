@@ -4,21 +4,9 @@ import { EvolucaoRepository } from '@/repositories/EvolucaoRepository';
 import { ProntuarioRepository } from '@/repositories/ProntuarioRepository';
 import { AgendaDiaRepository } from '@/repositories/AgendaDiaRepository';
 import { AgendaRepository } from '@/repositories/AgendaRepository';
-import { JwtService } from '@/shared/security/JwtService';
 import { autorizar } from '@/shared/security/Authorization';
 import { PerfilUsuario } from '@/domain/entities/Usuario';
-
-function getAuthPayload(request: Request) {
-  const authHeader = request.headers.get('authorization');
-
-  if (!authHeader) throw new Error('Token não informado');
-
-  const [, token] = authHeader.split(' ');
-
-  if (!token) throw new Error('Token mal formatado');
-
-  return JwtService.validarToken(token);
-}
+import { getAuthPayload } from '@/middlewares/auth.middleware';
 
 const evolucaoRepository = new EvolucaoRepository();
 const prontuarioRepository = new ProntuarioRepository();
@@ -65,7 +53,7 @@ export async function GET(request: Request) {
     const hoje = searchParams.get('hoje');
     const profissionalId = Number(searchParams.get('profissionalId'));
     const Id = Number(searchParams.get('Id'));
-     if (!profissionalId) {
+    if (!profissionalId) {
 
       return NextResponse.json(
         await service
@@ -73,10 +61,9 @@ export async function GET(request: Request) {
             Id
           )
       );
-    }   
+    }
 
     // EVOLUÇÕES DO DIA — FISIOTERAPIA
-    
     if (hoje === 'true' && profissionalId) {
 
       return NextResponse.json(

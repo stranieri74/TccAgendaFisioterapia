@@ -1,0 +1,177 @@
+/* BASE */
+.page-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 16px;
+  font-family: system-ui, sans-serif;
+}
+
+.page-header h2 {
+  margin-bottom: 4px;
+}
+
+.page-header p {
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+/* CARDS */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* BUSCA */
+.busca {
+  display: flex;
+  gap: 8px;
+}
+
+.busca input {
+  flex: 1;
+  padding: 8px;
+}
+
+.busca button {
+  padding: 8px 16px;
+}
+
+/* INFO */
+.info span {
+  color: #374151;
+}
+
+/* AVALIAÇÃO */
+.avaliacao .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.avaliacao .grid div {
+  display: flex;
+  flex-direction: column;
+}
+
+.avaliacao .grid .full {
+  grid-column: span 2;
+}
+
+/* TABLE */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background: #f9fafb;
+}
+
+/* BADGE */
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #e5e7eb;
+}
+
+.badge.ok {
+  background: #22c55e;
+  color: white;
+}
+
+/* MOBILE LIST */
+.mobile-list {
+  display: none;
+}
+
+.mobile-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+/* DRAWER */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 380px;
+  height: 100%;
+  background: white;
+  padding: 16px;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.2);
+}
+
+.drawer header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-content {
+  margin-top: 16px;
+}
+
+/* ALERT */
+.alert {
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* EMPTY */
+.empty {
+  text-align: center;
+  color: #6b7280;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .busca {
+    flex-direction: column;
+  }
+
+  .table {
+    display: none;
+  }
+
+  .mobile-list {
+    display: block;
+  }
+
+  .avaliacao .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .drawer {
+    width: 100%;
+  }
+}

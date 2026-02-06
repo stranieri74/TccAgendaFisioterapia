@@ -10,9 +10,8 @@ const usuarioService = new UsuarioService(
   funcionarioRepository
 );
 
-/**
- * ✅ Preflight (CORS)
- */
+//Preflight (CORS)
+
 export async function OPTIONS() {
   return NextResponse.json(
     {},
@@ -26,9 +25,8 @@ export async function OPTIONS() {
   );
 }
 
-/**
- * 🔐 Login
- */
+//Login
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();

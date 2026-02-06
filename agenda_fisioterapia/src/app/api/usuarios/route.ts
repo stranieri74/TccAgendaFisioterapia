@@ -5,18 +5,7 @@ import { Usuario } from '@/domain/entities/Usuario';
 import { PerfilUsuario } from '@/domain/entities/Usuario';
 import { FuncionarioRepository } from '@/repositories/FuncionarioRepository';
 import { autorizar } from '@/shared/security/Authorization';
-import { JwtService } from '@/shared/security/JwtService';
-
-function getAuthPayload(request: Request) {
-  const authHeader = request.headers.get('authorization');
-
-  if (!authHeader) throw new Error('Token não informado');
-
-  const [, token] = authHeader.split(' ');
-  if (!token) throw new Error('Token mal formatado');
-
-  return JwtService.validarToken(token);
-}
+import { getAuthPayload } from '@/middlewares/auth.middleware';
 
 const repositoryUsuario = new UsuarioRepository();
 const funcionarioRepository = new FuncionarioRepository();
@@ -25,9 +14,7 @@ const serviceUsuario = new UsuarioService(
   funcionarioRepository
 );
 
-// =======================================================
 // GET
-// =======================================================
 export async function GET(request: Request) {
   try {
     const payload = getAuthPayload(request);
@@ -37,9 +24,8 @@ export async function GET(request: Request) {
     const idParam = searchParams.get('id');
     const login = searchParams.get('login');
 
-    // ======================
     // BUSCAR POR ID
-    // ======================
+
     if (idParam) {
       const id = Number(idParam);
 
@@ -59,9 +45,7 @@ export async function GET(request: Request) {
       });
     }
 
-    // ======================
     // BUSCAR POR LOGIN
-    // ======================
     if (login) {
       const usuario: any = await serviceUsuario.buscarPorLogin(login);
 
@@ -75,9 +59,7 @@ export async function GET(request: Request) {
       });
     }
 
-    // ======================
     // LISTAR TODOS
-    // ======================
     const usuarios: any[] = await serviceUsuario.listar();
 
     return NextResponse.json(
@@ -99,9 +81,7 @@ export async function GET(request: Request) {
   }
 }
 
-// =======================================================
 // POST
-// =======================================================
 export async function POST(request: Request) {
   try {
     const payload = getAuthPayload(request);
@@ -136,9 +116,7 @@ export async function POST(request: Request) {
   }
 }
 
-// =======================================================
 // PUT
-// =======================================================
 export async function PUT(request: Request) {
   try {
     const payload = getAuthPayload(request);
@@ -175,9 +153,7 @@ export async function PUT(request: Request) {
   }
 }
 
-// =======================================================
 // DELETE
-// =======================================================
 export async function DELETE(request: Request) {
   try {
     const payload = getAuthPayload(request);

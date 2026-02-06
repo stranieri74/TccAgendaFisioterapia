@@ -24,7 +24,7 @@ export class EvolucaoListComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -46,21 +46,21 @@ export class EvolucaoListComponent implements OnInit {
     this.http.get<any[]>(
       `http://localhost:3000/api/evolucao?hoje=true&profissionalId=${this.profissionalId}`
     )
-    .subscribe({
-      next: (res) => {
-        this.sessoes = res ?? [];
-        this.carregando = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.erro = 'Erro ao carregar evoluções';
-        this.carregando = false;
-        this.cdr.detectChanges();
-      }
-    });
+      .subscribe({
+        next: (res) => {
+          this.sessoes = res ?? [];
+          this.carregando = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.erro = 'Erro ao carregar evoluções';
+          this.carregando = false;
+          this.cdr.detectChanges();
+        }
+      });
   }
 
-  evoluir(agendaDiaId: number, evolucaoId?: number): void {  
+  evoluir(agendaDiaId: number, evolucaoId?: number): void {
     if (evolucaoId) {
       this.router.navigate(['/evolucao', agendaDiaId, evolucaoId]);
     } else {

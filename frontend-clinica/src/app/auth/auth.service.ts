@@ -12,38 +12,35 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) { }
 
-login(login: string, senha: string) {
+  login(login: string, senha: string) {
 
-  return this.http.post<any>(this.apiUrl, {
-    login,
-    senha
-  }).pipe(
+    return this.http.post<any>(this.apiUrl, {
+      login,
+      senha
+    }).pipe(
 
-    tap(res => {
+      tap(res => {
+        if (isPlatformBrowser(this.platformId)) {
 
-      console.log('RETORNO DO LOGIN 👉', res);
+          // token
+          localStorage.setItem('token', res.token);
 
-      if (isPlatformBrowser(this.platformId)) {
+          // usuário
+          localStorage.setItem('usuarioId', String(res.usuario.id));
+          localStorage.setItem('login', res.usuario.login);
+          localStorage.setItem('perfil', res.usuario.perfil);
 
-        // token
-        localStorage.setItem('token', res.token);
+          localStorage.setItem(
+            'profissionalId',
+            res.usuario.funcionarioId
+          );
+        }
+      })
 
-        // usuário
-        localStorage.setItem('usuarioId', String(res.usuario.id));
-        localStorage.setItem('login', res.usuario.login);
-        localStorage.setItem('perfil', res.usuario.perfil);
-        
-        localStorage.setItem(
-          'profissionalId',
-          res.usuario.funcionarioId
-        );
-      }
-    })
-
-  );
-}
+    );
+  }
 
   salvarToken(token: string): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -68,13 +65,13 @@ login(login: string, senha: string) {
     return !!this.obterToken();
   }
 
- getProfissionalId(): number | null {
+  getProfissionalId(): number | null {
 
-  if (isPlatformBrowser(this.platformId)) {
-    const id = localStorage.getItem('profissionalId');
-    return id ? Number(id) : null;
+    if (isPlatformBrowser(this.platformId)) {
+      const id = localStorage.getItem('profissionalId');
+      return id ? Number(id) : null;
+    }
+
+    return null;
   }
-
-  return null;
-}
 }

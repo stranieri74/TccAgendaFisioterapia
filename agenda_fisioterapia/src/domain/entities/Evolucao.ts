@@ -11,8 +11,8 @@ export class Evolucao {
     private recursos?: string,
     private respostaPaciente?: string,
     private observacoes?: string,
-    private alta? : boolean
-  ) {}
+    private alta?: boolean
+  ) { }
 
   getId() { return this.id; }
   getProntuarioId() { return this.prontuarioId; }
@@ -24,5 +24,5 @@ export class Evolucao {
   getRecursos() { return this.recursos; }
   getRespostaPaciente() { return this.respostaPaciente; }
   getObservacoes() { return this.observacoes; }
-  getAlta() {return this.alta === true}
+  getAlta() { return this.alta === true }
 }

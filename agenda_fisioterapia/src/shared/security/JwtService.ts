@@ -11,7 +11,7 @@ export class JwtService {
   private static readonly SECRET = process.env.JWT_SECRET;
   private static readonly EXPIRES_IN = '1d';
 
-   private static getSecret(): string {
+  private static getSecret(): string {
     if (!this.SECRET) {
       throw new Error('JWT_SECRET não configurado');
     }
@@ -20,7 +20,7 @@ export class JwtService {
 
   // Gera um token JWT
 
-static sign(payload: AppJwtPayload): string {
+  static sign(payload: AppJwtPayload): string {
     return jwt.sign(
       { perfil: payload.perfil },
       this.getSecret(),

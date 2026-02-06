@@ -2,21 +2,9 @@ import { NextResponse } from 'next/server';
 import { FuncionarioService } from '@/services/FuncionarioService';
 import { FuncionarioRepository } from '@/repositories/FuncionarioRepository';
 import { Funcionario } from '@/domain/entities/Funcionario';
-import { JwtService } from '@/shared/security/JwtService';
 import { autorizar } from '@/shared/security/Authorization';
 import { PerfilUsuario } from '@/domain/entities/Usuario';
-
-function getAuthPayload(request: Request) {
-  const authHeader = request.headers.get('authorization');
-
-  if (!authHeader) throw new Error('Token não informado');
-
-  const [, token] = authHeader.split(' ');
-
-  if (!token) throw new Error('Token mal formatado');
-
-  return JwtService.validarToken(token);
-}
+import { getAuthPayload } from '@/middlewares/auth.middleware';
 
 const repositoryFuncionario = new FuncionarioRepository();
 const funcionarioService = new FuncionarioService(repositoryFuncionario);
@@ -30,45 +18,46 @@ export async function GET(request: Request) {
   const cpf = searchParams.get('cpf');
   const crefito = searchParams.get('crefito');
 
-    const idParam = searchParams.get('id');
-   //busca por id
+  const idParam = searchParams.get('id');
+
+  //busca por id
   if (idParam) {
-       const id = Number(idParam);
-        if (isNaN(id)) {
-          return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
-        }
-  
-        try {
-        const funcionario = await funcionarioService.buscarPorId(id);
-  
-        return NextResponse.json({
-          id: funcionario.getId(),
-          nome: funcionario.getNome(),
-          dataNascimento: funcionario.getDataNascimento(),
-          cep: funcionario.getCep(),
-          cnpj: funcionario.getCnpj(),
-          uf: funcionario.getUf(),
-          cidade: funcionario.getCidade(),
-          endereco: funcionario.getEndereco(),
-          numero: funcionario.getNumero(),
-          bairro: funcionario.getBairro(),
-          telefone: funcionario.getTelefone(),
-          celular: funcionario.getCelular(),
-          cpf: funcionario.getCpf(),
-          email: funcionario.getEmail(),
-          crefito: funcionario.getCrefito(),
-          sexo: funcionario.getSexo(),
-          estadoCivil: funcionario.getEstadoCivil(),
-          ativo: funcionario.getAtivo()
-        });
-      } catch (error: any) {
-        return NextResponse.json(
-          { message: error.message },
-          { status: 404 }
-        );
-      }
-  
-      }
+    const id = Number(idParam);
+    if (isNaN(id)) {
+      return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
+    }
+
+    try {
+      const funcionario = await funcionarioService.buscarPorId(id);
+
+      return NextResponse.json({
+        id: funcionario.getId(),
+        nome: funcionario.getNome(),
+        dataNascimento: funcionario.getDataNascimento(),
+        cep: funcionario.getCep(),
+        cnpj: funcionario.getCnpj(),
+        uf: funcionario.getUf(),
+        cidade: funcionario.getCidade(),
+        endereco: funcionario.getEndereco(),
+        numero: funcionario.getNumero(),
+        bairro: funcionario.getBairro(),
+        telefone: funcionario.getTelefone(),
+        celular: funcionario.getCelular(),
+        cpf: funcionario.getCpf(),
+        email: funcionario.getEmail(),
+        crefito: funcionario.getCrefito(),
+        sexo: funcionario.getSexo(),
+        estadoCivil: funcionario.getEstadoCivil(),
+        ativo: funcionario.getAtivo()
+      });
+    } catch (error: any) {
+      return NextResponse.json(
+        { message: error.message },
+        { status: 404 }
+      );
+    }
+
+  }
 
   if (cpf) {
     try {
@@ -102,7 +91,7 @@ export async function GET(request: Request) {
     }
   }
 
-    if (crefito) {
+  if (crefito) {
     try {
       const funcionario = await funcionarioService.buscarPorCrefito(crefito);
 
@@ -202,7 +191,7 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
 
-    const payload = getAuthPayload(request);
+  const payload = getAuthPayload(request);
   autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.RECEPCAO]);
 
   const { searchParams } = new URL(request.url);
@@ -225,57 +214,57 @@ export async function DELETE(request: Request) {
   }
 }
 
-export async function PUT(request: Request){
-  try{
-      const payload = getAuthPayload(request);
-      autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.RECEPCAO]);
+export async function PUT(request: Request) {
+  try {
+    const payload = getAuthPayload(request);
+    autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.RECEPCAO]);
 
-     const body = await request.json();
-     const funcionario = new Funcionario(
-       body.id,
-       body.nome,
-       body.dataNascimento,
-       body.cep,
-       body.cnpj,
-       body.uf,
-       body.cidade,
-       body.endereco,
-       body.numero,
-       body.bairro,
-       body.telefone,
-       body.celular,
-       body.cpf,
-       body.email,
-       body.crefito,
-       body.sexo,
-       body.estadoCivil,
-       body.ativo
-     );
+    const body = await request.json();
+    const funcionario = new Funcionario(
+      body.id,
+      body.nome,
+      body.dataNascimento,
+      body.cep,
+      body.cnpj,
+      body.uf,
+      body.cidade,
+      body.endereco,
+      body.numero,
+      body.bairro,
+      body.telefone,
+      body.celular,
+      body.cpf,
+      body.email,
+      body.crefito,
+      body.sexo,
+      body.estadoCivil,
+      body.ativo
+    );
 
-     const atualizado = await funcionarioService.atualizar(funcionario);
-     
-     return NextResponse.json({
-     id: funcionario.getId(),
-        nome: funcionario.getNome(),
-        dataNascimento: funcionario.getDataNascimento(),
-        cep: funcionario.getCep(),
-        cnpj: funcionario.getCrefito(),
-        uf: funcionario.getUf(),
-        cidade: funcionario.getCidade(),
-        endereco: funcionario.getEndereco(),
-        numero: funcionario.getNumero(),
-        bairro: funcionario.getBairro(),
-        telefone: funcionario.getTelefone(),
-        celular: funcionario.getCelular(),
-        cpf: funcionario.getCpf(),
-        email: funcionario.getEmail(),
-        crefito: funcionario.getCrefito(),
-        sexo: funcionario.getSexo(),
-        estadoCivil: funcionario.getEstadoCivil(),
-        ativo: funcionario.getAtivo() 
-     }, {status: 200});
+    const atualizado = await funcionarioService.atualizar(funcionario);
 
-  }catch(error: any){
-     return NextResponse.json({error: error.message}, { status: 400 })
+    return NextResponse.json({
+      id: funcionario.getId(),
+      nome: funcionario.getNome(),
+      dataNascimento: funcionario.getDataNascimento(),
+      cep: funcionario.getCep(),
+      cnpj: funcionario.getCrefito(),
+      uf: funcionario.getUf(),
+      cidade: funcionario.getCidade(),
+      endereco: funcionario.getEndereco(),
+      numero: funcionario.getNumero(),
+      bairro: funcionario.getBairro(),
+      telefone: funcionario.getTelefone(),
+      celular: funcionario.getCelular(),
+      cpf: funcionario.getCpf(),
+      email: funcionario.getEmail(),
+      crefito: funcionario.getCrefito(),
+      sexo: funcionario.getSexo(),
+      estadoCivil: funcionario.getEstadoCivil(),
+      ativo: funcionario.getAtivo()
+    }, { status: 200 });
+
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 400 })
   }
 }

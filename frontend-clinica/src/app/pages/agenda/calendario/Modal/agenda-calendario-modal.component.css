@@ -1,7 +1,7 @@
 .modal-bg {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.45);
+  background: rgba(0, 0, 0, .45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +13,7 @@
   background: #fff;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 15px 40px rgba(0,0,0,.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, .3);
 }
 
 .titulo {

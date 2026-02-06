@@ -9,10 +9,10 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./login.css'],
   standalone: true,
   imports: [FormsModule,
-            RouterModule ]
+    RouterModule]
 })
 export class Login {
- mensagemEsqueciSenha = 'Esqueci minha senha';
+  mensagemEsqueciSenha = 'Esqueci minha senha';
   login = '';
   senha = '';
   erro: string | null = null;
@@ -21,10 +21,10 @@ export class Login {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   entrar() {
-    this.erro = null;         
+    this.erro = null;
     this.carregando = true;
 
     this.authService.login(this.login, this.senha).subscribe({

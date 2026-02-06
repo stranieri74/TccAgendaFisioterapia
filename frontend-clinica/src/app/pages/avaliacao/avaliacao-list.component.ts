@@ -26,7 +26,7 @@ export class AvaliacaoListComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 

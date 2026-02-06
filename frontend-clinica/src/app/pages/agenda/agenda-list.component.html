@@ -49,9 +49,7 @@
 
     <tbody>
 
-      <tr
-        *ngFor="let a of agendamentos"
-        [ngClass]="getClasseEvento(a.tipo)">
+      <tr *ngFor="let a of agendamentos" [ngClass]="getClasseEvento(a.tipo)">
 
         <!-- PACIENTE -->
         <td>
@@ -68,9 +66,9 @@
 
 
         <!-- HORA -->
-       
-          <td>{{ a.hora }}</td>
-        
+
+        <td>{{ a.hora }}</td>
+
 
         <!-- TIPO -->
         <td>
@@ -79,8 +77,8 @@
 
         <!-- STATUS -->
         <td>
-  {{ a.AgendaDia?.[0]?.status || 'AGENDADO' }}
-</td>
+          {{ a.AgendaDia?.[0]?.status || 'AGENDADO' }}
+        </td>
 
         <!-- AÇÕES -->
         <td class="acoes">

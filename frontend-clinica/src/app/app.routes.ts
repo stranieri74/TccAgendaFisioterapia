@@ -16,7 +16,7 @@ import { AvaliacaoListComponent } from './pages/avaliacao/avaliacao-list.compone
 import { AvaliacaoFormComponent } from './pages/avaliacao/avaliacao-form/avaliacao-form.component';
 import { EvolucaoListComponent } from './pages/evolucao/evolucao-list.component';
 import { EvolucaoFormComponent } from './pages/evolucao/evolucao-form/evolucao-form.component';
-import { RedefinirSenhaComponent } from './pages/esqueciSenha/redefinir-senha.component';
+import { ProntuarioComponent } from './pages/prontuario/prontuario.component';
 export const routes: Routes = [
 
   // 🔓 login fora do layout
@@ -26,12 +26,12 @@ export const routes: Routes = [
       import('./auth/login/login')
         .then(m => m.Login)
   },
-{
-  path: 'esqueci-senha',
-  loadComponent: () =>
-    import('./pages/esqueciSenha/redefinir-senha.component')
-      .then(m => m.RedefinirSenhaComponent)
-},
+  {
+    path: 'esqueci-senha',
+    loadComponent: () =>
+      import('./pages/esqueciSenha/redefinir-senha.component')
+        .then(m => m.RedefinirSenhaComponent)
+  },
 
   // 🔐 rotas protegidas
   {
@@ -132,37 +132,42 @@ export const routes: Routes = [
         path: 'sobre',
         component: SobreComponent,
         runGuardsAndResolvers: 'always'
-      },      
-     {
-      path: 'avaliacoes/:agendaId/:id',
-      component: AvaliacaoFormComponent,
-      runGuardsAndResolvers: 'always'
-     },
-     {
-      path: 'avaliacoes/:agendaId',
-      component: AvaliacaoFormComponent,
-      runGuardsAndResolvers: 'always'
-    },
-    {
-       path: 'avaliacoes',
-       component: AvaliacaoListComponent,
-       runGuardsAndResolvers: 'always'
-    },
-    {
-     path: 'evolucao',
-     component: EvolucaoListComponent,
-     runGuardsAndResolvers: 'always'
-    },
-    {
-     path: 'evolucao/:agendaDiaId',
-     component: EvolucaoFormComponent,
-     runGuardsAndResolvers: 'always'
-    },
-    {
-     path: 'evolucao/:agendaDiaId/:id',
-     component: EvolucaoFormComponent,
-     runGuardsAndResolvers: 'always'
-    }
+      },
+      {
+        path: 'avaliacoes/:agendaId/:id',
+        component: AvaliacaoFormComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'avaliacoes/:agendaId',
+        component: AvaliacaoFormComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'avaliacoes',
+        component: AvaliacaoListComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'evolucao',
+        component: EvolucaoListComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'evolucao/:agendaDiaId',
+        component: EvolucaoFormComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'evolucao/:agendaDiaId/:id',
+        component: EvolucaoFormComponent,
+        runGuardsAndResolvers: 'always'
+      },
+      {
+        path: 'prontuario',
+        component: ProntuarioComponent,
+        runGuardsAndResolvers: 'always'
+      }
 
     ]
   }

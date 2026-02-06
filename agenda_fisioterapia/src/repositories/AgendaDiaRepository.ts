@@ -5,21 +5,21 @@ export class AgendaDiaRepository {
     return prisma.agendaDia.create({ data });
   }
 
-async findById(id: number) {
-  return prisma.agendaDia.findUnique({
-    where: { id },
-    include: {
-      agenda: {
-        include: {
-          paciente: true,
-          funcionario: true
+  async findById(id: number) {
+    return prisma.agendaDia.findUnique({
+      where: { id },
+      include: {
+        agenda: {
+          include: {
+            paciente: true,
+            funcionario: true
+          }
         }
       }
-    }
-  });
-}
+    });
+  }
 
-findConflict(
+  buscaConflito(
     profissionalId: number,
     data: Date,
     hora: string,
@@ -40,13 +40,13 @@ findConflict(
     });
   }
 
-findByAgenda(agendaId: number) {
+  findByAgenda(agendaId: number) {
     return prisma.agendaDia.findMany({
       where: { agendaId }
     });
   }
-  
-  findWeekly(
+
+  buscaSemanaAtual(
     profissionalId: number,
     inicio: Date,
     fim: Date
@@ -70,120 +70,122 @@ findByAgenda(agendaId: number) {
     });
   }
 
-async update(id: number, data: any) {
+  async update(id: number, data: any) {
     return prisma.agendaDia.update({
       where: { id },
       data
     });
   }
 
-async updateStatus(id: number, status: string) {
+  async AtualizaStatus(id: number, status: string) {
 
-  const existe = await prisma.agendaDia.findUnique({
-    where: { id }
-  });
+    const existe = await prisma.agendaDia.findUnique({
+      where: { id }
+    });
 
-  if (!existe) {
-    throw new Error("Sessão não encontrada");
+    if (!existe) {
+      throw new Error("Sessão não encontrada");
+    }
+
+    return prisma.agendaDia.update({
+      where: { id },
+      data: { status }
+    });
   }
 
-  return prisma.agendaDia.update({
-    where: { id },
-    data: { status }
-  });
-}
-
   deleteByAgenda(agendaId: number) {
-  return prisma.agendaDia.deleteMany({
-    where: { agendaId,
-      status: 'AGENDADO' }
-  });
-}
-
-async listarFisioterapiaHojePorProfissional(
-  profissionalId: number
-) {
-
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
-
-  const amanha = new Date(hoje);
-  amanha.setDate(amanha.getDate() + 1);
-
-  return prisma.agendaDia.findMany({
-    where: {
-      data: {
-        gte: hoje,
-        lt: amanha
-      },
-      status: {
-        in: ['AGENDADO', 'REALIZADO']
-      },
-      agenda: {
-        profissionalId,
-        tipo: 'FISIOTERAPIA'
+    return prisma.agendaDia.deleteMany({
+      where: {
+        agendaId,
+        status: 'AGENDADO'
       }
-    },
-    include: {
-      evolucoes: true,
-      agenda: {
-        include: {
-          paciente: true,
-          funcionario: true
+    });
+  }
+
+  async listarFisioterapiaHojePorProfissional(
+    profissionalId: number
+  ) {
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const amanha = new Date(hoje);
+    amanha.setDate(amanha.getDate() + 1);
+
+    return prisma.agendaDia.findMany({
+      where: {
+        data: {
+          gte: hoje,
+          lt: amanha
+        },
+        status: {
+          in: ['AGENDADO', 'REALIZADO']
+        },
+        agenda: {
+          profissionalId,
+          tipo: 'FISIOTERAPIA'
         }
-      }
-    },
-    orderBy: {
-      hora: 'asc'
-    }
-  });
-}
-
-async cancelarSessoesFuturas(
-  agendaId: number,
-  dataReferencia: Date
-) {
-  return prisma.agendaDia.updateMany({
-    where: {
-      agendaId,
-      data: {
-        gt: dataReferencia
       },
-      status: {
-        not: 'ALTA'
-      }
-    },
-    data: {
-      status: 'ALTA'
-    }
-  });
-}
-
-async reverterAltaIndevida(
-  agendaId: number,
-  dataReferencia: Date
-) {
-  // 1️⃣ Reativa as sessões futuras
-  await prisma.agendaDia.updateMany({
-    where: {
-      agendaId,
-      data: {
-        gt: dataReferencia
+      include: {
+        evolucoes: true,
+        agenda: {
+          include: {
+            paciente: true,
+            funcionario: true
+          }
+        }
       },
-      status: 'ALTA'
-    },
-    data: {
-      status: 'AGENDADO'
-    }
-  });
+      orderBy: {
+        hora: 'asc'
+      }
+    });
+  }
 
-  // 2️⃣ Remove a data fim da agenda
-  return prisma.agenda.update({
-    where: { id: agendaId },
-    data: {
-      dataFim: null
-    }
-  });
-}
+  async cancelarSessoesFuturas(
+    agendaId: number,
+    dataReferencia: Date
+  ) {
+    return prisma.agendaDia.updateMany({
+      where: {
+        agendaId,
+        data: {
+          gt: dataReferencia
+        },
+        status: {
+          not: 'ALTA'
+        }
+      },
+      data: {
+        status: 'ALTA'
+      }
+    });
+  }
+
+  async reverterAltaIndevida(
+    agendaId: number,
+    dataReferencia: Date
+  ) {
+    // Reativa as sessões futuras
+    await prisma.agendaDia.updateMany({
+      where: {
+        agendaId,
+        data: {
+          gt: dataReferencia
+        },
+        status: 'ALTA'
+      },
+      data: {
+        status: 'AGENDADO'
+      }
+    });
+
+    // Remove a data fim da agenda
+    return prisma.agenda.update({
+      where: { id: agendaId },
+      data: {
+        dataFim: null
+      }
+    });
+  }
 
 }

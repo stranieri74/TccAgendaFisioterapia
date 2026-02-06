@@ -1,5 +1,6 @@
 .container {
-  height: calc(100vh - 60px); /* ajusta se tiver navbar */
+  height: calc(100vh - 60px);
+  /* ajusta se tiver navbar */
   display: flex;
   justify-content: center;
   align-items: center;

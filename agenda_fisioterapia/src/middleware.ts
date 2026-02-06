@@ -16,7 +16,7 @@ export function middleware(request: NextRequest) {
     'Content-Type, Authorization'
   );
 
-    response.headers.set(
+  response.headers.set(
     'Access-Control-Allow-Credentials',
     'true'
   );

@@ -4,22 +4,10 @@ import { PacienteRepository } from '@/repositories/PacienteRepository';
 import { Paciente } from '@/domain/entities/Paciente';
 import { autorizar } from '@/shared/security/Authorization';
 import { PerfilUsuario } from '@/domain/entities/Usuario';
-import { JwtService } from '@/shared/security/JwtService';
+import { getAuthPayload } from '@/middlewares/auth.middleware';
 
 const repositoryPaciente = new PacienteRepository();
 const servicePaciente = new PacienteService(repositoryPaciente);
-
-function getAuthPayload(request: Request) {
-  const authHeader = request.headers.get('authorization');
-
-  if (!authHeader) throw new Error('Token não informado');
-
-  const [, token] = authHeader.split(' ');
-
-  if (!token) throw new Error('Token mal formatado');
-
-  return JwtService.validarToken(token);
-}
 
 export async function GET(request: Request) {
 
@@ -29,14 +17,14 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const cpf = searchParams.get('cpf');
   const idParam = searchParams.get('id');
- //busca por id
-if (idParam) {
-     const id = Number(idParam);
-      if (isNaN(id)) {
-        return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
-      }
+  //busca por id
+  if (idParam) {
+    const id = Number(idParam);
+    if (isNaN(id)) {
+      return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
+    }
 
-      try {
+    try {
       const paciente = await servicePaciente.buscarPorId(id);
 
       return NextResponse.json({
@@ -64,8 +52,8 @@ if (idParam) {
       );
     }
 
-    }
-//busca por cpf
+  }
+  //busca por cpf
   if (cpf) {
     try {
       const paciente = await servicePaciente.buscarPorCpf(cpf);
@@ -123,8 +111,8 @@ if (idParam) {
 
 export async function POST(request: Request) {
   try {
-      const payload = getAuthPayload(request);
-      autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.PROFISSIONAL, PerfilUsuario.RECEPCAO]);
+    const payload = getAuthPayload(request);
+    autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.PROFISSIONAL, PerfilUsuario.RECEPCAO]);
 
     const body = await request.json();
     const paciente = await servicePaciente.cadastrar(body);
@@ -161,7 +149,7 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
   const idParam = searchParams.get('id');
-  
+
   const payload = getAuthPayload(request);
   autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.RECEPCAO]);
 
@@ -182,54 +170,54 @@ export async function DELETE(request: Request) {
   }
 }
 
-export async function PUT(request: Request){
-  try{
-     const payload = getAuthPayload(request);
-     autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.PROFISSIONAL, PerfilUsuario.RECEPCAO]);
-     const body = await request.json();
+export async function PUT(request: Request) {
+  try {
+    const payload = getAuthPayload(request);
+    autorizar(payload.perfil, [PerfilUsuario.ADMIN, PerfilUsuario.PROFISSIONAL, PerfilUsuario.RECEPCAO]);
+    const body = await request.json();
 
-     //cria instancia do paciente
-     const paciente = new Paciente(
-       body.id,
-       body.nome,
-       body.dataNascimento,
-       body.cep,
-       body.uf,
-       body.cidade,
-       body.endereco,
-       body.numero,
-       body.bairro,
-       body.telefone,
-       body.celular,
-       body.cpf,
-       body.email,
-       body.convenio,
-       body.sexo,
-       body.estadoCivil
-     );
+    //cria instancia do paciente
+    const paciente = new Paciente(
+      body.id,
+      body.nome,
+      body.dataNascimento,
+      body.cep,
+      body.uf,
+      body.cidade,
+      body.endereco,
+      body.numero,
+      body.bairro,
+      body.telefone,
+      body.celular,
+      body.cpf,
+      body.email,
+      body.convenio,
+      body.sexo,
+      body.estadoCivil
+    );
 
-     const atualizado = await servicePaciente.atualizar(paciente);
-     
-     return NextResponse.json({
-     id: paciente.getId(),
-        nome: paciente.getNome(),
-        dataNascimento: paciente.getDataNascimento(),
-        cep: paciente.getCep(),
-        uf: paciente.getUf(),
-        cidade: paciente.getCidade(),
-        endereco: paciente.getEndereco(),
-        numero: paciente.getNumero(),
-        bairro: paciente.getBairro(),
-        telefone: paciente.getTelefone(),
-        celular: paciente.getCelular(),
-        cpf: paciente.getCpf(),
-        email: paciente.getEmail(),
-        convenio: paciente.getConvenio(),
-        sexo: paciente.getSexo(),
-        estadoCivil: paciente.getEstadoCivil() 
-     }, {status: 200});
+    const atualizado = await servicePaciente.atualizar(paciente);
 
-  }catch(error: any){
-     return NextResponse.json({error: error.message}, { status: 400 })
+    return NextResponse.json({
+      id: paciente.getId(),
+      nome: paciente.getNome(),
+      dataNascimento: paciente.getDataNascimento(),
+      cep: paciente.getCep(),
+      uf: paciente.getUf(),
+      cidade: paciente.getCidade(),
+      endereco: paciente.getEndereco(),
+      numero: paciente.getNumero(),
+      bairro: paciente.getBairro(),
+      telefone: paciente.getTelefone(),
+      celular: paciente.getCelular(),
+      cpf: paciente.getCpf(),
+      email: paciente.getEmail(),
+      convenio: paciente.getConvenio(),
+      sexo: paciente.getSexo(),
+      estadoCivil: paciente.getEstadoCivil()
+    }, { status: 200 });
+
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 400 })
   }
 }

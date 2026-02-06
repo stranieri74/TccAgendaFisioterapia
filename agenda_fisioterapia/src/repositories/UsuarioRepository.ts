@@ -4,34 +4,34 @@ import { PerfilUsuario } from '@/domain/entities/Usuario';
 
 export class UsuarioRepository {
 
-    async salvar(usuario: Usuario): Promise<Usuario> {
-        const result = await prisma.usuario.create({
-           data: {
-                  login: usuario.getLogin(),
-                  senhaHash: usuario.getSenhaHash(),
-                  perfil: usuario.getPerfil(),
-                  ativo: usuario.isAtivo() ? 1 : 0,
-                  funcionario:{
-                    connect: {
-                        id: usuario.getFuncionarioId()
-                    }
-                  }
-           }    
-        });
+  async salvar(usuario: Usuario): Promise<Usuario> {
+    const result = await prisma.usuario.create({
+      data: {
+        login: usuario.getLogin(),
+        senhaHash: usuario.getSenhaHash(),
+        perfil: usuario.getPerfil(),
+        ativo: usuario.isAtivo() ? 1 : 0,
+        funcionario: {
+          connect: {
+            id: usuario.getFuncionarioId()
+          }
+        }
+      }
+    });
 
-       return new Usuario(
-           result.id,
-           result.login,
-           result.senhaHash,
-           result.perfil as PerfilUsuario,
-           Boolean(result.ativo),
-           result.funcionarioId
-       );
-    }
+    return new Usuario(
+      result.id,
+      result.login,
+      result.senhaHash,
+      result.perfil as PerfilUsuario,
+      Boolean(result.ativo),
+      result.funcionarioId
+    );
+  }
 
 
-async listar(): Promise<Usuario[]> {
-  const usuarios = await prisma.usuario.findMany({
+  async listar(): Promise<Usuario[]> {
+    const usuarios = await prisma.usuario.findMany({
       include: {
         funcionario: {
           select: {
@@ -42,21 +42,21 @@ async listar(): Promise<Usuario[]> {
       }
     });
 
-  return usuarios.map(p =>
-    new Usuario(
-      p.id,
-      p.login,
-      p.senhaHash,
-      p.perfil as PerfilUsuario,
-      Boolean(p.ativo),
-      p.funcionarioId
-    )
-  );
-}
+    return usuarios.map(p =>
+      new Usuario(
+        p.id,
+        p.login,
+        p.senhaHash,
+        p.perfil as PerfilUsuario,
+        Boolean(p.ativo),
+        p.funcionarioId
+      )
+    );
+  }
 
-async buscarPorLogin(login: string): Promise<Usuario | null>{
-   const result = await prisma.usuario.findUnique({
-    where: { login },
+  async buscarPorLogin(login: string): Promise<Usuario | null> {
+    const result = await prisma.usuario.findUnique({
+      where: { login },
       include: {
         funcionario: {
           select: {
@@ -65,26 +65,26 @@ async buscarPorLogin(login: string): Promise<Usuario | null>{
           }
         }
       }
-    
-   });
 
-   if (!result) return null;
+    });
 
-   return new Usuario(
-    result.id,
-    result.login,
-    result.senhaHash,
-    result.perfil as PerfilUsuario,
-    Boolean( result.ativo),
-    result.funcionarioId
-   );
-}
+    if (!result) return null;
 
-async deletarPorId(id: number): Promise<void> {
-  await prisma.usuario.delete({
-    where: { id }
-  });
-}
+    return new Usuario(
+      result.id,
+      result.login,
+      result.senhaHash,
+      result.perfil as PerfilUsuario,
+      Boolean(result.ativo),
+      result.funcionarioId
+    );
+  }
+
+  async deletarPorId(id: number): Promise<void> {
+    await prisma.usuario.delete({
+      where: { id }
+    });
+  }
 
   async buscarPorId(id: number): Promise<Usuario | null> {
     const result = await prisma.usuario.findUnique({
@@ -145,20 +145,20 @@ async deletarPorId(id: number): Promise<void> {
     );
   }
 
-async atualizar(usuario: Usuario): Promise<Usuario> {
-  const result = await prisma.usuario.update({
-    where: { id: usuario.getId() },
-    data: {
-      login: usuario.getLogin(),
-      senhaHash: usuario.getSenhaHash(),
-      perfil: usuario.getPerfil(),
-      ativo: usuario.isAtivo() ? 1 : 0,
-      funcionario: {
-        connect: {
-          id: usuario.getFuncionarioId()
+  async atualizar(usuario: Usuario): Promise<Usuario> {
+    const result = await prisma.usuario.update({
+      where: { id: usuario.getId() },
+      data: {
+        login: usuario.getLogin(),
+        senhaHash: usuario.getSenhaHash(),
+        perfil: usuario.getPerfil(),
+        ativo: usuario.isAtivo() ? 1 : 0,
+        funcionario: {
+          connect: {
+            id: usuario.getFuncionarioId()
+          }
         }
-      }
-    },
+      },
       include: {
         funcionario: {
           select: {
@@ -167,49 +167,49 @@ async atualizar(usuario: Usuario): Promise<Usuario> {
           }
         }
       }
-  });
+    });
 
-  return new Usuario(
-    result.id,
-    result.login,
-    result.senhaHash,
-    result.perfil as PerfilUsuario,
-    Boolean(result.ativo),
-    result.funcionarioId
-  );
-}
+    return new Usuario(
+      result.id,
+      result.login,
+      result.senhaHash,
+      result.perfil as PerfilUsuario,
+      Boolean(result.ativo),
+      result.funcionarioId
+    );
+  }
 
-async listarComFuncionario() {
-  return await prisma.usuario.findMany({
-    include: {
-      funcionario: {
-        select: {
-          id: true,
-          nome: true
+  async listarComFuncionario() {
+    return await prisma.usuario.findMany({
+      include: {
+        funcionario: {
+          select: {
+            id: true,
+            nome: true
+          }
         }
       }
-    }
-  });
-}
+    });
+  }
 
-// ==============================
-// BUSCA POR ID PARA TELA
-// ==============================
-async buscarPorIdComFuncionario(id: number) {
-  return await prisma.usuario.findUnique({
-    where: { id },
-    include: {
-      funcionario: {
-        select: {
-          id: true,
-          nome: true
+  // ==============================
+  // BUSCA POR ID PARA TELA
+  // ==============================
+  async buscarPorIdComFuncionario(id: number) {
+    return await prisma.usuario.findUnique({
+      where: { id },
+      include: {
+        funcionario: {
+          select: {
+            id: true,
+            nome: true
+          }
         }
       }
-    }
-  });
-}
+    });
+  }
 
-async buscarParaRecuperacao(dados: {
+  async buscarParaRecuperacao(dados: {
     email: string;
     cpf?: string;
     cnpj?: string;

@@ -15,7 +15,7 @@ export class Agenda {
     public dataFim?: Date,
     public observacao?: string,
     public ativo: boolean = true
-  ) {}
+  ) { }
 
   getId(): number | null {
     return this.id;

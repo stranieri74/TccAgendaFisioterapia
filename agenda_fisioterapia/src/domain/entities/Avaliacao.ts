@@ -23,8 +23,8 @@ export class Avaliacao {
     private objetivos?: string,
     private plano?: string,
     private observacoes?: string
-  ) {}
-  
+  ) { }
+
   getId() { return this.id; }
   getAgendaId() { return this.agendaId; }
   getProntuarioId() { return this.prontuarioId; }

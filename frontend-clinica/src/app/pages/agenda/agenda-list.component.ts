@@ -24,7 +24,7 @@ export class AgendaListComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.listarAgendamentos();
@@ -32,31 +32,31 @@ export class AgendaListComponent implements OnInit {
 
   // LISTAR TODAS AS AGENDAS
   listarAgendamentos() {
-  this.carregando = true;
+    this.carregando = true;
 
-  this.http.get<any[]>('http://localhost:3000/api/agendas')
-    .subscribe({
-      next: (res) => {
+    this.http.get<any[]>('http://localhost:3000/api/agendas')
+      .subscribe({
+        next: (res) => {
 
-        this.agendamentos = res.map(a => ({
-          ...a,
-          hora: a.AgendaDia?.length
-            ? a.AgendaDia[0].hora
-            : '',
-          data: a.AgendaDia?.length
-            ? a.AgendaDia[0].data
-            : ''
-        }));
+          this.agendamentos = res.map(a => ({
+            ...a,
+            hora: a.AgendaDia?.length
+              ? a.AgendaDia[0].hora
+              : '',
+            data: a.AgendaDia?.length
+              ? a.AgendaDia[0].data
+              : ''
+          }));
 
-        this.carregando = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.erro = 'Erro ao carregar agendamentos';
-        this.carregando = false;
-      }
-    });
-}
+          this.carregando = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.erro = 'Erro ao carregar agendamentos';
+          this.carregando = false;
+        }
+      });
+  }
 
   // EXCLUIR
   excluir(id: number) {
@@ -89,33 +89,33 @@ export class AgendaListComponent implements OnInit {
   // CLASSE DE COR
   getClasseEvento(tipo: string): string {
 
-  if (tipo === 'FISIOTERAPIA') {
-    return 'linha-fisio';
-  }
+    if (tipo === 'FISIOTERAPIA') {
+      return 'linha-fisio';
+    }
 
-  if (tipo === 'AVALIACAO') {
-    return 'linha-avaliacao';
-  }
+    if (tipo === 'AVALIACAO') {
+      return 'linha-avaliacao';
+    }
 
-  if (tipo === 'RETORNO') {
-    return 'linha-retorno';
-  }
+    if (tipo === 'RETORNO') {
+      return 'linha-retorno';
+    }
 
-  if (tipo === 'FALTA') {
-    return 'falta';
-  }
+    if (tipo === 'FALTA') {
+      return 'falta';
+    }
 
-  if (tipo === 'REALIZADO') {
-    return 'realizado';
-  }
+    if (tipo === 'REALIZADO') {
+      return 'realizado';
+    }
 
-  if (tipo === 'REMARCADO') {
-    return 'remarcado';
-  }
-  if (tipo === 'CANCELADO') {
-    return 'cancelado';
-  }
+    if (tipo === 'REMARCADO') {
+      return 'remarcado';
+    }
+    if (tipo === 'CANCELADO') {
+      return 'cancelado';
+    }
 
-  return '';
-}
+    return '';
+  }
 }

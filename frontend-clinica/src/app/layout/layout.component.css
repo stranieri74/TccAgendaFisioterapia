@@ -4,7 +4,7 @@
 .layout {
   display: flex;
   height: 100vh;
- /* overflow: hidden;*/
+  /* overflow: hidden;*/
 
 }
 
@@ -213,4 +213,3 @@ header {
 .logout:hover {
   background: rgba(255, 0, 0, 0.2);
 }
-

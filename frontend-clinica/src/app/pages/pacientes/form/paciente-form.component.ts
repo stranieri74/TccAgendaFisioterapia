@@ -43,7 +43,7 @@ export class PacienteFormComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private cd: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -138,13 +138,13 @@ export class PacienteFormComponent implements OnInit {
 
     const request = this.editando
       ? this.http.put(
-          'http://localhost:3000/api/pacientes',
-          { ...pacienteEnvio, id: this.id }
-        )
+        'http://localhost:3000/api/pacientes',
+        { ...pacienteEnvio, id: this.id }
+      )
       : this.http.post(
-          'http://localhost:3000/api/pacientes',
-          pacienteEnvio
-        );
+        'http://localhost:3000/api/pacientes',
+        pacienteEnvio
+      );
 
     request.subscribe({
       next: () => {

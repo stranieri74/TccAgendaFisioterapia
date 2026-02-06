@@ -112,7 +112,7 @@ export class ProntuarioRepository {
 
     return resultados.map(p =>
       new Prontuario(
-         p.id,
+        p.id,
         p.pacienteId!,
         p.profissionalId!,
         p.usuarioId!,
@@ -177,4 +177,38 @@ export class ProntuarioRepository {
       prontuario.tipo as TipoEvolucao
     );
   }
+
+  async buscarCompleto(prontuarioId: number) {
+    return prisma.prontuario.findUnique({
+      where: { id: prontuarioId },
+      include: {
+        paciente: true,
+        funcionario: true,
+        avaliacao: {
+          orderBy: { data: 'asc' },
+          take: 1
+        },
+        evolucoes: {
+          orderBy: { data: 'asc' }
+        }
+      }
+    });
+  }
+
+  async buscarCompletoPorPacienteId(pacienteId: number) {
+    return prisma.prontuario.findFirst({
+      where: {
+        pacienteId: pacienteId
+      },
+      include: {
+        paciente: true,
+        funcionario: true,
+        avaliacao: true,
+        evolucoes: {
+          orderBy: { data: 'asc' }
+        }
+      }
+    });
+  }
+
 }

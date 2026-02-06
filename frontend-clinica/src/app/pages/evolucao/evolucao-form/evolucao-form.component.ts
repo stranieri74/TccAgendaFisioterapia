@@ -32,7 +32,7 @@ export class EvolucaoFormComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -53,29 +53,29 @@ export class EvolucaoFormComponent implements OnInit {
     }
   }
 
-buscar(): void {
+  buscar(): void {
 
-  this.http.get<any>(
-    `http://localhost:3000/api/evolucao?Id=${this.id}`
-  )
-  .subscribe({
-    next: (res) => {
+    this.http.get<any>(
+      `http://localhost:3000/api/evolucao?Id=${this.id}`
+    )
+      .subscribe({
+        next: (res) => {
 
-      this.evolucao = {
-        ...res,
+          this.evolucao = {
+            ...res,
 
-        // ✅ conversão correta Decimal → boolean
-        alta: res.alta === 1 || res.alta === '1'
-      };
+            // ✅ conversão correta Decimal → boolean
+            alta: res.alta === 1 || res.alta === '1'
+          };
 
-      this.cdr.detectChanges();
-    },
+          this.cdr.detectChanges();
+        },
 
-    error: () => {
-      this.erro = 'Erro ao carregar evolução';
-    }
-  });
-}
+        error: () => {
+          this.erro = 'Erro ao carregar evolução';
+        }
+      });
+  }
 
   salvar(): void {
 
@@ -86,17 +86,17 @@ buscar(): void {
 
     const req = this.editando
       ? this.http.put('http://localhost:3000/api/evolucao', {
-          ...payload,
-          id: this.id
-        })
+        ...payload,
+        id: this.id
+      })
       : this.http.post('http://localhost:3000/api/evolucao', payload);
 
     req.subscribe({
       next: () => this.router.navigate(['/evolucao']),
       error: err =>
         this.erro =
-          err?.error?.message ||
-          'Erro ao salvar evolução'
+        err?.error?.message ||
+        'Erro ao salvar evolução'
     });
   }
 

@@ -3,23 +3,9 @@ import { AvaliacaoService } from '@/services/Avaliacao.service';
 import { AvaliacaoRepository } from '@/repositories/AvaliacaoRepository';
 import { ProntuarioRepository } from '@/repositories/ProntuarioRepository';
 import { AgendaRepository } from '@/repositories/AgendaRepository';
-
-import { JwtService } from '@/shared/security/JwtService';
 import { autorizar } from '@/shared/security/Authorization';
 import { PerfilUsuario } from '@/domain/entities/Usuario';
-
-function getAuthPayload(request: Request) {
-  const authHeader = request.headers.get('authorization');
-
-  if (!authHeader) throw new Error('Token não informado');
-
-  const [, token] = authHeader.split(' ');
-
-  if (!token) throw new Error('Token mal formatado');
-
-  return JwtService.validarToken(token);
-}
-
+import { getAuthPayload } from '@/middlewares/auth.middleware';
 
 const avaliacaoRepository = new AvaliacaoRepository();
 const prontuarioRepository = new ProntuarioRepository();
@@ -42,7 +28,7 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    // 🔥 método correto
+    // método correto
     const avaliacao = await service.cadastrar(body);
 
     return NextResponse.json(avaliacao, { status: 201 });
@@ -75,15 +61,15 @@ export async function GET(request: Request) {
     }
 
     const avaliacao = await service.buscarPorAgendaId(agendaId);
-    
-    // ✅ NÃO ENCONTROU
+
+    // NÃO ENCONTROU
     if (!avaliacao) {
       return NextResponse.json(
         { message: 'Avaliação não encontrada para esta agenda' },
         { status: 404 }
       );
     }
-    
+
     return NextResponse.json(avaliacao);
 
   } catch (error: any) {

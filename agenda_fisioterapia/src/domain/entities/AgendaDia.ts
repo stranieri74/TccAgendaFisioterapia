@@ -13,5 +13,5 @@ export class AgendaDia {
     public data: Date,
     public hora: string,
     public status: StatusAgendaDia = StatusAgendaDia.AGENDADO
-  ) {}
+  ) { }
 }

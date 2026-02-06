@@ -26,36 +26,36 @@
     </div>
 
     <div class="form-group">
-       <label>Senha</label>
-       <input type="password" [(ngModel)]="usuario.senhaHash" name="senhaHash" />
-       </div>
+      <label>Senha</label>
+      <input type="password" [(ngModel)]="usuario.senhaHash" name="senhaHash" />
+    </div>
 
     <div class="form-group">
       <label>Funcionário</label>
-        <select [(ngModel)]="usuario.funcionarioId" name="funcionarioId">
+      <select [(ngModel)]="usuario.funcionarioId" name="funcionarioId">
         <option value="">Selecione</option>
         <option *ngFor="let f of funcionarios" [value]="f.id">
-        {{ f.nome }}
-     </option>
-     </select>
-     </div>
+          {{ f.nome }}
+        </option>
+      </select>
+    </div>
 
-     <div class="form-group">
-        <label>Perfil</label>
-        <select [(ngModel)]="usuario.perfil" name="perfil">
+    <div class="form-group">
+      <label>Perfil</label>
+      <select [(ngModel)]="usuario.perfil" name="perfil">
         <option value="ADMIN">ADMIN</option>
         <option value="PROFISSIONAL">PROFISSIONAL</option>
         <option value="RECEPCAO">RECEPCAO</option>
-        </select>
-      </div>
+      </select>
+    </div>
 
-        <div class="form-group checkbox">
-          <label>
-           <input type="checkbox" [(ngModel)]="usuario.ativo" name="ativo" />
-            Usuário ativo
-          </label>
-       </div>
-    
+    <div class="form-group checkbox">
+      <label>
+        <input type="checkbox" [(ngModel)]="usuario.ativo" name="ativo" />
+        Usuário ativo
+      </label>
+    </div>
+
 
     <div class="acoes">
       <button type="submit" class="btn-salvar">

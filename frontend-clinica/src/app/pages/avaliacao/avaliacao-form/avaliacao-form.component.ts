@@ -45,30 +45,30 @@ export class AvaliacaoFormComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
-ngOnInit(): void {
+  ngOnInit(): void {
 
-  const snapshot = this.route.snapshot;
+    const snapshot = this.route.snapshot;
 
-  const agendaId = snapshot.paramMap.get('agendaId');
-  const id = snapshot.paramMap.get('id');
+    const agendaId = snapshot.paramMap.get('agendaId');
+    const id = snapshot.paramMap.get('id');
 
-  this.agendaId = Number(agendaId);
-  this.id = id ? Number(id) : undefined;
+    this.agendaId = Number(agendaId);
+    this.id = id ? Number(id) : undefined;
 
-  if (!this.agendaId || this.agendaId <= 0) {
-    this.erro = 'Agenda não informada.';
-    this.cdr.detectChanges();
-    return;
+    if (!this.agendaId || this.agendaId <= 0) {
+      this.erro = 'Agenda não informada.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    // ✏️ edição
+    if (this.id) {
+      this.editando = true;
+      this.buscar();
+    }
   }
-
-  // ✏️ edição
-  if (this.id) {
-    this.editando = true;
-    this.buscar();
-  }
-}
 
   // ===============================
   // 🔍 BUSCAR AVALIAÇÃO
@@ -98,57 +98,57 @@ ngOnInit(): void {
   // ===============================
   salvar(): void {
 
-  this.erro = '';
+    this.erro = '';
 
-  const payload = {
-    agendaId: Number(this.agendaId),
-    tipo: 'AVALIACAO',
-    queixa: this.avaliacao.queixa || null,
-    historia: this.avaliacao.historia || null,
-    doencas: this.avaliacao.doencas || null,
-    medicamentos: this.avaliacao.medicamentos || null,
-    cirurgias: this.avaliacao.cirurgias || null,
+    const payload = {
+      agendaId: Number(this.agendaId),
+      tipo: 'AVALIACAO',
+      queixa: this.avaliacao.queixa || null,
+      historia: this.avaliacao.historia || null,
+      doencas: this.avaliacao.doencas || null,
+      medicamentos: this.avaliacao.medicamentos || null,
+      cirurgias: this.avaliacao.cirurgias || null,
 
-    dor: this.avaliacao.dor !== ''
-      ? Number(this.avaliacao.dor)
-      : null,
+      dor: this.avaliacao.dor !== ''
+        ? Number(this.avaliacao.dor)
+        : null,
 
-    inspecao: this.avaliacao.inspecao || null,
-    palpacao: this.avaliacao.palpacao || null,
-    adm: this.avaliacao.adm || null,
-    forca: this.avaliacao.forca || null,
-    testes: this.avaliacao.testes || null,
+      inspecao: this.avaliacao.inspecao || null,
+      palpacao: this.avaliacao.palpacao || null,
+      adm: this.avaliacao.adm || null,
+      forca: this.avaliacao.forca || null,
+      testes: this.avaliacao.testes || null,
 
-    diagnostico: this.avaliacao.diagnostico || null,
-    objetivos: this.avaliacao.objetivos || null,
-    plano: this.avaliacao.plano || null,
-    observacoes: this.avaliacao.observacoes || null
-  };
+      diagnostico: this.avaliacao.diagnostico || null,
+      objetivos: this.avaliacao.objetivos || null,
+      plano: this.avaliacao.plano || null,
+      observacoes: this.avaliacao.observacoes || null
+    };
 
-  console.log(payload);
-  const request = this.editando
-    ? this.http.put(
+    console.log(payload);
+    const request = this.editando
+      ? this.http.put(
         'http://localhost:3000/api/avaliacao',
         { ...payload, id: this.id }
       )
-    : this.http.post(
+      : this.http.post(
         'http://localhost:3000/api/avaliacao',
         payload
       );
 
-  request.subscribe({
-    next: () => {
-      this.router.navigate(['/avaliacoes']);
-    },
-    error: err => {
-      this.erro =
-        err?.error?.message ??
-        'Erro ao salvar avaliação';
+    request.subscribe({
+      next: () => {
+        this.router.navigate(['/avaliacoes']);
+      },
+      error: err => {
+        this.erro =
+          err?.error?.message ??
+          'Erro ao salvar avaliação';
 
         this.cdr.detectChanges();
-    }
-  });
-}
+      }
+    });
+  }
 
   cancelar(): void {
     this.router.navigate(['/avaliacoes']);

@@ -40,7 +40,7 @@ export class AgendaRepository {
 
   async findByProfissional(profissionalId: number) {
     return prisma.agenda.findMany({
-      where: { profissionalId }, 
+      where: { profissionalId },
       include: {
         paciente: true,
         funcionario: true,
@@ -49,60 +49,58 @@ export class AgendaRepository {
     });
   }
 
-async findAvaliacoesPendentesHoje(profissionalId: number) {
+  async buscaAvaliacoesPendentesHoje(profissionalId: number) {
 
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
 
-  const amanha = new Date(hoje);
-  amanha.setDate(amanha.getDate() + 1);
+    const amanha = new Date(hoje);
+    amanha.setDate(amanha.getDate() + 1);
 
-  return prisma.agenda.findMany({
-    where: {
-      profissionalId,
-      tipo: 'AVALIACAO',
-      AgendaDia: {
-        some: {
-          status: {
-            in: ['AGENDADO', 'REALIZADO']
-          },
-          data: {
-            gte: hoje,
-            lt: amanha
+    return prisma.agenda.findMany({
+      where: {
+        profissionalId,
+        tipo: 'AVALIACAO',
+        AgendaDia: {
+          some: {
+            status: {
+              in: ['AGENDADO', 'REALIZADO']
+            },
+            data: {
+              gte: hoje,
+              lt: amanha
+            }
           }
-        }
-      }
-    },
-
-    include: {
-
-      paciente: true,
-      funcionario: true,
-      AgendaDia: {
-        where: {
-          status: {
-            in: ['AGENDADO', 'REALIZADO']
-          }
-        },
-        orderBy: {
-          hora: 'asc'
         }
       },
 
-      avaliacao: {
-        select: {
-          id: true,
-          data: true
+      include: {
+
+        paciente: true,
+        funcionario: true,
+        AgendaDia: {
+          where: {
+            status: {
+              in: ['AGENDADO', 'REALIZADO']
+            }
+          },
+          orderBy: {
+            hora: 'asc'
+          }
+        },
+
+        avaliacao: {
+          select: {
+            id: true,
+            data: true
+          }
         }
+
       }
+    });
+  }
 
-    }
-  });
-}
-
-  // =====================================
   // BUSCAR TODAS AS AGENDAS
-  // =====================================
   async findAll() {
     return prisma.agenda.findMany({
       include: {
@@ -118,53 +116,53 @@ async findAvaliacoesPendentesHoje(profissionalId: number) {
   }
 
   async update(data: any) {
-  return prisma.agenda.update({
-    where: { id: data.id },
-    data: {
-      pacienteId: data.pacienteId,
-      profissionalId: data.profissionalId,
-      tipo: data.tipo,
-      dataInicio: data.dataInicio,
-      dataFim: data.dataFim,
-      observacao: data.observacao,
-      ativo: data.ativo ? 1 : 0
-    }
-  });
-}
+    return prisma.agenda.update({
+      where: { id: data.id },
+      data: {
+        pacienteId: data.pacienteId,
+        profissionalId: data.profissionalId,
+        tipo: data.tipo,
+        dataInicio: data.dataInicio,
+        dataFim: data.dataFim,
+        observacao: data.observacao,
+        ativo: data.ativo ? 1 : 0
+      }
+    });
+  }
 
-async delete(id: number) {
-  return prisma.agenda.delete({
-    where: { id }
-  });
-}
+  async delete(id: number) {
+    return prisma.agenda.delete({
+      where: { id }
+    });
+  }
 
-async atualizarStatusDia(
-  agendaId: number,
-  status: string
-): Promise<void> {
+  async atualizarStatusDia(
+    agendaId: number,
+    status: string
+  ): Promise<void> {
 
-  await prisma.agendaDia.updateMany({
-    where: {
-      agendaId,
-      status: 'AGENDADO'
-    },
-    data: {
-      status
-    }
-  });
-}
+    await prisma.agendaDia.updateMany({
+      where: {
+        agendaId,
+        status: 'AGENDADO'
+      },
+      data: {
+        status
+      }
+    });
+  }
 
-async atualizarDataFim(
-  agendaId: number,
-  dataFim: Date
-): Promise<void> {
+  async atualizarDataFim(
+    agendaId: number,
+    dataFim: Date
+  ): Promise<void> {
 
-  await prisma.agenda.update({
-    where: { id: agendaId },
-    data: {
-      dataFim
-    }
-  });
-}
+    await prisma.agenda.update({
+      where: { id: agendaId },
+      data: {
+        dataFim
+      }
+    });
+  }
 
 }

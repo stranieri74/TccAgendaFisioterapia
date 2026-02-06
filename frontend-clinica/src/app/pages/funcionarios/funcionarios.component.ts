@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -21,10 +21,10 @@ export class FuncionariosComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-     this.carregando = true;
+    this.carregando = true;
     this.listarFuncionarios();
   }
 

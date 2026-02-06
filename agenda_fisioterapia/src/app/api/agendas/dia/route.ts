@@ -3,7 +3,7 @@ import { AgendaService } from "@/services/AgendaService";
 
 const service = new AgendaService();
 
-// 🔁 remarcar
+// remarcar
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
@@ -22,7 +22,7 @@ export async function PUT(req: Request) {
   }
 }
 
-// ❌ cancelar
+// cancelar
 export async function PATCH(req: Request) {
   try {
     const body = await req.json();
@@ -38,7 +38,7 @@ export async function PATCH(req: Request) {
   }
 }
 
-// 🔄 alterar horário em massa
+// alterar horário em massa
 export async function POST(req: Request) {
   try {
     const body = await req.json();

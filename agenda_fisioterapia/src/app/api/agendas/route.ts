@@ -1,24 +1,9 @@
 import { NextResponse } from 'next/server';
-import { JwtService } from '@/shared/security/JwtService';
 import { AgendaService } from '@/services/AgendaService';
-
-function getAuthPayload(request: Request) {
-  const authHeader = request.headers.get('authorization');
-
-  if (!authHeader) throw new Error('Token não informado');
-
-  const [, token] = authHeader.split(' ');
-
-  if (!token) throw new Error('Token mal formatado');
-
-  return JwtService.validarToken(token);
-}
-
+import { getAuthPayload } from '@/middlewares/auth.middleware';
 const service = new AgendaService();
 
-// ===================================================
 // POST — criar agenda
-// ===================================================
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -33,9 +18,7 @@ export async function POST(req: Request) {
   }
 }
 
-// ===================================================
 // GET — listar
-// ===================================================
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -43,14 +26,12 @@ export async function GET(req: Request) {
     const profissionalIdParam = searchParams.get("profissionalId");
 
     const dataParam = searchParams.get("dataInicio");
-    
+
     const idParam = searchParams.get("id");
-    
+
     const avaliacaoHojeParam = searchParams.get("avaliacaoHoje");
 
-    // ======================================
-    // 🔎 BUSCAR POR ID (EDIÇÃO)
-    // ======================================
+    // BUSCAR POR ID (EDIÇÃO)
     if (idParam) {
 
       const id = Number(idParam);
@@ -58,7 +39,7 @@ export async function GET(req: Request) {
       if (isNaN(id)) {
         throw new Error("ID inválido");
       }
-      
+
       const agenda = await service.buscarPorId(id);
 
       if (!agenda) {
@@ -71,9 +52,7 @@ export async function GET(req: Request) {
       return NextResponse.json(agenda, { status: 200 });
     }
 
-    // =============================
     // LISTAR TODAS
-    // =============================
     if (!profissionalIdParam) {
       const dados = await service.listarTodas();
       return NextResponse.json(dados, { status: 200 });
@@ -84,16 +63,14 @@ export async function GET(req: Request) {
     if (isNaN(profissionalId)) {
       throw new Error("profissionalId inválido");
     }
-    
+
     // LISTAR avaliações profissionais, data e avaliação
     if (profissionalIdParam && avaliacaoHojeParam === 'true') {
-       const dados = await service.findAvaliacoesPendentesHoje(profissionalId);
-       return NextResponse.json(dados, { status: 200 });
+      const dados = await service.buscaAvaliacoesPendentesHoje(profissionalId);
+      return NextResponse.json(dados, { status: 200 });
     }
 
-    // =============================
     // PROFISSIONAL + DATA
-    // =============================
     if (dataParam && dataParam.trim() !== "") {
       const dataInicio = new Date(dataParam);
 
@@ -109,9 +86,7 @@ export async function GET(req: Request) {
       return NextResponse.json(dados, { status: 200 });
     }
 
-    // =============================
     // SOMENTE PROFISSIONAL
-    // =============================
     const dados =
       await service.agendaPorProfissional(profissionalId);
 
@@ -130,9 +105,7 @@ export async function GET(req: Request) {
   }
 }
 
-// ===================================================
 // PUT — atualizar agenda
-// ===================================================
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
@@ -153,9 +126,7 @@ export async function PUT(req: Request) {
   }
 }
 
-// ===================================================
 // DELETE — excluir agenda
-// ===================================================
 export async function DELETE(req: Request) {
   try {
     const { searchParams } = new URL(req.url);

@@ -4,27 +4,28 @@ export enum PerfilUsuario {
   RECEPCAO = 'RECEPCAO'
 }
 
-export class Usuario{
-    private id: number;
-    private login: string;
-    private senhaHash: string;
-    private perfil: PerfilUsuario;
-    private ativo: boolean;
-    private funcionarioId:number
+export class Usuario {
+  private id: number;
+  private login: string;
+  private senhaHash: string;
+  private perfil: PerfilUsuario;
+  private ativo: boolean;
+  private funcionarioId: number
 
-    constructor(
+  constructor(
     id: number,
     login: string,
     senhaHash: string,
     perfil: PerfilUsuario,
     ativo: boolean,
     funcionarioId: number
-  ) {this.id = id;
-     this.login = login;
-     this.senhaHash = senhaHash;
-     this.perfil = perfil;
-     this.ativo = ativo;
-     this.funcionarioId = funcionarioId
+  ) {
+    this.id = id;
+    this.login = login;
+    this.senhaHash = senhaHash;
+    this.perfil = perfil;
+    this.ativo = ativo;
+    this.funcionarioId = funcionarioId
   }
 
   getId(): number {
@@ -47,15 +48,15 @@ export class Usuario{
     return this.ativo;
   }
 
-getFuncionarioId(): number {
-  if (!this.funcionarioId) {
-    throw new Error('Usuário precisa ter um funcionário associado');
+  getFuncionarioId(): number {
+    if (!this.funcionarioId) {
+      throw new Error('Usuário precisa ter um funcionário associado');
+    }
+    return this.funcionarioId;
   }
-  return this.funcionarioId;
-}
 
-setSenhaHash(senhaHash: string): void {
-  this.senhaHash = senhaHash;
-}
+  setSenhaHash(senhaHash: string): void {
+    this.senhaHash = senhaHash;
+  }
 
 }

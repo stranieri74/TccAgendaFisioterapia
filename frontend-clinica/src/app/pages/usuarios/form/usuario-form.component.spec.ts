@@ -10,7 +10,7 @@ describe('UsuarioForm', () => {
     await TestBed.configureTestingModule({
       imports: [UsuarioFormComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(UsuarioFormComponent);
     component = fixture.componentInstance;

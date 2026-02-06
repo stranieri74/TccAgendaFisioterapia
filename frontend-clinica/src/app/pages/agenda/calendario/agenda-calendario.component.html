@@ -2,40 +2,36 @@
 
   <div class="legenda">
 
-  <div class="item">
-    <span class="box agendado"></span> Agendado
+    <div class="item">
+      <span class="box agendado"></span> Agendado
+    </div>
+
+    <div class="item">
+      <span class="box realizado"></span> Realizado
+    </div>
+
+    <div class="item">
+      <span class="box falta"></span> Falta
+    </div>
+
+    <div class="item">
+      <span class="box cancelado"></span> Cancelado
+    </div>
+
+    <div class="item">
+      <span class="box alta"></span> Alta
+    </div>
+
   </div>
 
-  <div class="item">
-    <span class="box realizado"></span> Realizado
-  </div>
-
-  <div class="item">
-    <span class="box falta"></span> Falta
-  </div>
-
-  <div class="item">
-    <span class="box cancelado"></span> Cancelado
-  </div>
-
-  <div class="item">
-    <span class="box alta"></span> Alta
-  </div>
-
-</div>
-
-  <div class="profissional" >
+  <div class="profissional">
     <label>Profissional:</label>
 
-    <select
-      [(ngModel)]="profissionalId"
-      (change)="buscarAgenda()">
+    <select [(ngModel)]="profissionalId" (change)="buscarAgenda()">
 
       <option value="">Selecione</option>
 
-      <option
-        *ngFor="let f of funcionarios"
-        [value]="f.id">
+      <option *ngFor="let f of funcionarios" [value]="f.id">
         {{ f.nome }}
       </option>
 
@@ -59,62 +55,51 @@
 
 <div class="calendar-wrapper" #scrollArea>
 
-<table class="agenda-table">
+  <table class="agenda-table">
 
-  <thead>
-    <tr>
-      <th class="hora-col">Hora</th>
+    <thead>
+      <tr>
+        <th class="hora-col">Hora</th>
 
-      <th
-        *ngFor="let d of diasSemana"
-        [class.fim-semana]="isFimDeSemana(d)">
+        <th *ngFor="let d of diasSemana" [class.fim-semana]="isFimDeSemana(d)">
 
-        {{ diasSemanaPt[d.getDay()] }}<br>
-        {{ d | date:'dd/MM' }}
+          {{ diasSemanaPt[d.getDay()] }}<br>
+          {{ d | date:'dd/MM' }}
 
-      </th>
-    </tr>
-  </thead>
+        </th>
+      </tr>
+    </thead>
 
-  <tbody>
+    <tbody>
 
-    <tr
-      *ngFor="let hora of horas; let i = index"
-      [ngClass]="['linha-' + i, i === linhaAtualIndex ? 'linha-atual' : '']">
+      <tr *ngFor="let hora of horas; let i = index"
+        [ngClass]="['linha-' + i, i === linhaAtualIndex ? 'linha-atual' : '']">
 
-      <td class="hora-col">
-        {{ hora }}
-      </td>
+        <td class="hora-col">
+          {{ hora }}
+        </td>
 
-      <td *ngFor="let dia of diasSemana">
+        <td *ngFor="let dia of diasSemana">
 
-        <div
-             *ngFor="let e of eventosPorDiaHora(dia, hora)"
-             class="evento"
-            [ngClass]="[
+          <div *ngFor="let e of eventosPorDiaHora(dia, hora)" class="evento" [ngClass]="[
                         getClasse(e.tipo),
                         getClasseStatus(e.status)
-                       ]"
-             (click)="abrirEvento(e)">
+                       ]" (click)="abrirEvento(e)">
 
-          {{ e.paciente }}
+            {{ e.paciente }}
 
-        </div>
+          </div>
 
-      </td>
+        </td>
 
-    </tr>
+      </tr>
 
-  </tbody>
+    </tbody>
 
-</table>
+  </table>
 </div>
 
-<app-agenda-calendario-modal
-  *ngIf="eventoSelecionado"
-  [sessao]="eventoSelecionado"
-  (fechar)="fecharModal()"
-  (cancelar)="cancelarSessao($event)"
-  (alterarStatus)="alterarStatusSessao($event)"
+<app-agenda-calendario-modal *ngIf="eventoSelecionado" [sessao]="eventoSelecionado" (fechar)="fecharModal()"
+  (cancelar)="cancelarSessao($event)" (alterarStatus)="alterarStatusSessao($event)"
   (reagendar)="reagendarSessao($event)">
 </app-agenda-calendario-modal>

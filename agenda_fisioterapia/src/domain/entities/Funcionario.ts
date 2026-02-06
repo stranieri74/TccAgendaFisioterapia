@@ -1,61 +1,61 @@
 export class Funcionario {
-    private id: number;
-    private nome: string;
-    private dataNascimento: Date;
-    private cep: string;
-    private cnpj: string;
-    private uf: string;
-    private cidade: string;
-    private endereco: string;
-    private numero: number;
-    private bairro: string;
-    private telefone: string;
-    private celular: string;
-    private cpf: string;
-    private email: string;
-    private crefito: string;
-    private sexo: number;
-    private estadoCivil: number;
-    private ativo: number;
+  private id: number;
+  private nome: string;
+  private dataNascimento: Date;
+  private cep: string;
+  private cnpj: string;
+  private uf: string;
+  private cidade: string;
+  private endereco: string;
+  private numero: number;
+  private bairro: string;
+  private telefone: string;
+  private celular: string;
+  private cpf: string;
+  private email: string;
+  private crefito: string;
+  private sexo: number;
+  private estadoCivil: number;
+  private ativo: number;
 
-    constructor(id: number,
-               nome: string,
-               dataNascimento: Date,
-               cep: string,
-               cnpj: string,
-               uf: string,
-               cidade: string,
-               endereco: string,
-               numero: number,
-               bairro: string,
-               telefone: string,
-               celular: string,
-               cpf: string,
-               email: string,
-               crefito: string,
-               sexo: number,
-               estadoCivil: number,
-              ativo: number){
-            this.id = id;
-            this.nome = nome;
-            this.dataNascimento = dataNascimento;
-            this.cep = cep;
-            this.cnpj = cnpj
-            this.uf = uf;
-            this.cidade = cidade;
-            this.endereco = endereco;
-            this.numero = numero;
-            this.bairro = bairro;
-            this.telefone = telefone;
-            this.celular = celular;
-            this.cpf = cpf;
-            this.email = email;
-            this.crefito = crefito;
-            this.sexo = sexo;
-            this.estadoCivil = estadoCivil;
-            this.ativo = ativo;
+  constructor(id: number,
+    nome: string,
+    dataNascimento: Date,
+    cep: string,
+    cnpj: string,
+    uf: string,
+    cidade: string,
+    endereco: string,
+    numero: number,
+    bairro: string,
+    telefone: string,
+    celular: string,
+    cpf: string,
+    email: string,
+    crefito: string,
+    sexo: number,
+    estadoCivil: number,
+    ativo: number) {
+    this.id = id;
+    this.nome = nome;
+    this.dataNascimento = dataNascimento;
+    this.cep = cep;
+    this.cnpj = cnpj
+    this.uf = uf;
+    this.cidade = cidade;
+    this.endereco = endereco;
+    this.numero = numero;
+    this.bairro = bairro;
+    this.telefone = telefone;
+    this.celular = celular;
+    this.cpf = cpf;
+    this.email = email;
+    this.crefito = crefito;
+    this.sexo = sexo;
+    this.estadoCivil = estadoCivil;
+    this.ativo = ativo;
 
-   }
+  }
 
   getId(): number {
     return this.id;

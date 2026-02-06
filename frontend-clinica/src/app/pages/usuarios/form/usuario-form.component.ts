@@ -21,11 +21,11 @@ export class UsuarioFormComponent implements OnInit {
   funcionarios: any[] = [];
 
   usuario: any = {
-     login: '',
-     senhaHash: '',
-     perfil: 'ADMIN',
-     ativo: 0,
-     funcionarioId: ''
+    login: '',
+    senhaHash: '',
+    perfil: 'ADMIN',
+    ativo: 0,
+    funcionarioId: ''
   };
 
   constructor(
@@ -33,7 +33,7 @@ export class UsuarioFormComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private cd: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.buscarFuncionarios();
@@ -86,18 +86,18 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   buscarFuncionarios() {
-  this.http
-    .get<any[]>('http://localhost:3000/api/funcionarios')
-    .subscribe({
-      next: res => {
-        this.funcionarios = res;
-        this.cd.detectChanges();
-      },
-      error: () => {
-        this.erro = 'Erro ao carregar funcionários';
-      }
-    });
-}
+    this.http
+      .get<any[]>('http://localhost:3000/api/funcionarios')
+      .subscribe({
+        next: res => {
+          this.funcionarios = res;
+          this.cd.detectChanges();
+        },
+        error: () => {
+          this.erro = 'Erro ao carregar funcionários';
+        }
+      });
+  }
 
   // SALVAR
   salvar() {
@@ -106,26 +106,26 @@ export class UsuarioFormComponent implements OnInit {
     this.sucesso = '';
     this.carregando = true;
 
-const usuarioEnvio: any = {
-    login: this.usuario.login,
-    perfil: this.usuario.perfil,
-    funcionarioId: Number(this.usuario.funcionarioId),
-    ativo: this.usuario.ativo ? 1 : 0
-  };
+    const usuarioEnvio: any = {
+      login: this.usuario.login,
+      perfil: this.usuario.perfil,
+      funcionarioId: Number(this.usuario.funcionarioId),
+      ativo: this.usuario.ativo ? 1 : 0
+    };
 
     if (this.usuario.senhaHash && this.usuario.senhaHash.trim() !== '') {
-       usuarioEnvio.senha = this.usuario.senhaHash;
-     }
+      usuarioEnvio.senha = this.usuario.senhaHash;
+    }
 
     const request = this.editando
       ? this.http.put(
-          'http://localhost:3000/api/usuarios',
-          { ...usuarioEnvio, id: this.id }
-        )
+        'http://localhost:3000/api/usuarios',
+        { ...usuarioEnvio, id: this.id }
+      )
       : this.http.post(
-          'http://localhost:3000/api/usuarios',
-          usuarioEnvio
-        );
+        'http://localhost:3000/api/usuarios',
+        usuarioEnvio
+      );
 
     request.subscribe({
       next: () => {

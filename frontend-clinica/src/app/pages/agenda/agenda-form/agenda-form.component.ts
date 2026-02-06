@@ -53,7 +53,7 @@ export class AgendaFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private cd: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -72,7 +72,7 @@ export class AgendaFormComponent implements OnInit {
       this.buscar();
     }
 
-    
+
   }
 
   // COMBOS
@@ -119,7 +119,7 @@ export class AgendaFormComponent implements OnInit {
   toggleDia(dia: number): void {
     this.diasSelecionados.includes(dia)
       ? this.diasSelecionados =
-          this.diasSelecionados.filter(d => d !== dia)
+      this.diasSelecionados.filter(d => d !== dia)
       : this.diasSelecionados.push(dia);
   }
 
@@ -155,20 +155,20 @@ export class AgendaFormComponent implements OnInit {
 
     const req = this.editando
       ? this.http.put(
-          'http://localhost:3000/api/agendas',
-          { ...payload, id: Number(this.id) }
-        )
+        'http://localhost:3000/api/agendas',
+        { ...payload, id: Number(this.id) }
+      )
       : this.http.post(
-          'http://localhost:3000/api/agendas',
-          payload
-        );
+        'http://localhost:3000/api/agendas',
+        payload
+      );
 
     req.subscribe({
       next: () => this.router.navigate(['/agenda']),
       error: err =>
         this.erro =
-          err?.error?.message ??
-          'Erro ao salvar agendamento'
+        err?.error?.message ??
+        'Erro ao salvar agendamento'
     });
   }
 

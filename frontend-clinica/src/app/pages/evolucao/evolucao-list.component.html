@@ -31,40 +31,33 @@
 
           <!-- STATUS -->
           <td>
-            <span
-              class="status-chip"
-              [ngClass]="{
+            <span class="status-chip" [ngClass]="{
                 'agendado': s.status === 'AGENDADO',
                 'realizado': s.status === 'REALIZADO'
-              }"
-            >
+              }">
               {{
-                s.status === 'AGENDADO'
-                  ? '🔵 Aguardando'
-                  : '🟢 Concluido'
+              s.status === 'AGENDADO'
+              ? '🔵 Aguardando'
+              : '🟢 Concluido'
               }}
             </span>
           </td>
 
           <!-- AÇÃO -->
           <td>
-            <button
-  class="btn"
-  [ngClass]="{
+            <button class="btn" [ngClass]="{
     'btn-primary': !s.evolucoes?.length,
     'btn-warning': s.evolucoes?.length
-  }"
-  (click)="evoluir(
+  }" (click)="evoluir(
     s.id,
     s.evolucoes?.[0]?.id
-  )"
->
-  {{
-    s.evolucoes?.length
-      ? 'Editar evolução'
-      : 'Evoluir'
-  }}
-</button>
+  )">
+              {{
+              s.evolucoes?.length
+              ? 'Editar evolução'
+              : 'Evoluir'
+              }}
+            </button>
           </td>
 
         </tr>

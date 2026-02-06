@@ -32,7 +32,7 @@ export class EvolucaoRepository {
       registro.alta
     );
   }
-async findById(id: number): Promise<Evolucao | null> {
+  async findById(id: number): Promise<Evolucao | null> {
 
     const registro = await prisma.evolucoes.findUnique({
       where: { id },
@@ -67,7 +67,7 @@ async findById(id: number): Promise<Evolucao | null> {
     );
   }
 
-listarTodas() {
+  listarTodas() {
     return prisma.evolucoes.findMany({
       orderBy: { data: 'asc' },
       include: {
@@ -137,12 +137,12 @@ listarTodas() {
         recursos: evolucao.getRecursos(),
         respostaPaciente: evolucao.getRespostaPaciente(),
         observacoes: evolucao.getObservacoes(),
-        alta: evolucao.getAlta()  ? 1 : 0
+        alta: evolucao.getAlta() ? 1 : 0
       }
     });
 
     return new Evolucao(
-registro.id,
+      registro.id,
       registro.prontuarioId,
       registro.agendaDiaId,
       registro.data,
