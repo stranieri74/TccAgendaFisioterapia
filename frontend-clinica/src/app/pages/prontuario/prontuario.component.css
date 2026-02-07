@@ -175,3 +175,206 @@
     width: 100%;
   }
 }
+
+/* =========================
+   RELATÓRIO DE PRONTUÁRIO
+   ========================= */
+@media print {
+
+  /* esconder tudo */
+  body * {
+    visibility: hidden;
+  }
+
+  /* mostrar apenas o relatório */
+  .content,
+  .content * {
+    visibility: visible;
+  }
+
+  .content {
+    position: absolute;
+    inset: 0;
+    padding: 32px;
+  }
+
+  /* tipografia de documento */
+  body {
+    font-family: "Times New Roman", serif;
+    font-size: 12px;
+    color: #000;
+    background: #fff;
+  }
+
+  /* CABEÇALHO */
+  .print-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .print-header h1 {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .print-header h2 {
+    font-size: 14px;
+    margin: 4px 0 8px;
+    font-weight: normal;
+  }
+
+  .print-date {
+    font-size: 11px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #000;
+    margin: 16px 0;
+  }
+
+  /* remover visual de app */
+  .card {
+    box-shadow: none !important;
+    border: none;
+    padding: 0;
+    margin-bottom: 16px;
+  }
+
+  /* títulos de seção */
+  h3, h4 {
+    font-size: 13px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 2px;
+  }
+
+  /* dados simples */
+  .info span {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* AVALIAÇÃO – duas colunas */
+  .avaliacao .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+  }
+
+  .avaliacao .full {
+    grid-column: 1 / -1;
+  }
+
+  .avaliacao strong {
+    display: block;
+    font-weight: bold;
+  }
+
+  /* TABELA DE EVOLUÇÕES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+
+  th, td {
+    border: 1px solid #000;
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  th {
+    text-align: left;
+    background: #f2f2f2;
+  }
+
+  /* evitar cortes feios */
+  tr {
+    page-break-inside: avoid;
+  }
+
+  /* esconder elementos do app */
+  .busca,
+  .actions,
+  .mobile-list,
+  button,
+  .drawer,
+  .drawer-backdrop,
+  .page-header {
+    display: none !important;
+  }
+
+  /* remover emojis e badges */
+  .badge {
+    border: none;
+    background: none;
+    color: #000;
+    padding: 0;
+  }
+.rel-section {
+  page-break-before: auto;
+  page-break-after: auto;
+}
+
+.rel-section.evolucoes {
+  page-break-before: always;
+}
+
+.evolucao-bloco {
+  margin-top: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #000;
+}
+
+.evolucao-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.evolucao-body p {
+  margin: 4px 0;
+  text-align: justify;
+}
+
+.evolucao-body strong {
+  display: inline-block;
+  min-width: 180px;
+}
+
+  .rel-section {
+  margin-top: 20px;
+}
+
+.rel-section h3 {
+  border-bottom: 2px solid #000;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+}
+
+.evolucao-bloco {
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ccc;
+}
+
+.evolucao-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.evolucao-body p {
+  margin: 4px 0;
+  text-align: justify;
+}
+
+.evolucao-body strong {
+  display: inline-block;
+  min-width: 200px;
+}
+}

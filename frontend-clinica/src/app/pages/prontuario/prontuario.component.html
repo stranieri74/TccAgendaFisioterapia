@@ -1,13 +1,13 @@
 <div class="page-container">
 
-  <!-- HEADER -->
-  <header class="page-header">
+  <!-- HEADER (TELA) -->
+  <header class="page-header no-print">
     <h2>📋 Prontuário</h2>
     <p>Busque o prontuário completo do paciente pelo CPF</p>
   </header>
 
   <!-- BUSCA -->
-  <section class="card busca">
+  <section class="card busca no-print">
     <input type="text" placeholder="Digite o CPF" [(ngModel)]="cpfBusca" />
     <button (click)="buscarProntuario()" [disabled]="carregando">
       {{ carregando ? 'Buscando...' : 'Buscar' }}
@@ -15,108 +15,108 @@
   </section>
 
   <!-- ERRO -->
-  <section class="alert error" *ngIf="erro">
+  <section class="alert error no-print" *ngIf="erro">
     {{ erro }}
   </section>
 
   <!-- CONTEÚDO -->
   <section *ngIf="prontuario" class="content">
 
-    <!-- PACIENTE -->
-    <div class="card info">
-      <h3>🧑‍⚕️ {{ prontuario.paciente?.nome }}</h3>
-      <span>
-        Nascimento:
-        {{ prontuario.paciente?.dataNascimento | date:'dd/MM/yyyy':'UTC' }}
-      </span>
+    <!-- AÇÕES -->
+    <div class="card actions no-print">
+      <button class="btn btn-secondary" (click)="gerarRelatorio()">
+        🖨️ Gerar relatório
+      </button>
     </div>
 
-    <!-- PROFISSIONAL -->
-    <div class="card info">
-      <h4>👨‍⚕️ Profissional</h4>
-      <span>
-        {{ prontuario.profissional?.nome }}
-        ({{ prontuario.profissional?.crefito }})
-      </span>
+    <!-- =========================
+         RELATÓRIO (IMPRIME)
+         ========================= -->
+    <div class="relatorio-print">
+
+      <header class="relatorio-header">
+        <h1>Clínica de Fisioterapia</h1>
+        <h2>Relatório de Prontuário</h2>
+        <p>Emitido em {{ hoje | date:'dd/MM/yyyy HH:mm' }}</p>
+      </header>
+
+      <section class="relatorio-bloco">
+        <h3>Paciente</h3>
+        <p><strong>Nome:</strong> {{ prontuario.paciente?.nome }}</p>
+        <p>
+          <strong>Nascimento:</strong>
+          {{ prontuario.paciente?.dataNascimento | date:'dd/MM/yyyy':'UTC' }}
+        </p>
+      </section>
+
+      <section class="relatorio-bloco">
+        <h3>Profissional</h3>
+        <p>
+          {{ prontuario.profissional?.nome }}
+          ({{ prontuario.profissional?.crefito }})
+        </p>
+      </section>
+
+<section class="rel-section" *ngIf="prontuario.avaliacao">
+  <h3>Avaliação</h3>
+
+  <table>
+    <tr><td>Data</td><td>{{ prontuario.avaliacao.data | date:'dd/MM/yyyy':'UTC' }}</td></tr>
+    <tr><td>Tipo</td><td>{{ prontuario.avaliacao.tipo }}</td></tr>
+
+    <tr><td>Queixa Principal</td><td>{{ prontuario.avaliacao.queixa }}</td></tr>
+    <tr><td>História da Doença Atual</td><td>{{ prontuario.avaliacao.historia }}</td></tr>
+
+    <tr><td>Doenças Associadas</td><td>{{ prontuario.avaliacao.doencas }}</td></tr>
+    <tr><td>Medicamentos em Uso</td><td>{{ prontuario.avaliacao.medicamentos }}</td></tr>
+    <tr><td>Cirurgias Prévias</td><td>{{ prontuario.avaliacao.cirurgias }}</td></tr>
+
+    <tr><td>Dor (Escala)</td><td>{{ prontuario.avaliacao.dor }}</td></tr>
+
+    <tr><td>Inspeção</td><td>{{ prontuario.avaliacao.inspecao }}</td></tr>
+    <tr><td>Palpação</td><td>{{ prontuario.avaliacao.palpacao }}</td></tr>
+    <tr><td>ADM</td><td>{{ prontuario.avaliacao.adm }}</td></tr>
+    <tr><td>Força Muscular</td><td>{{ prontuario.avaliacao.forca }}</td></tr>
+    <tr><td>Testes Especiais</td><td>{{ prontuario.avaliacao.teste }}</td></tr>
+
+    <tr><td>Diagnóstico Funcional</td><td>{{ prontuario.avaliacao.diagnostico }}</td></tr>
+    <tr><td>Objetivos</td><td>{{ prontuario.avaliacao.objetivos }}</td></tr>
+    <tr><td>Plano Terapêutico</td><td>{{ prontuario.avaliacao.plano }}</td></tr>
+
+    <tr><td>Observações</td><td>{{ prontuario.avaliacao.observacao }}</td></tr>
+  </table>
+</section>
+
+ <section class="rel-section">
+  <h3>Evoluções</h3>
+
+  <div *ngFor="let e of prontuario.evolucoes; let i = index" class="evolucao-bloco">
+
+    <div class="evolucao-header">
+      <span><strong>Evolução {{ i + 1 }}</strong></span>
+      <span><strong>Data:</strong> {{ e.data | date:'dd/MM/yyyy':'UTC' }}</span>
+      <span><strong>Alta:</strong> {{ e.alta ? 'Sim' : 'Não' }}</span>
     </div>
 
-    <!-- AVALIAÇÃO -->
-    <div class="card avaliacao" *ngIf="prontuario.avaliacao">
-  <h4>📝 Avaliação</h4>
+    <div class="evolucao-body">
+      <p><strong>Conduta:</strong> {{ e.conduta }}</p>
 
-  <div class="grid">
-    <div><strong>Data</strong><span>{{ prontuario.avaliacao.data | date:'dd/MM/yyyy':'UTC' }}</span></div>
-    <div><strong>Tipo</strong><span>{{ prontuario.avaliacao.tipo }}</span></div>
-    <div><strong>Queixa</strong><span>{{ prontuario.avaliacao.queixa }}</span></div>
-    <div><strong>Dor</strong><span>{{ prontuario.avaliacao.dor }}</span></div>
-    <div><strong>Diagnóstico</strong><span>{{ prontuario.avaliacao.diagnostico }}</span></div>
-    <div><strong>Plano</strong><span>{{ prontuario.avaliacao.plano }}</span></div>
-    <div class="full"><strong>Observação</strong><span>{{ prontuario.avaliacao.observacao }}</span></div>
-  </div>
-</div>
+      <p *ngIf="e.exercicios">
+        <strong>Exercícios:</strong> {{ e.exercicios }}
+      </p>
 
-    <!-- EVOLUÇÕES -->
-    <div class="card">
-      <h4>📈 Evoluções</h4>
+      <p *ngIf="e.recursos">
+        <strong>Recursos:</strong> {{ e.recursos }}
+      </p>
 
-      <!-- DESKTOP -->
-      <table class="table" *ngIf="prontuario.evolucoes?.length">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Conduta</th>
-            <th>Alta</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let e of prontuario.evolucoes" (click)="abrirHistorico(e)" class="clickable">
-            <td>{{ e.data | date:'dd/MM/yyyy':'UTC' }}</td>
-            <td>{{ e.conduta }}</td>
-            <td>
-              <span class="badge" [class.ok]="e.alta">
-                {{ e.alta ? 'Sim' : 'Não' }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <p *ngIf="e.respostaPaciente">
+        <strong>Resposta do Paciente:</strong> {{ e.respostaPaciente }}
+      </p>
 
-      <!-- MOBILE -->
-      <div class="mobile-list">
-        <div class="mobile-card" *ngFor="let e of prontuario.evolucoes" (click)="abrirHistorico(e)">
-          <div>
-            <strong>{{ e.data | date:'dd/MM/yyyy' }}</strong>
-            <span>{{ e.conduta }}</span>
-          </div>
-          <span class="badge" [class.ok]="e.alta">
-            {{ e.alta ? 'Alta' : 'Em tratamento' }}
-          </span>
-        </div>
-      </div>
-
-      <p *ngIf="!prontuario.evolucoes?.length" class="empty">
-        Nenhuma evolução registrada.
+      <p *ngIf="e.observacoes">
+        <strong>Observações:</strong> {{ e.observacoes }}
       </p>
     </div>
-  </section>
 
-  <!-- DRAWER -->
-  <div class="drawer-backdrop" *ngIf="evolucaoSelecionada" (click)="fecharHistorico()"></div>
-
-  <aside class="drawer" *ngIf="evolucaoSelecionada">
-    <header>
-      <h3>📄 Histórico</h3>
-      <button (click)="fecharHistorico()">✖</button>
-    </header>
-
-    <div class="drawer-content">
-      <p><strong>Data:</strong> {{ evolucaoSelecionada.data | date:'dd/MM/yyyy':'UTC' }}</p>
-      <p><strong>Conduta:</strong> {{ evolucaoSelecionada.conduta }}</p>
-      <p><strong>Exercícios:</strong> {{ evolucaoSelecionada.exercicios }}</p>
-      <p><strong>Recursos:</strong> {{ evolucaoSelecionada.recursos }}</p>
-      <p><strong>Resposta:</strong> {{ evolucaoSelecionada.respostaPaciente }}</p>
-      <p><strong>Observações:</strong> {{ evolucaoSelecionada.observacoes }}</p>
-    </div>
-  </aside>
-
-</div>
+  </div>
+</section>

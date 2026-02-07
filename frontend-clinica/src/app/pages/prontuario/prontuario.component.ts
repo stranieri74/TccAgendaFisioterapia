@@ -23,8 +23,9 @@ export class ProntuarioComponent {
   constructor(
     private http: HttpClient,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
+  hoje = new Date();
   buscarProntuario(): void {
 
     if (!this.cpfBusca) {
@@ -55,15 +56,15 @@ export class ProntuarioComponent {
           ...res,
           avaliacao: Array.isArray(res.avaliacao) && res.avaliacao.length
             ? {
-                ...res.avaliacao[0],
-                data: normalizarData(res.avaliacao[0].data)
-              }
+              ...res.avaliacao[0],
+              data: normalizarData(res.avaliacao[0].data)
+            }
             : null,
           evolucoes: Array.isArray(res.evolucoes)
             ? res.evolucoes.map((e: any) => ({
-                ...e,
-                data: normalizarData(e.data)
-              }))
+              ...e,
+              data: normalizarData(e.data)
+            }))
             : []
         };
 
@@ -87,4 +88,9 @@ export class ProntuarioComponent {
   fecharHistorico(): void {
     this.evolucaoSelecionada = null;
   }
+
+  gerarRelatorio(): void {
+    window.print();
+  }
+
 }

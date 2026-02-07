@@ -1,0 +1,1 @@
+process.env.JWT_SECRET = 'uma_chave_super_secreta_123456';
