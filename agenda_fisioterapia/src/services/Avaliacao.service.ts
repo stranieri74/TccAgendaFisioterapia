@@ -46,14 +46,14 @@ export class AvaliacaoService {
     const agenda = await this.agendaRepository.findById(dados.agendaId);
     if (!agenda) throw new Error('Agenda não encontrada');
 
-    // 🔎 verifica se já existe prontuário
+    // verifica se já existe prontuário
     let prontuario =
       await this.prontuarioRepository.buscarAtivoPorPacienteEProfissional(
         agenda.pacienteId,
         agenda.profissionalId
       );
 
-    // ✅ SE NÃO EXISTIR → CRIA AGORA
+    // SE NÃO EXISTIR → CRIA AGORA
     if (!prontuario) {
       prontuario = await this.prontuarioRepository.salvar(
         new Prontuario(
@@ -68,7 +68,7 @@ export class AvaliacaoService {
       );
     }
 
-    // ✅ agora o ID existe
+    // agora o ID existe
     const avaliacao = new Avaliacao(
       0,
       agenda.id!,

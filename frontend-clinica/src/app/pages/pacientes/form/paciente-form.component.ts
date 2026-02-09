@@ -22,7 +22,7 @@ export class PacienteFormComponent implements OnInit {
 
   paciente: any = {
     nome: '',
-    dataNascimento: '',   // ✅ string para input type="date"
+    dataNascimento: '',  
     cpf: '',
     sexo: '',
     estadoCivil: '',
@@ -82,9 +82,7 @@ export class PacienteFormComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  // ===============================
   // BUSCAR PACIENTE
-  // ===============================
   buscarPaciente() {
     this.carregando = true;
 
@@ -95,7 +93,6 @@ export class PacienteFormComponent implements OnInit {
 
           this.paciente = res;
 
-          // ✅ CONVERSÃO CORRETA DA DATA
           if (this.paciente.dataNascimento) {
             const data = new Date(this.paciente.dataNascimento);
 
@@ -119,9 +116,7 @@ export class PacienteFormComponent implements OnInit {
       });
   }
 
-  // ===============================
   // SALVAR
-  // ===============================
   salvar() {
 
     this.erro = '';
@@ -165,16 +160,16 @@ export class PacienteFormComponent implements OnInit {
         if (err.error?.message) {
 
           if (typeof err.error.message === 'string') {
-            this.erro = err.error.message;
+            alert(err.error.message);
 
           } else if (Array.isArray(err.error.message)) {
-            this.erro = err.error.message.join(' | ');
+            alert(err.error.message.join(' | '));
           }
 
         } else if (err.error?.error) {
-          this.erro = err.error.error;
+          alert(err.error.error);
         } else {
-          this.erro = 'Erro inesperado ao salvar paciente.';
+          alert('Erro inesperado ao salvar paciente.');
         }
 
         this.cd.detectChanges();

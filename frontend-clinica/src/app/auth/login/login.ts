@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { FooterComponent } from '../../../app/layout/footer/footer.component';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./login.css'],
   standalone: true,
   imports: [FormsModule,
-    RouterModule]
+    RouterModule,
+  FooterComponent ]
 })
 export class Login {
   mensagemEsqueciSenha = 'Esqueci minha senha';

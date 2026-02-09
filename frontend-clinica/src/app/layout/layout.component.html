@@ -14,6 +14,10 @@
 
     <!-- MENU PRINCIPAL -->
     <nav>
+      <!-- HOME -->
+      <div class="menu-item" routerLink="/dashboard" (click)="fecharMenuMobile()">
+        🏠 <span *ngIf="menuAberto">Home</span>
+      </div>
 
       <!-- CADASTROS -->
       <div class="menu-item" (click)="abrirSubmenu('cadastros')">
@@ -21,9 +25,30 @@
       </div>
 
       <div class="submenu" *ngIf="submenuAberto === 'cadastros'">
-        <a routerLink="/pacientes" (click)="fecharMenuMobile()">Pacientes</a>
-        <a routerLink="/funcionarios" (click)="fecharMenuMobile()">Profissionais</a>
-        <a routerLink="/usuarios" (click)="fecharMenuMobile()">Usuários</a>
+
+        <!-- Pacientes (logado) -->
+        <a *ngIf="isRecepcaoOuAdmin()" routerLink="/pacientes" (click)="fecharMenuMobile()">
+          Pacientes
+        </a>
+
+        <!-- Profissionais (ADMIN) -->
+        <a
+          *ngIf="isAdmin()"
+          routerLink="/funcionarios"
+          (click)="fecharMenuMobile()"
+        >
+          Profissionais
+        </a>
+
+        <!-- Usuários (ADMIN) -->
+        <a
+          *ngIf="isAdmin()"
+          routerLink="/usuarios"
+          (click)="fecharMenuMobile()"
+        >
+          Usuários
+        </a>
+
       </div>
 
       <!-- AGENDA -->
@@ -32,9 +57,9 @@
       </div>
 
       <div class="submenu" *ngIf="submenuAberto === 'agenda'">
-        <a routerLink="/agenda" (click)="fecharMenuMobile()">Agendamentos</a>
-        <a routerLink="/calendario" (click)="fecharMenuMobile()">Calendário</a>
-        <a routerLink="/prontuario" (click)="fecharMenuMobile()">Prontuários</a>
+        <a *ngIf="isRecepcaoOuAdmin()" routerLink="/agenda" (click)="fecharMenuMobile()">Agendamentos</a>
+        <a *ngIf="isTodos()" routerLink="/calendario" (click)="fecharMenuMobile()">Calendário</a>
+        <a *ngIf="isTodos()" routerLink="/prontuario" (click)="fecharMenuMobile()">Prontuários</a>
       </div>
 
       <!-- EVOLUÇÃO -->
@@ -43,11 +68,11 @@
       </div>
 
       <div class="submenu" *ngIf="submenuAberto === 'evolucao'">
-        <a routerLink="/evolucao" (click)="fecharMenuMobile()">Evolução</a>
+        <a *ngIf="isProfissionalOuAdmin()" routerLink="/evolucao" (click)="fecharMenuMobile()">Evolução</a>
       </div>
 
       <!-- AVALIAÇÕES -->
-      <div class="menu-item" routerLink="/avaliacoes" (click)="fecharMenuMobile()">
+      <div class="menu-item" *ngIf="isProfissionalOuAdmin()" routerLink="/avaliacoes" (click)="fecharMenuMobile()">
         🧠 <span *ngIf="menuAberto">Avaliações</span>
       </div>
 
@@ -79,9 +104,9 @@
     <section class="page">
       <router-outlet></router-outlet>
     </section>
+
     <!-- ✅ RODAPÉ -->
     <app-footer></app-footer>
+
   </main>
-
-
 </div>

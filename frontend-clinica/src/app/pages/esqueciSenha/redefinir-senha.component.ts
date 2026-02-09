@@ -40,12 +40,12 @@ export class RedefinirSenhaComponent {
       !this.form.novaSenha ||
       !this.form.confirmarSenha
     ) {
-      this.erro = 'Preencha todos os campos obrigatórios.';
+      alert('Preencha todos os campos obrigatórios.');
       return;
     }
 
     if (this.form.novaSenha !== this.form.confirmarSenha) {
-      this.erro = 'As senhas não conferem.';
+      alert('As senhas não conferem.');
       return;
     }
 
@@ -68,9 +68,16 @@ export class RedefinirSenhaComponent {
         }, 1500);
       },
       error: err => {
-        this.erro =
-          err?.error?.message ??
-          'Erro ao atualizar senha.';
+        if (typeof err?.error === 'string') {
+          this.erro = err.error;
+        } else {
+          this.erro =
+            err?.error?.message ||
+            err?.message ||
+            'Erro ao atualizar senha.';
+        }
+
+        alert(this.erro);
       }
     });
   }

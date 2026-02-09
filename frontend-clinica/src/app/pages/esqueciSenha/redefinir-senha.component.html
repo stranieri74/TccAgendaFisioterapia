@@ -2,14 +2,6 @@
 
   <h2>🔐 Recuperação de Senha</h2>
 
-  <div *ngIf="erro" class="erro">
-    {{ erro }}
-  </div>
-
-  <div *ngIf="sucesso" class="sucesso">
-    {{ sucesso }}
-  </div>
-
   <section>
     <label>Email</label>
     <input type="email" [(ngModel)]="form.email" placeholder="Informe seu email" />

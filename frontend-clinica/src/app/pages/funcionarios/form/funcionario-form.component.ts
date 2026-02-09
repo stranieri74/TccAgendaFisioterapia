@@ -163,16 +163,16 @@ export class FuncionarioFormComponent implements OnInit {
         if (err.error?.message) {
 
           if (typeof err.error.message === 'string') {
-            this.erro = err.error.message;
+            alert(err.error.message);
 
           } else if (Array.isArray(err.error.message)) {
-            this.erro = err.error.message.join(' | ');
+            alert(err.error.message.join(' | '));
           }
 
         } else if (err.error?.error) {
-          this.erro = err.error.error;
+          alert(err.error.error);
         } else {
-          this.erro = 'Erro inesperado ao salvar funcionários.';
+          alert('Erro inesperado ao salvar funcionários.');
         }
 
         this.cd.detectChanges();

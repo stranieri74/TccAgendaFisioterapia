@@ -18,7 +18,6 @@ export async function POST(request: Request) {
     await serviceUsuario.recuperarSenha({
       email: body.email,
       cpf: body.cpf,
-      cnpj: body.cnpj,
       crefito: body.crefito,
       novaSenha: body.novaSenha
     });

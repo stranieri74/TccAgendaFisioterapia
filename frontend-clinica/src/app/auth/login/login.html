@@ -9,12 +9,6 @@
       <!-- Form -->
       <form (ngSubmit)="entrar()">
 
-@if (erro) {
-  <div class="error-msg">
-    {{ erro }}
-  </div>
-}
-
         <div class="form-group">
           <label>Usuário</label>
           <input
@@ -39,16 +33,20 @@
           Entrar
         </button>
 
-        <a class="forgot-password"  routerLink="/esqueci-senha" translate="no">
-  {{ mensagemEsqueciSenha }}
-</a>
+        <a
+          class="forgot-password"
+          routerLink="/esqueci-senha"
+          translate="no"
+        >
+          {{ mensagemEsqueciSenha }}
+        </a>
+
       </form>
 
     </div>
   </div>
 
-  <footer class="login-footer">
-    © 2026 - Clínica de Fisioterapia
-  </footer>
+  <!-- ✅ Rodapé reutilizado -->
+  <app-footer></app-footer>
 
 </div>

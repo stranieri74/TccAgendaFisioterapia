@@ -1,0 +1,17 @@
+services:
+  backend:
+    build: ./agenda_fisioterapia
+    container_name: agenda-backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./agenda_fisioterapia/.env
+    command: npm run dev
+
+  frontend:
+    build: ./frontend-clinica
+    container_name: agenda-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend

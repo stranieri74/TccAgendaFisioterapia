@@ -1,8 +1,9 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
-import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service'; // ajuste o path se necessário
+import { PerfilUsuario } from '../core/guards/perfil-usuario.enum';
 
 @Component({
   selector: 'app-layout',
@@ -16,12 +17,14 @@ export class LayoutComponent {
   menuAberto = true;
   submenuAberto: string | null = null;
   mobile = false;
-
-  constructor(private router: Router) {
+  PerfilUsuario = PerfilUsuario;
+  // PRECISA ser public para o HTML acessar
+  constructor(
+    private router: Router,
+    public authService: AuthService
+  ) {
     this.verificarTela();
   }
-
-
 
   @HostListener('window:resize')
   verificarTela() {
@@ -36,14 +39,11 @@ export class LayoutComponent {
   }
 
   abrirSubmenu(menu: string) {
-    this.submenuAberto =
-      this.submenuAberto === menu ? null : menu;
+    this.submenuAberto = this.submenuAberto === menu ? null : menu;
   }
 
   fecharMenuMobile() {
-    if (this.mobile) {
-      this.menuAberto = false;
-    }
+    this.menuAberto = false;
   }
 
   logout() {
@@ -52,5 +52,31 @@ export class LayoutComponent {
 
     this.router.navigate(['/login']);
   }
+
+  isAdmin(): boolean {
+  return this.authService.hasPerfil([PerfilUsuario.ADMIN]);
+}
+
+  isRecepcaoOuAdmin(): boolean {
+  return this.authService.hasPerfil([
+    PerfilUsuario.RECEPCAO,
+    PerfilUsuario.ADMIN
+  ]);
+}
+
+isTodos(): boolean {
+  return this.authService.hasPerfil([
+    PerfilUsuario.PROFISSIONAL,
+    PerfilUsuario.RECEPCAO,
+    PerfilUsuario.ADMIN
+  ]);
+}
+
+isProfissionalOuAdmin(): boolean {
+  return this.authService.hasPerfil([
+    PerfilUsuario.PROFISSIONAL,
+    PerfilUsuario.ADMIN
+  ]);
+}
 
 }

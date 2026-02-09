@@ -1,7 +1,8 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { tap } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
+import { PerfilUsuario } from '../../app/core/guards/perfil-usuario.enum';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -15,30 +16,35 @@ export class AuthService {
   ) { }
 
   login(login: string, senha: string) {
-
     return this.http.post<any>(this.apiUrl, {
       login,
       senha
     }).pipe(
 
+      // Sucesso
       tap(res => {
         if (isPlatformBrowser(this.platformId)) {
-
-          // token
           localStorage.setItem('token', res.token);
-
-          // usuário
           localStorage.setItem('usuarioId', String(res.usuario.id));
           localStorage.setItem('login', res.usuario.login);
           localStorage.setItem('perfil', res.usuario.perfil);
-
-          localStorage.setItem(
-            'profissionalId',
-            res.usuario.funcionarioId
-          );
+          localStorage.setItem('profissionalId', res.usuario.funcionarioId);
         }
-      })
+      }),
 
+      // Erro
+      catchError(error => {
+        if (error.status === 401) {
+          alert('Login ou senha inválidos');
+        } else if (error.status === 0) {
+          alert('Servidor indisponível');
+        }
+
+        // repassa mensagem para o component
+        return throwError(() => ({
+          status: error.status
+        }));
+      })
     );
   }
 
@@ -55,14 +61,14 @@ export class AuthService {
     return null;
   }
 
+  isLogado(): boolean {
+    return !!this.obterToken();
+  }
+
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('token');
     }
-  }
-
-  isLogado(): boolean {
-    return !!this.obterToken();
   }
 
   getProfissionalId(): number | null {
@@ -74,4 +80,22 @@ export class AuthService {
 
     return null;
   }
+
+  getPerfil(): PerfilUsuario | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('perfil') as PerfilUsuario;
+    }
+    return null;
+  }
+
+  hasPerfil(perfis: PerfilUsuario[]): boolean {
+    const perfil = this.getPerfil();
+    return !!perfil && perfis.includes(perfil);
+  }
+
+  isAdmin(): boolean {
+    return this.getPerfil() === PerfilUsuario.ADMIN;
+  }
+
+
 }

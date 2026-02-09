@@ -1,5 +1,6 @@
 import { Paciente } from '@/domain/entities/Paciente';
 import { PacienteRepository } from '@/repositories/PacienteRepository';
+import { validarCPF, validarEmail } from '@/shared/utils/funcaoValidacao';
 
 export class PacienteService {
   constructor(private repository: PacienteRepository) { }
@@ -61,8 +62,16 @@ export class PacienteService {
       throw new Error('Cpf é obrigatório');
     }
 
+    if(!validarCPF(dados.cpf?.trim())){
+      throw new Error('Cpf inválido');   
+    }
+
     if (!dados.email?.trim()) {
       throw new Error('email é obrigatório');
+    }
+    
+    if(!validarEmail(dados.email?.trim())){
+      throw new Error('Email inválido');   
     }
 
     if (!dados.convenio?.trim()) {
@@ -139,6 +148,59 @@ export class PacienteService {
   }
 
   async atualizar(dados: Paciente): Promise<Paciente> {
+
+    if (!dados.getCep()?.trim()) {
+      throw new Error('CEP é obrigatório');
+    }
+
+    if (!dados.getUf()?.trim()) {
+      throw new Error('Estado é obrigatório');
+    }
+
+    if (!dados.getCidade()?.trim()) {
+      throw new Error('Cidade é obrigatório');
+    }
+
+    if (!dados.getEndereco()?.trim()) {
+      throw new Error('Endereço é obrigatório');
+    }
+
+    if (dados.getNumero() == null || dados.getNumero() <= 0) {
+      throw new Error('Numero é obrigatório');
+    }
+
+    if (!dados.getBairro()?.trim()) {
+      throw new Error('Bairro é obrigatório');
+    }
+
+    if (!dados.getTelefone()?.trim()) {
+      throw new Error('Telefone é obrigatório');
+    }
+
+    if (!dados.getCelular()?.trim()) {
+      throw new Error('Celular é obrigatório');
+    }
+
+    if (!dados.getCpf()?.trim()) {
+      throw new Error('Cpf é obrigatório');
+    }
+
+    if (!dados.getEmail()?.trim()) {
+      throw new Error('email é obrigatório');
+    }
+
+    if (!dados.getConvenio()?.trim()) {
+      throw new Error('Convenio é obrigatório');
+    }
+
+    if(!validarCPF(dados.getCpf())){
+      throw new Error('Cpf inválido');   
+    }
+
+    if(!validarEmail(dados.getEmail())){
+      throw new Error('Email inválido');   
+    }
+
     const pacienteExistente = await this.repository.buscarPorId(dados.getId());
     if (!pacienteExistente) {
       throw new Error('Paciente não encontrado');

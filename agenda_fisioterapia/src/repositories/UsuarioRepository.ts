@@ -212,7 +212,6 @@ export class UsuarioRepository {
   async buscarParaRecuperacao(dados: {
     email: string;
     cpf?: string;
-    cnpj?: string;
     crefito: string;
   }) {
 
@@ -221,9 +220,8 @@ export class UsuarioRepository {
         funcionario: {
           email: dados.email,
           crefito: dados.crefito,
-          OR: [
-            { cpf: dados.cpf },
-            { cnpj: dados.cnpj }
+          AND: [
+            { cpf: dados.cpf }
           ]
         }
       },

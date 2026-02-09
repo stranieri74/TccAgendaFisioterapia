@@ -4,15 +4,7 @@
     {{ editando ? '✏️ Editar Paciente' : '➕ Novo Paciente' }}
   </h2>
 
-  <!-- ✅ MENSAGEM DE ERRO -->
-  <div *ngIf="erro" class="alert alert-error">
-    ❌ {{ erro }}
-  </div>
 
-  <!-- ✅ MENSAGEM DE SUCESSO -->
-  <div *ngIf="sucesso" class="alert alert-success">
-    ✅ {{ sucesso }}
-  </div>
 
   <div *ngIf="carregando" class="loading">
     Carregando...

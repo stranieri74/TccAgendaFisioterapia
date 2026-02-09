@@ -3,6 +3,7 @@ import { UsuarioRepository } from '@/repositories/UsuarioRepository';
 import { Usuario, PerfilUsuario } from '@/domain/entities/Usuario';
 import { FuncionarioRepository } from '@/repositories/FuncionarioRepository';
 import { JwtService } from '@/shared/security/JwtService';
+import { validarCPF, validarEmail } from '@/shared/utils/funcaoValidacao';
 
 export class UsuarioService {
 
@@ -11,9 +12,7 @@ export class UsuarioService {
     private funcionarioRepository: FuncionarioRepository
   ) { }
 
-  // =====================================================
   // CADASTRAR
-  // =====================================================
   async cadastrar(dados: {
     login: string;
     senha: string;
@@ -64,9 +63,7 @@ export class UsuarioService {
     return await this.repository.salvar(usuario);
   }
 
-  // =====================================================
   // BUSCAR POR LOGIN
-  // =====================================================
   async buscarPorLogin(login: string): Promise<any> {
 
     if (!login?.trim()) {
@@ -79,12 +76,10 @@ export class UsuarioService {
       throw new Error('Usuário não encontrado');
     }
 
-    return usuario; // 🔥 não converte para Entity
+    return usuario; 
   }
 
-  // =====================================================
   // BUSCAR POR ID
-  // =====================================================
   async buscarPorId(id: number): Promise<any> {
 
     if (!id || id <= 0) {
@@ -97,19 +92,15 @@ export class UsuarioService {
       throw new Error('Usuário não encontrado');
     }
 
-    return usuario; // 🔥 mantém funcionario
+    return usuario; 
   }
 
-  // =====================================================
   // LISTAR
-  // =====================================================
   async listar(): Promise<any[]> {
     return await this.repository.listarComFuncionario();
   }
 
-  // =====================================================
   // DELETAR
-  // =====================================================
   async deletar(id: number): Promise<void> {
 
     const usuarioExistente = await this.repository.buscarPorId(id);
@@ -121,9 +112,8 @@ export class UsuarioService {
     await this.repository.deletarPorId(id);
   }
 
-  // =====================================================
   // AUTENTICAÇÃO
-  // =====================================================
+
   async autenticar(
     login: string,
     senha: string
@@ -164,9 +154,7 @@ export class UsuarioService {
     return { usuario, token };
   }
 
-  // =====================================================
   // ATUALIZAR
-  // =====================================================
   async atualizar(dados: Usuario & { senha?: string }): Promise<any> {
 
     const usuarioExistente =
@@ -195,7 +183,6 @@ export class UsuarioService {
       throw new Error('Login já cadastrado para outro usuário');
     }
 
-    // 🔐 senha opcional
     if ((dados as any).senha?.trim()) {
       const novaSenhaHash = await bcrypt.hash(
         (dados as any).senha,
@@ -212,10 +199,18 @@ export class UsuarioService {
   async recuperarSenha(dados: {
     email: string;
     cpf: string;
-    cnpj: string;
     crefito: string;
     novaSenha: string;
   }) {
+
+    if (!validarEmail(dados.email)){
+       throw new Error('e-mail invalido!');
+    }
+
+    if (!validarCPF(dados.cpf)){
+       throw new Error('CPF Invalido!');
+    }
+    
     const usuario = await this.repository.buscarParaRecuperacao(
       dados
     );

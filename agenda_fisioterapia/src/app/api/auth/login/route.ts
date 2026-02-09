@@ -19,7 +19,8 @@ export async function OPTIONS() {
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:4200',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Credentials': 'true'
       }
     }
   );

@@ -6,7 +6,6 @@
 .login-page {
   min-height: 100vh;
 
-  background-image: url('/assets/fundo_geral.png');
   background-repeat: no-repeat;
   background-position: center bottom;
   background-size: cover;

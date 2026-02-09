@@ -12,11 +12,7 @@
     Carregando pacientes...
   </div>
 
-  <div *ngIf="erro" class="erro">
-    {{ erro }}
-  </div>
-
-  <!-- 🔥 container responsivo -->
+  <!-- container responsivo -->
   <div class="table-container" *ngIf="!carregando && pacientes.length">
 
     <table>

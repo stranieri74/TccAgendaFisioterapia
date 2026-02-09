@@ -1,25 +1,37 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { PerfilGuard } from './core/guards/perfil.guard';
+import { PerfilUsuario } from './core/guards/perfil-usuario.enum';
+
 import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+
 import { PacientesComponent } from './pages/pacientes/pacientes.component';
 import { PacienteFormComponent } from './pages/pacientes/form/paciente-form.component';
+
 import { FuncionariosComponent } from './pages/funcionarios/funcionarios.component';
 import { FuncionarioFormComponent } from './pages/funcionarios/form/funcionario-form.component';
+
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { UsuarioFormComponent } from './pages/usuarios/form/usuario-form.component';
+
 import { AgendaListComponent } from './pages/agenda/agenda-list.component';
 import { AgendaFormComponent } from './pages/agenda/agenda-form/agenda-form.component';
 import { AgendaCalendarioComponent } from './pages/agenda/calendario/agenda-calendario.component';
+
 import { SobreComponent } from './pages/sobre/sobre.component';
+
 import { AvaliacaoListComponent } from './pages/avaliacao/avaliacao-list.component';
 import { AvaliacaoFormComponent } from './pages/avaliacao/avaliacao-form/avaliacao-form.component';
+
 import { EvolucaoListComponent } from './pages/evolucao/evolucao-list.component';
 import { EvolucaoFormComponent } from './pages/evolucao/evolucao-form/evolucao-form.component';
+
 import { ProntuarioComponent } from './pages/prontuario/prontuario.component';
+
 export const routes: Routes = [
 
-  // 🔓 login fora do layout
+  // 🔓 rotas públicas
   {
     path: 'login',
     loadComponent: () =>
@@ -41,73 +53,97 @@ export const routes: Routes = [
     children: [
 
       {
-        path: 'dashboard',
-        component: DashboardComponent
-      },
-
-      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
       },
 
-      // 📋 lista
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      },
+
+      // =========================
+      // PACIENTES (logado)
+      // =========================
       {
         path: 'pacientes',
         component: PacientesComponent
       },
-
-      // ➕ novo paciente
       {
         path: 'pacientes/novo',
         component: PacienteFormComponent,
         runGuardsAndResolvers: 'always'
       },
-
-      // ✏ editar paciente
       {
         path: 'pacientes/editar/:id',
         component: PacienteFormComponent,
         runGuardsAndResolvers: 'always'
       },
-      // 📋 lista
+
+      // =========================
+      // FUNCIONÁRIOS (ADMIN)
+      // =========================
       {
         path: 'funcionarios',
-        component: FuncionariosComponent
+        component: FuncionariosComponent,
+        canActivate: [PerfilGuard],
+        data: {
+          perfis: [PerfilUsuario.ADMIN]
+        }
       },
-
-      // ➕ novo funcionarios
       {
         path: 'funcionarios/novo',
         component: FuncionarioFormComponent,
+        canActivate: [PerfilGuard],
+        data: {
+          perfis: [PerfilUsuario.ADMIN]
+        },
         runGuardsAndResolvers: 'always'
       },
-
-      // ✏ editar funcionarios
       {
         path: 'funcionarios/editar/:id',
         component: FuncionarioFormComponent,
+        canActivate: [PerfilGuard],
+        data: {
+          perfis: [PerfilUsuario.ADMIN]
+        },
         runGuardsAndResolvers: 'always'
       },
-      // 📋 lista
+
+      // =========================
+      // USUÁRIOS (ADMIN)
+      // =========================
       {
         path: 'usuarios',
-        component: UsuariosComponent
+        component: UsuariosComponent,
+        canActivate: [PerfilGuard],
+        data: {
+          perfis: [PerfilUsuario.ADMIN]
+        }
       },
-
-      // ➕ novo funcionarios
       {
         path: 'usuarios/novo',
         component: UsuarioFormComponent,
+        canActivate: [PerfilGuard],
+        data: {
+          perfis: [PerfilUsuario.ADMIN]
+        },
         runGuardsAndResolvers: 'always'
       },
-
-      // ✏ editar funcionarios
       {
         path: 'usuarios/editar/:id',
         component: UsuarioFormComponent,
+        canActivate: [PerfilGuard],
+        data: {
+          perfis: [PerfilUsuario.ADMIN]
+        },
         runGuardsAndResolvers: 'always'
       },
+
+      // =========================
+      // AGENDA (logado)
+      // =========================
       {
         path: 'agenda',
         component: AgendaListComponent,
@@ -128,14 +164,18 @@ export const routes: Routes = [
         component: AgendaCalendarioComponent,
         runGuardsAndResolvers: 'always'
       },
+
+      // =========================
+      // OUTROS
+      // =========================
       {
         path: 'sobre',
         component: SobreComponent,
         runGuardsAndResolvers: 'always'
       },
       {
-        path: 'avaliacoes/:agendaId/:id',
-        component: AvaliacaoFormComponent,
+        path: 'avaliacoes',
+        component: AvaliacaoListComponent,
         runGuardsAndResolvers: 'always'
       },
       {
@@ -144,8 +184,8 @@ export const routes: Routes = [
         runGuardsAndResolvers: 'always'
       },
       {
-        path: 'avaliacoes',
-        component: AvaliacaoListComponent,
+        path: 'avaliacoes/:agendaId/:id',
+        component: AvaliacaoFormComponent,
         runGuardsAndResolvers: 'always'
       },
       {
@@ -167,9 +207,8 @@ export const routes: Routes = [
         path: 'prontuario',
         component: ProntuarioComponent,
         runGuardsAndResolvers: 'always'
+        
       }
-
     ]
   }
-
 ];
